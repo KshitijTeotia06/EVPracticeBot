@@ -21,7 +21,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final Drivetrain drivetrain = new Drivetrain();
   private Joystick driveStick, turnStick;
-  private final JoyDrive jdrive = new JoyDrive(drivetrain);
+  private final JoyDrive jdrive;
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -30,6 +30,7 @@ public class RobotContainer {
     configureButtonBindings();
     driveStick = new Joystick(Constants.DRIVE_STICK_PORT);
     turnStick = new Joystick(Constants.TURN_STICK_PORT);
+    jdrive = new JoyDrive(drivetrain, driveStick, turnStick);
   }
 
   /**
@@ -38,7 +39,9 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureButtonBindings() {}
+  private void configureButtonBindings() {
+    
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

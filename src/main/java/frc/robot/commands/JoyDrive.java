@@ -13,8 +13,10 @@ public class JoyDrive extends CommandBase {
   /** Creates a new JoyDrive. */
   private final Drivetrain drivetrain;
   private Joystick driveStick, turnStick;
-  public JoyDrive(Drivetrain dt) {
+  public JoyDrive(Drivetrain dt, Joystick dst, Joystick tst) {
     drivetrain = dt;
+    driveStick = dst;
+    turnStick = tst;
     addRequirements(dt);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -29,7 +31,7 @@ public class JoyDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    drivetrain.move();
+    drivetrain.move(driveStick.getRawAxis(Constants.DRIVE_AXIS), turnStick.getRawAxis(Constants.TURN_STICK_PORT));
   }
 
   // Called once the command ends or is interrupted.

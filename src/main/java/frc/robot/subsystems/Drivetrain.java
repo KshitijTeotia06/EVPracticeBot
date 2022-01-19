@@ -18,7 +18,6 @@ public class Drivetrain extends SubsystemBase {
   public WPI_TalonFX l1, l2, r1, r2;
   public MotorControllerGroup l, r;
   public DifferentialDrive ddrive;
-  public Joystick driveStick, turnStick;
   public Drivetrain() {
     l1 = new WPI_TalonFX(Constants.MOTOR_L1_ID);
     l2 = new WPI_TalonFX(Constants.MOTOR_L2_ID);
@@ -28,14 +27,10 @@ public class Drivetrain extends SubsystemBase {
     r = new MotorControllerGroup(r1, r2);
     r.setInverted(true);
     ddrive = new DifferentialDrive(l, r);
-    driveStick = new Joystick(Constants.DRIVE_STICK_PORT);
-    turnStick = new Joystick(Constants.TURN_STICK_PORT);
   }
 
 
-  public void move(){
-    double power = driveStick.getRawAxis(Constants.DRIVE_AXIS),
-    offset = turnStick.getRawAxis(Constants.TURN_AXIS);
+  public void move(double power, double offset){
     ddrive.arcadeDrive(power, offset, power < 0.1);
   }
 
