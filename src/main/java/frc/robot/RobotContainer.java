@@ -8,7 +8,9 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.JoyDrive;
+import frc.robot.commands.Shoot;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Shooter;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /**
@@ -22,6 +24,9 @@ public class RobotContainer {
   private final Drivetrain drivetrain = new Drivetrain();
   private Joystick driveStick, turnStick;
   private final JoyDrive jdrive;
+  private final Shooter shooter = new Shooter();
+  private final Shoot shoot;
+
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -31,6 +36,7 @@ public class RobotContainer {
     driveStick = new Joystick(Constants.DRIVE_STICK_PORT);
     turnStick = new Joystick(Constants.TURN_STICK_PORT);
     jdrive = new JoyDrive(drivetrain, driveStick, turnStick);
+    shoot = new Shoot(shooter, driveStick);
   }
 
   /**
@@ -48,8 +54,9 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getTeleCommand() {
+  public Command[] getTeleCommand() {
     // An ExampleCommand will run in autonomous
-    return jdrive;
+    Command[] ret = {jdrive, shoot};
+    return ret;
   }
 }

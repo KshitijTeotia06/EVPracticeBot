@@ -16,7 +16,7 @@ import frc.robot.subsystems.Drivetrain;
  * project.
  */
 public class Robot extends TimedRobot {
-  private Command teleCommand;
+  private Command[] teleCommands;
 
   private RobotContainer m_robotContainer;
 
@@ -69,11 +69,13 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.if (m_autonomousCommand != null) {
-    teleCommand = m_robotContainer.getTeleCommand();
+    teleCommands = m_robotContainer.getTeleCommand();
 
     // schedule the autonomous command (example)
-    if (teleCommand != null) {
-      teleCommand.schedule();
+    if (teleCommands != null) {
+      for(Command get : teleCommands){
+        get.schedule();
+      }
     }
   }
 
