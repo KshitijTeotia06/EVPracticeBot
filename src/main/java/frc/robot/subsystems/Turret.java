@@ -32,7 +32,6 @@ public class Turret extends SubsystemBase {
   /** Creates a new Turret. */
   public Turret(Vision vision) {
     turretMotor = new TalonSRX(Constants.TURRT_MOTOR_ID);
-    turretMotor.setInverted(true);
     this.vision = vision;
     limitSwitch_left = new DigitalInput(1);
     limitSwitch_right = new DigitalInput(0);
@@ -47,11 +46,13 @@ public class Turret extends SubsystemBase {
     posErr = 0;
   }
 
-  public void turnTurret(double autoTrigger, double manual) {
+  public void turnTurret(double autoTrigger) {
+    double manual = 0;
     SmartDashboard.putNumber("REACHED", 1);
     posErr = vision.getX();
     SmartDashboard.putNumber("JOYSTICK", autoTrigger);
     SmartDashboard.putNumber("Vision X: ", posErr);
+    SmartDashboard.updateValues();
     intErr += posErr;
 
     fric = (kf / deadZone) * posErr;

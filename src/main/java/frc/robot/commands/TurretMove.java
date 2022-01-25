@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -12,12 +13,12 @@ import frc.robot.subsystems.Turret;
 public class TurretMove extends CommandBase {
   /** Creates a new TurretMove. */
   Turret turret;
-  XboxController controller;
+  Joystick j1;
 
-  public TurretMove(Turret turret, XboxController controller) {
+  public TurretMove(Turret turret, Joystick j1) {
     this.turret = turret;
     addRequirements(turret);
-    this.controller = controller;
+    this.j1 = j1;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -29,9 +30,9 @@ public class TurretMove extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double turretThrottle = controller.getLeftTriggerAxis();
+    double turretThrottle = j1.getY();
     SmartDashboard.putNumber("TURRETTHROTTLE", turretThrottle);
-    turret.turnTurret(turretThrottle, controller.getLeftX());
+    turret.turnTurret(turretThrottle);
   }
 
   // Called once the command ends or is interrupted.
