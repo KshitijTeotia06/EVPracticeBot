@@ -9,8 +9,11 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.JoyDrive;
 import frc.robot.commands.Shoot;
+import frc.robot.commands.TurretMove;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Turret;
+import frc.robot.subsystems.Vision;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /**
@@ -22,8 +25,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final Drivetrain drivetrain = new Drivetrain();
+  private final Vision vision = new Vision();
+  private final Turret turret = new Turret(vision);
   private Joystick driveStick, turnStick;
+  private XboxController controller;
   private final JoyDrive jdrive;
+  private final TurretMove tmove;
   private final Shooter shooter = new Shooter();
   private final Shoot shoot;
 
@@ -35,6 +42,8 @@ public class RobotContainer {
     configureButtonBindings();
     driveStick = new Joystick(Constants.DRIVE_STICK_PORT);
     turnStick = new Joystick(Constants.TURN_STICK_PORT);
+    controller = new XboxController(Constants.XBOX_PORT);
+    tmove = new TurretMove(turret, controller);
     jdrive = new JoyDrive(drivetrain, driveStick, turnStick);
     shoot = new Shoot(shooter, driveStick);
   }
@@ -56,7 +65,7 @@ public class RobotContainer {
    */
   public Command[] getTeleCommand() {
     // An ExampleCommand will run in autonomous
-    Command[] ret = {jdrive, shoot};
+    Command[] ret = {jdrive, shoot, tmove};
     return ret;
   }
 }

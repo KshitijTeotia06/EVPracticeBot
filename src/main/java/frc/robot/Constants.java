@@ -24,4 +24,6 @@ public final class Constants {
     public static final int TURN_AXIS = 0;
     public static final int SHOOTER1 = 14;
     public static final int SHOOTER2 = 15;
+    public static final int TURRT_MOTOR_ID = 9;
+    public static final int XBOX_PORT = 1;
 }
