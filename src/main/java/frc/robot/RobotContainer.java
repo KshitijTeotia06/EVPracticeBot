@@ -8,8 +8,10 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.JoyDrive;
+import frc.robot.commands.MoveClimb;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.TurretMove;
+import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
@@ -25,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final Drivetrain drivetrain = new Drivetrain();
+  private final Climb climb = new Climb();
   private final Vision vision = new Vision();
   private final Turret turret = new Turret(vision);
   private Joystick driveStick, turnStick;
@@ -33,7 +36,7 @@ public class RobotContainer {
   private final TurretMove tmove;
   private final Shooter shooter = new Shooter();
   private final Shoot shoot;
-
+  private final MoveClimb climbmove;
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -46,6 +49,7 @@ public class RobotContainer {
     tmove = new TurretMove(turret, driveStick);
     jdrive = new JoyDrive(drivetrain, driveStick, turnStick);
     shoot = new Shoot(shooter, driveStick);
+    climbmove = new MoveClimb(climb, driveStick);
   }
 
   /**
@@ -65,7 +69,7 @@ public class RobotContainer {
    */
   public Command[] getTeleCommand() {
     // An ExampleCommand will run in autonomous
-    Command[] ret = {tmove};
+    Command[] ret = {climbmove};
     return ret;
   }
 }
