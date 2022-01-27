@@ -14,18 +14,29 @@ package frc.robot;
  */
 public final class Constants {
 
+    // drive motors: 0, 16, 2, 3 for inf recharge game bot
     public static final int MOTOR_L1_ID = 0;
     public static final int MOTOR_L2_ID = 16;
     public static final int MOTOR_R1_ID = 2;
     public static final int MOTOR_R2_ID = 3;
-    public static final int DRIVE_STICK_PORT = 0;
-    public static final int TURN_STICK_PORT = 2;
-    public static final int DRIVE_AXIS = 1;
-    public static final int TURN_AXIS = 0;
+
+    // shooter and turret
     public static final int SHOOTER1 = 14;
     public static final int SHOOTER2 = 15;
     public static final int TURRT_MOTOR_ID = 9;
+
+    // control 
     public static final int XBOX_PORT = 1;
+    public static final int DRIVE_STICK_PORT = 0; // joystick
+    public static final int TURN_STICK_PORT = 2; // steering wheel
+    public static final int DRIVE_AXIS = 1; 
+    public static final int TURN_AXIS = 0; 
+
+    // climb 
     public static final int CLIMB_MOTOR_1_ID = 13;
     public static final int CLIMB_MOTOR_2_ID = 12;
+
+    // intake
+    public static final int INTAKE_MOTOR = 11;
+    public static final int BRUSH_MOTOR = 10;
 }

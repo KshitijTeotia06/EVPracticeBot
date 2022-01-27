@@ -71,5 +71,8 @@ public class RobotContainer {
     // An ExampleCommand will run in autonomous
     Command[] ret = {climbmove};
     return ret;
+    /*
+    REMINDER: schedule the other commands here !!!!
+    */
   }
 }
