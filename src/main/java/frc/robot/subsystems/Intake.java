@@ -11,6 +11,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -27,14 +28,15 @@ public class Intake extends SubsystemBase {
   public Intake() {
     intakeMotor = new VictorSPX(Constants.INTAKE_MOTOR);
     brushMotor = new VictorSPX(Constants.BRUSH_MOTOR);
-    //banner = new DigitalInput(Constants.BANNER_1);
-    //banner2 = new DigitalInput(Constants.BANNER_2);
+    banner = new DigitalInput(Constants.BANNER_1);
+    banner2 = new DigitalInput(Constants.BANNER_2);
 
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+
   }
 
   /* 
@@ -66,7 +68,6 @@ public class Intake extends SubsystemBase {
 
   public boolean bannerOutput() {
     return banner.get();
-
   }
   public boolean banner2Output() {
     return banner2.get();

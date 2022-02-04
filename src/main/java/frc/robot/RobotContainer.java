@@ -7,12 +7,14 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.commands.IntakeBall;
 import frc.robot.commands.JoyDrive;
 import frc.robot.commands.MoveClimb;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.TurretMove;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Vision;
@@ -37,6 +39,8 @@ public class RobotContainer {
   private final Shooter shooter = new Shooter();
   private final Shoot shoot;
   private final MoveClimb climbmove;
+  private final Intake intake = new Intake();
+  private final IntakeBall intakeCommand;
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -50,6 +54,7 @@ public class RobotContainer {
     jdrive = new JoyDrive(drivetrain, driveStick, turnStick);
     shoot = new Shoot(shooter, driveStick);
     climbmove = new MoveClimb(climb, driveStick);
+    intakeCommand = new IntakeBall(intake, driveStick, controller);
   }
 
   /**
@@ -69,7 +74,7 @@ public class RobotContainer {
    */
   public Command[] getTeleCommand() {
     // An ExampleCommand will run in autonomous
-    Command[] ret = {climbmove};
+    Command[] ret = {intakeCommand};
     return ret;
     /*
     REMINDER: schedule the other commands here !!!!
