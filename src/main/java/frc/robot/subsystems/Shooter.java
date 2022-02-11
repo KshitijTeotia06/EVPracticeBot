@@ -41,7 +41,7 @@ public class Shooter extends SubsystemBase {
     shooterMotor1 = new TalonSRX(Constants.SHOOTER1);
     shooterMotor2 = new TalonSRX(Constants.SHOOTER2);
     shooterMotor2.setInverted(true);
-    shooterMotor2.set(ControlMode.Follower, Constants.SHOOTER1);
+    shooterMotor2.follow(shooterMotor1);
     banner = new DigitalInput(6);
     banner2 = new DigitalInput(8);
     ballLoaded = false;
@@ -59,11 +59,14 @@ public class Shooter extends SubsystemBase {
   }
 
   public void outtakeBall(double speed) {
-    shooterMotor1.set(ControlMode.Velocity, speed * 7500);
-    // shooterMotor1.set(ControlMode.PercentOutput, speed);
-    // shooterMotor2.set(ControlMode.PercentOutput, speed);
-    SmartDashboard.getNumber("Shooter speed: ", getShooterVel());
-
+    SmartDashboard.putNumber("CUR SPEED: ", speed);
+    if(speed > 0.5) shooterMotor1.set(ControlMode.PercentOutput, 0.8);
+    else shooterMotor1.set(ControlMode.Velocity, 0);
+    // shooterMotor1.set(ControlMode.Velocity, );
+    // if(speed > 0.5) shooterMotor1.set(ControlMode.Velocity, 15000);
+    // else shooterMotor1.set(ControlMode.Velocity, 0);
+    SmartDashboard.putNumber("Shooter speed 1 : ", shooterMotor1.getSelectedSensorVelocity());
+    SmartDashboard.putNumber("Shooter speed 2 : ", shooterMotor2.getSelectedSensorVelocity());
   }
 
   public void inttakeBall(double speed) {
@@ -104,6 +107,10 @@ public class Shooter extends SubsystemBase {
     }else{
       inttakeBall(-1);
     }
+  }
+
+  public double getRPM(){
+    return (shooterMotor1.getSelectedSensorVelocity() + shooterMotor2.getSelectedSensorVelocity()) / 2;
   }
 
 }

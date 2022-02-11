@@ -33,8 +33,8 @@ public class Turret extends SubsystemBase {
   public Turret(Vision vision) {
     turretMotor = new TalonSRX(Constants.TURRT_MOTOR_ID);
     this.vision = vision;
-    limitSwitch_left = new DigitalInput(1);
-    limitSwitch_right = new DigitalInput(0);
+    limitSwitch_left = new DigitalInput(0);
+    limitSwitch_right = new DigitalInput(1);
 
     kp = .03;
     kf = 0.1;
@@ -52,6 +52,7 @@ public class Turret extends SubsystemBase {
     posErr = vision.getX();
     SmartDashboard.putNumber("JOYSTICK", autoTrigger);
     SmartDashboard.putNumber("Vision X: ", posErr);
+    SmartDashboard.putBoolean("Target Found", vision.getTarget());
     SmartDashboard.updateValues();
     intErr += posErr;
 
@@ -74,12 +75,14 @@ public class Turret extends SubsystemBase {
     }
     motorOutput = autoTrigger * (intErr * ki + posErr * kp + fric) + manual*.5;
     if (getLeftLimitSwitchStatus() == false && motorOutput < 0) {
-      motorOutput = .5;
+      motorOutput = .25;
     }
     if (getRightLimitSwitchStatus() == false && motorOutput > 0) {
-      motorOutput = -.5;
+      motorOutput = -.25;
     }
     turretMotor.set(ControlMode.PercentOutput, motorOutput);
+    SmartDashboard.putBoolean("LEFT LIMIT", getLeftLimitSwitchStatus());
+    SmartDashboard.putBoolean("RIGHT LIMIT", getRightLimitSwitchStatus());
     SmartDashboard.putNumber("Motor Ouptut: ", motorOutput);
   }
 

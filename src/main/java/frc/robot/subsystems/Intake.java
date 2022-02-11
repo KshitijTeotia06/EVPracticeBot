@@ -8,6 +8,7 @@ package frc.robot.subsystems;
 /*----------------------------------------------------------------------------*/
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -21,16 +22,20 @@ public class Intake extends SubsystemBase {
    */
   private VictorSPX intakeMotor;
   private VictorSPX brushMotor;
+  private TalonFX transitionMotor;
   private DigitalInput banner;
   private DigitalInput banner2;
+  private DigitalInput banner3;
   private boolean ballLoaded;
   
   public Intake() {
     intakeMotor = new VictorSPX(Constants.INTAKE_MOTOR);
     brushMotor = new VictorSPX(Constants.BRUSH_MOTOR);
+    transitionMotor = new TalonFX(Constants.TRANSIT_MOTOR);
+
     banner = new DigitalInput(Constants.BANNER_1);
     banner2 = new DigitalInput(Constants.BANNER_2);
-
+    banner3 = new DigitalInput(Constants.BANNER_3);
   }
 
   @Override
@@ -59,11 +64,15 @@ public class Intake extends SubsystemBase {
   */
 
   public void intakeBall(double speed){
-    intakeMotor.set(ControlMode.PercentOutput, speed); 
+    intakeMotor.set(ControlMode.PercentOutput, -speed); 
   }
 
   public void intakeBrush(double speed) {
     brushMotor.set(ControlMode.PercentOutput, speed);
+  }
+
+  public void transitionMotor(double speed) {
+    transitionMotor.set(ControlMode.PercentOutput, speed);
   }
 
   public boolean bannerOutput() {
@@ -71,6 +80,10 @@ public class Intake extends SubsystemBase {
   }
   public boolean banner2Output() {
     return banner2.get();
+  }
+
+  public boolean banner3Output() {
+    return banner3.get();
   }
 
   public void ejectBalls(double speed) {

@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Turret;
+import frc.robot.subsystems.Vision;
 
 public class TurretMove extends CommandBase {
   /** Creates a new TurretMove. */
@@ -31,7 +32,8 @@ public class TurretMove extends CommandBase {
   @Override
   public void execute() {
     double turretThrottle = j1.getY();
-    SmartDashboard.putNumber("TURRETTHROTTLE", turretThrottle);
+    // SmartDashboard.putNumber("TURRETTHROTTLE", turretThrottle);
+    // turret.turnTurret(-0.1);
     turret.turnTurret(turretThrottle);
   }
 

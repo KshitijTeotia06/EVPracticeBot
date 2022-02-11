@@ -4,7 +4,10 @@
 
 package frc.robot.commands;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
 
@@ -28,8 +31,9 @@ public class Shoot extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    throttle = stick.getRawAxis(3) - stick.getRawAxis(2);
+    throttle = -stick.getY();
     shoot.outtakeBall(throttle);
+    SmartDashboard.putNumber("SPED", shoot.getRPM());
   }
 
   // Called once the command ends or is interrupted.

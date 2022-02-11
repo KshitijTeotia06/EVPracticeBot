@@ -12,14 +12,23 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Vision extends SubsystemBase {
   /** Creates a new Vision. */
   NetworkTable table;
+
+  /*
+  tv	Whether the limelight has any valid targets (0 or 1)
+  tx	Horizontal Offset From Crosshair To Target (-27 degrees to 27 degrees)
+  ty	Vertical Offset From Crosshair To Target (-20.5 degrees to 20.5 degrees)
+  ta	Target Area (0% of image to 100% of image)
+  */
+
   NetworkTableEntry tx;
   NetworkTableEntry ty;
-  NetworkTableEntry ta;
-  NetworkTableEntry tv;
+  NetworkTableEntry ta; 
+  NetworkTableEntry tv; 
   // read values periodically
   double x;
   double y;
   double area;
+  Boolean targets;
   public Vision() {
     table = NetworkTableInstance.getDefault().getTable("limelight");
   }
@@ -41,6 +50,13 @@ public class Vision extends SubsystemBase {
     }
     return x ;
     
-  
+  }
+
+  // returns true or false depending on if a target is found
+  public boolean getTarget() {
+
+    targets = tv.getBoolean(false);
+    return targets;
+
   }
 }

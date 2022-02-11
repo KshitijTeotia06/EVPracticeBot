@@ -38,7 +38,9 @@ public final class Constants {
 
     // intake
     public static final int INTAKE_MOTOR = 11;
+    public static final int TRANSIT_MOTOR = 8;
     public static final int BRUSH_MOTOR = 10;
     public static final int BANNER_1 = 5;
     public static final int BANNER_2 = 7;
+    public static final int BANNER_3 = 9;
 }

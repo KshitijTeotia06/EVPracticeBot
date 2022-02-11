@@ -41,6 +41,7 @@ public class RobotContainer {
   private final MoveClimb climbmove;
   private final Intake intake = new Intake();
   private final IntakeBall intakeCommand;
+  private final TurretMove shootCommand;
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -54,7 +55,8 @@ public class RobotContainer {
     jdrive = new JoyDrive(drivetrain, driveStick, turnStick);
     shoot = new Shoot(shooter, driveStick);
     climbmove = new MoveClimb(climb, driveStick);
-    intakeCommand = new IntakeBall(intake, driveStick, controller);
+    intakeCommand = new IntakeBall(intake, driveStick);
+    shootCommand = new TurretMove(turret, driveStick);
   }
 
   /**
@@ -74,7 +76,7 @@ public class RobotContainer {
    */
   public Command[] getTeleCommand() {
     // An ExampleCommand will run in autonomous
-    Command[] ret = {intakeCommand};
+    Command[] ret = {shoot, intakeCommand};
     return ret;
     /*
     REMINDER: schedule the other commands here !!!!
