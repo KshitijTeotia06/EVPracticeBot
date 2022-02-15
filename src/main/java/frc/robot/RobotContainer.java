@@ -52,7 +52,7 @@ public class RobotContainer {
     turnStick = new Joystick(Constants.TURN_STICK_PORT);
     controller = new XboxController(Constants.XBOX_PORT);
     tmove = new TurretMove(turret, driveStick);
-    jdrive = new JoyDrive(drivetrain, driveStick, turnStick);
+    jdrive = new JoyDrive(drivetrain, controller);
     shoot = new Shoot(shooter, driveStick);
     climbmove = new MoveClimb(climb, driveStick);
     intakeCommand = new IntakeBall(intake, driveStick);
@@ -76,7 +76,7 @@ public class RobotContainer {
    */
   public Command[] getTeleCommand() {
     // An ExampleCommand will run in autonomous
-    Command[] ret = {shoot, intakeCommand};
+    Command[] ret = {shoot, intakeCommand, jdrive, tmove};
     return ret;
     /*
     REMINDER: schedule the other commands here !!!!

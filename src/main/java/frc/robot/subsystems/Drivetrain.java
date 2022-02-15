@@ -30,7 +30,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
 
-  public void move(double power, double offset){
+  public void move(double power, double offset){ // power is the throttle (drive stick), offset is turning
     ddrive.arcadeDrive(power, offset, power < 0.1);
   }
 
