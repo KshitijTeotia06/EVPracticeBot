@@ -14,9 +14,9 @@ public class JoyDrive extends CommandBase {
   private final Drivetrain drivetrain;
   private Joystick driveStick, turnStick;
   public JoyDrive(Drivetrain dt, Joystick dst, Joystick tst) {
-    drivetrain = dt;
+    drivetrain = dt;      
     driveStick = dst;
-    turnStick = tst;
+    turnStick = tst;  
     addRequirements(dt);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -39,8 +39,8 @@ public class JoyDrive extends CommandBase {
   public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
+  @Override   
+  public boolean isFinished() { 
     return false;
   }
 }
