@@ -26,8 +26,8 @@ public final class Constants {
     public static final int TURRT_MOTOR_ID = 9;
 
     // control 
-    public static final int XBOX_PORT = 1;
-    public static final int DRIVE_STICK_PORT = 0; // joystick
+    public static final int XBOX_PORT = 0;
+    public static final int DRIVE_STICK_PORT = 1; // joystick
     public static final int TURN_STICK_PORT = 2; // steering wheel
     public static final int DRIVE_AXIS = 3; // 1 for joystick, 3 for right trigger xbox controller
     public static final int TURN_AXIS = 0; // 0 for wheel, 0 for left stick x-axis xbox controller

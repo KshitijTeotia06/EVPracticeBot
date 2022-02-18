@@ -44,6 +44,7 @@ public class RobotContainer {
   private final TurretMove shootCommand;
 
 
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
@@ -57,6 +58,8 @@ public class RobotContainer {
     climbmove = new MoveClimb(climb, driveStick);
     intakeCommand = new IntakeBall(intake, driveStick);
     shootCommand = new TurretMove(turret, driveStick);
+    
+
   }
 
   /**
@@ -78,6 +81,7 @@ public class RobotContainer {
     // An ExampleCommand will run in autonomous
     Command[] ret = {shoot, intakeCommand, jdrive, tmove};
     return ret;
+    // Removed tmove from ret
     /*
     REMINDER: schedule the other commands here !!!!
     */

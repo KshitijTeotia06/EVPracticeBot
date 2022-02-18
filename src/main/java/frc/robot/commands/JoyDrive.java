@@ -4,8 +4,12 @@
 
 package frc.robot.commands;
 
+import com.kauailabs.navx.frc.AHRS;
+
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
@@ -15,11 +19,22 @@ public class JoyDrive extends CommandBase {
   private final Drivetrain drivetrain;
   //private Joystick driveStick, turnStick;
   private XboxController controller;
+  private AHRS ahrsNavX;
+
   public JoyDrive(Drivetrain dt, XboxController xbox) { //replace parameters w (Drivetrain dt, Joystick dst, Joystick tst) for wheel and stick 
     drivetrain = dt;      
     /*driveStick = dst;
     turnStick = tst; */ 
     this.controller = xbox;
+     
+    // Change based on the connection to nav x
+  
+    ahrsNavX = new AHRS(SerialPort.Port.kUSB);
+    ahrsNavX.reset();
+    ahrsNavX.resetDisplacement();
+    ahrsNavX.calibrate();
+    
+
     addRequirements(dt);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -40,6 +55,10 @@ public class JoyDrive extends CommandBase {
     /* replace parameters w 
     driveStick.getRawAxis(Constants.DRIVE_AXIS), turnStick.getRawAxis(Constants.TURN_STICK_PORT) 
     for final bot with joystick and wheel */
+    
+    SmartDashboard.putNumber("gyroAngleX", ahrsNavX.getAngle());
+    SmartDashboard.updateValues();
+
   }
 
   // Called once the command ends or is interrupted.

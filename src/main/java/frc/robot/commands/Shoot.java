@@ -5,8 +5,11 @@
 package frc.robot.commands;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
@@ -22,6 +25,8 @@ public class Shoot extends CommandBase {
     addRequirements(shoot);
     this.shoot = shoot;
     this.stick = stick;
+
+
   }
 
   // Called when the command is initially scheduled.
@@ -34,6 +39,7 @@ public class Shoot extends CommandBase {
     throttle = -stick.getY();
     shoot.outtakeBall(throttle);
     SmartDashboard.putNumber("SPED", shoot.getRPM());
+
   }
 
   // Called once the command ends or is interrupted.
