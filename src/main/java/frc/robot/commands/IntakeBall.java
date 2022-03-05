@@ -34,15 +34,20 @@ public class IntakeBall extends CommandBase {
   @Override
   public void execute() {
     SmartDashboard.putBoolean("7 button", j1.getRawButton(7));
-    if(j1.getTrigger()){
+    SmartDashboard.putBoolean("banner1: ", intake.banner1Output());
+    SmartDashboard.putBoolean("banner2: ", intake.banner2Output());
+    if(j1.getRawButton(5)){ 
+      intake.intake(true); // ejects balls (joystick button 6(id 5))
+    } else {
+      intake.intake(false); // keeps running intake by default
+    }
+    
+    if(j1.getRawButton(2)){ //runs brush (add color sensor stuff here)
       intake.intakeBrush(0.8);
-      intake.intakeBall(0.8);
-      intake.transitionMotor(1);
     }else{
       intake.intakeBrush(0);
-      intake.intakeBall(0);
-      intake.transitionMotor(0);
     }
+    SmartDashboard.updateValues();
   }
 
   // Called once the command ends or is interrupted.

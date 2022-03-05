@@ -22,11 +22,13 @@ public class Vision extends SubsystemBase {
 
   NetworkTableEntry tx;
   NetworkTableEntry ty;
+  NetworkTableEntry tz;
   NetworkTableEntry ta; 
   NetworkTableEntry tv; 
   // read values periodically
   double x;
   double y;
+  double z;
   double area;
   Boolean targets;
   public Vision() {
@@ -37,6 +39,7 @@ public class Vision extends SubsystemBase {
   public void periodic() {
     tx = table.getEntry("tx");
     ty = table.getEntry("ty");
+    tz = table.getEntry("tz");
     ta = table.getEntry("ta");
     tv = table.getEntry("tv");
   }
@@ -50,6 +53,14 @@ public class Vision extends SubsystemBase {
     }
     return x ;
     
+  }
+  
+  public double getZ(){
+    z = tz.getDouble(0);
+    if(tv.getBoolean(false)){
+      z = 0;
+    }
+    return z;
   }
 
   // returns true or false depending on if a target is found

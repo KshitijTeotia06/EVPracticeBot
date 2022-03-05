@@ -31,7 +31,10 @@ public class JoyDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    drivetrain.move(driveStick.getRawAxis(Constants.DRIVE_AXIS), turnStick.getRawAxis(Constants.TURN_STICK_PORT));
+    if(driveStick.getRawButton(0)){
+      drivetrain.toggleGear();
+    }
+    drivetrain.move(-driveStick.getRawAxis(Constants.DRIVE_AXIS), -turnStick.getX());
   }
 
   // Called once the command ends or is interrupted.

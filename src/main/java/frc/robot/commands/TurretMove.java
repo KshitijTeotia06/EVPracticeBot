@@ -15,11 +15,13 @@ public class TurretMove extends CommandBase {
   /** Creates a new TurretMove. */
   Turret turret;
   Joystick j1;
+  Joystick wheel;
 
-  public TurretMove(Turret turret, Joystick j1) {
+  public TurretMove(Turret turret, Joystick j1, Joystick wheel) {
     this.turret = turret;
     addRequirements(turret);
     this.j1 = j1;
+    this.wheel = wheel;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -31,10 +33,13 @@ public class TurretMove extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double turretThrottle = j1.getY();
     // SmartDashboard.putNumber("TURRETTHROTTLE", turretThrottle);
     // turret.turnTurret(-0.1);
-    turret.turnTurret(turretThrottle);
+    if (wheel.getRawButton(4)){
+      turret.turnTurret(-0.5); // turns turret left
+    } else if (wheel.getRawButton(6)){
+      turret.turnTurret(0.5); // turns turret right
+    }
   }
 
   // Called once the command ends or is interrupted.

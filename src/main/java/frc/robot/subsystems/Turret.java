@@ -25,6 +25,7 @@ public class Turret extends SubsystemBase {
   double fric;
   double posErr;
   double intErr;
+  double zerr;
   double motorOutput;
   private DigitalInput limitSwitch_left;
   private DigitalInput limitSwitch_right;
@@ -33,8 +34,8 @@ public class Turret extends SubsystemBase {
   public Turret(Vision vision) {
     turretMotor = new TalonSRX(Constants.TURRT_MOTOR_ID);
     this.vision = vision;
-    limitSwitch_left = new DigitalInput(0);
-    limitSwitch_right = new DigitalInput(1);
+    limitSwitch_left = new DigitalInput(Constants.LIMIT_LEFT);
+    limitSwitch_right = new DigitalInput(Constants.LIMIT_RIGHT);
 
     kp = .03;
     kf = 0.1;
@@ -44,6 +45,7 @@ public class Turret extends SubsystemBase {
     fric = 0;
     intErr = 0;
     posErr = 0;
+    zerr = 0;
   }
 
   public void turnTurret(double autoTrigger) {
@@ -52,6 +54,8 @@ public class Turret extends SubsystemBase {
     posErr = vision.getX();
     SmartDashboard.putNumber("JOYSTICK", autoTrigger);
     SmartDashboard.putNumber("Vision X: ", posErr);
+    zerr = vision.getZ();
+    SmartDashboard.putNumber("Vision Z: ", zerr);
     SmartDashboard.putBoolean("Target Found", vision.getTarget());
     SmartDashboard.updateValues();
     intErr += posErr;

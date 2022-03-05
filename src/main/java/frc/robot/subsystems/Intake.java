@@ -23,17 +23,21 @@ public class Intake extends SubsystemBase {
   private VictorSPX intakeMotor;
   private VictorSPX brushMotor;
   private TalonFX transitionMotor;
-  private DigitalInput banner;
-  private DigitalInput banner2;
-  private DigitalInput banner3;
-  private boolean ballLoaded;
+
+  private DigitalInput banner1; // dio 0
+  private DigitalInput banner2; // dio 1
+  private DigitalInput banner3; // dio 2
+
+  private boolean storageFull; // whether storage is full
+  private int ballStored; // balls stored
+  private String intakeStatus;
   
   public Intake() {
     intakeMotor = new VictorSPX(Constants.INTAKE_MOTOR);
     brushMotor = new VictorSPX(Constants.BRUSH_MOTOR);
     transitionMotor = new TalonFX(Constants.TRANSIT_MOTOR);
 
-    banner = new DigitalInput(Constants.BANNER_1);
+    banner1 = new DigitalInput(Constants.BANNER_1);
     banner2 = new DigitalInput(Constants.BANNER_2);
     banner3 = new DigitalInput(Constants.BANNER_3);
   }
@@ -43,25 +47,41 @@ public class Intake extends SubsystemBase {
     // This method will be called once per scheduler run
 
   }
-
-  /* 
+ 
   public void intake(boolean isEjecting){
     if (!isEjecting) {
-      if (bannerOutput()) {
-        ballLoaded = true;
-      } else if (banner2Output()) {
-        ballLoaded = false;
-      }
-      if (ballLoaded) {
-        intakeBall(.5);
+
+      if (!banner3Output()) {
+        storageFull = true; // all slots full
+        ballStored = 3;
+      } else if (!banner2Output()) {
+        storageFull = false; // one slot open
+        ballStored = 2;
+      } else if (!banner1Output()) {
+        storageFull = false; // two slots open 
+        ballStored = 1;
       } else {
+        storageFull = false;
+        ballStored = 0;
+      }
+
+      if (storageFull) {
         intakeBall(0);
+        intakeStatus = "intake motor not running";
+      } else {
+        intakeBall(.5);
+        intakeStatus = "intake motor running";
        }
     }else{
       intakeBall(-1);
-       }
+      transitionMotor(-1); // ejects everything 
+      intakeStatus = "intake motor ejecting balls";
+    }
+
+    SmartDashboard.putBoolean("Storage Full?", storageFull);
+    SmartDashboard.putNumber("Balls Stored:", ballStored);
+    SmartDashboard.putString("Intake Status:", intakeStatus);
   }
-  */
 
   public void intakeBall(double speed){
     intakeMotor.set(ControlMode.PercentOutput, -speed); 
@@ -75,14 +95,13 @@ public class Intake extends SubsystemBase {
     transitionMotor.set(ControlMode.PercentOutput, speed);
   }
 
-  public boolean bannerOutput() {
-    return banner.get();
+  public boolean banner1Output() { // banner sensor for 1st ball
+    return banner1.get();
   }
-  public boolean banner2Output() {
+  public boolean banner2Output() { // banner sensor for 2nd ball
     return banner2.get();
   }
-
-  public boolean banner3Output() {
+  public boolean banner3Output() { // banner sensor for transition
     return banner3.get();
   }
 

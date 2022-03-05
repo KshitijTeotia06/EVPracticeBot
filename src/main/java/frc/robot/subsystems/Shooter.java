@@ -59,8 +59,8 @@ public class Shooter extends SubsystemBase {
   }
 
   public void outtakeBall(double speed) {
-    SmartDashboard.putNumber("CUR SPEED: ", speed);
-    if(speed > 0.5) shooterMotor1.set(ControlMode.PercentOutput, 0.8);
+    SmartDashboard.putNumber("SHOOTER SPEED: ", speed);
+    if(speed > 0.5) shooterMotor1.set(ControlMode.PercentOutput, speed);
     else shooterMotor1.set(ControlMode.Velocity, 0);
     // shooterMotor1.set(ControlMode.Velocity, );
     // if(speed > 0.5) shooterMotor1.set(ControlMode.Velocity, 15000);
