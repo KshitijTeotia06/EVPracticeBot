@@ -5,8 +5,11 @@
 package frc.robot.commands;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
@@ -25,7 +28,12 @@ public class Shoot extends CommandBase {
     addRequirements(shoot);
     this.shoot = shoot;
     this.stick = stick;
+<<<<<<< HEAD
     this.intake = intake;
+=======
+
+
+>>>>>>> d13f6b3d4862082d3b5dc7ba01f755ddcb627aa5
   }
 
   // Called when the command is initially scheduled.
@@ -35,6 +43,7 @@ public class Shoot extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+<<<<<<< HEAD
     if(stick.getRawButton(4)) { // starts warming up shooter (press again to stop shooter)
       if(shooterWarmedUp == false) {
         shooterWarmedUp = true;
@@ -52,6 +61,12 @@ public class Shoot extends CommandBase {
       intake.transitionMotor(0.8);
     }
     SmartDashboard.putNumber("SHOOTER SPEED", shoot.getRPM());
+=======
+    throttle = -stick.getY();
+    shoot.outtakeBall(throttle);
+    SmartDashboard.putNumber("SPED", shoot.getRPM());
+
+>>>>>>> d13f6b3d4862082d3b5dc7ba01f755ddcb627aa5
   }
 
   // Called once the command ends or is interrupted.

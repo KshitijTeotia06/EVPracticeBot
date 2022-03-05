@@ -8,11 +8,11 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Climb;
-
 public class MoveClimb extends CommandBase {
   /** Creates a new MoveClimb. */
   Climb climb;
   Joystick joy;
+  
   public MoveClimb(Climb climb, Joystick joy) {
     addRequirements(climb);
     this.climb = climb;
