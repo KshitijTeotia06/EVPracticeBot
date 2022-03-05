@@ -50,22 +50,12 @@ public class RobotContainer {
     driveStick = new Joystick(Constants.DRIVE_STICK_PORT);
     turnStick = new Joystick(Constants.TURN_STICK_PORT);
     controller = new XboxController(Constants.XBOX_PORT);
-<<<<<<< HEAD
     tmove = new TurretMove(turret, driveStick, turnStick);
     jdrive = new JoyDrive(drivetrain, driveStick, turnStick);
     shoot = new Shoot(shooter, driveStick, intake);
     climbmove = new MoveClimb(climb, driveStick);
     intakeCommand = new IntakeBall(intake, driveStick);
-=======
-    tmove = new TurretMove(turret, driveStick);
-    jdrive = new JoyDrive(drivetrain, controller);
-    shoot = new Shoot(shooter, driveStick);
-    climbmove = new MoveClimb(climb, driveStick);
-    intakeCommand = new IntakeBall(intake, driveStick);
-    shootCommand = new TurretMove(turret, driveStick);
-    
 
->>>>>>> d13f6b3d4862082d3b5dc7ba01f755ddcb627aa5
   }
 
   /**
@@ -85,11 +75,7 @@ public class RobotContainer {
    */
   public Command[] getTeleCommand() {
     // An ExampleCommand will run in autonomous
-<<<<<<< HEAD
-    Command[] ret = {jdrive, intakeCommand};
-=======
     Command[] ret = {shoot, intakeCommand, jdrive, tmove};
->>>>>>> d13f6b3d4862082d3b5dc7ba01f755ddcb627aa5
     return ret;
     // Removed tmove from ret
     /*
