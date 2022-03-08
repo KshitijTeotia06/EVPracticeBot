@@ -36,6 +36,7 @@ public class IntakeBall extends CommandBase {
     SmartDashboard.putBoolean("7 button", j1.getRawButton(7));
     SmartDashboard.putBoolean("banner1: ", intake.banner1Output());
     SmartDashboard.putBoolean("banner2: ", intake.banner2Output());
+    /*
     if(j1.getRawButton(5)){ 
       intake.intake(true); // ejects balls (joystick button 6(id 5))
     } else {
@@ -46,7 +47,9 @@ public class IntakeBall extends CommandBase {
       intake.intakeBrush(0.8);
     }else{
       intake.intakeBrush(0);
-    }
+    } 
+    */
+    intake.intakeBall(0.9);
     SmartDashboard.updateValues();
   }
 

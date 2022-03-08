@@ -35,11 +35,15 @@ public class TurretMove extends CommandBase {
   public void execute() {
     // SmartDashboard.putNumber("TURRETTHROTTLE", turretThrottle);
     // turret.turnTurret(-0.1);
+    /*
     if (wheel.getRawButton(4)){
       turret.turnTurret(-0.5); // turns turret left
     } else if (wheel.getRawButton(6)){
       turret.turnTurret(0.5); // turns turret right
     }
+    */
+
+    //turret.turnTurret(-0.9);
   }
 
   // Called once the command ends or is interrupted.

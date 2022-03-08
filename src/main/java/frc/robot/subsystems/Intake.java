@@ -11,6 +11,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -23,6 +24,7 @@ public class Intake extends SubsystemBase {
   private VictorSPX intakeMotor;
   private VictorSPX brushMotor;
   private TalonFX transitionMotor;
+  private Compressor compressor;
 
   private DigitalInput banner1; // dio 0
   private DigitalInput banner2; // dio 1
@@ -84,7 +86,8 @@ public class Intake extends SubsystemBase {
   }
 
   public void intakeBall(double speed){
-    intakeMotor.set(ControlMode.PercentOutput, -speed); 
+    intakeMotor.set(ControlMode.PercentOutput, speed); 
+    SmartDashboard.putNumber("Intake: ", speed);
   }
 
   public void intakeBrush(double speed) {

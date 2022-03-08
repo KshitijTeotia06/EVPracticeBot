@@ -26,12 +26,12 @@ public class JoyDrive extends CommandBase {
     this.driveStick = dst;
     
     // Change based on the connection to nav x
-  
+    /*
     ahrsNavX = new AHRS(SerialPort.Port.kUSB);
     ahrsNavX.reset();
     ahrsNavX.resetDisplacement();
     ahrsNavX.calibrate();
-    
+    */
 
     addRequirements(dt);
     // Use addRequirements() here to declare subsystem dependencies.

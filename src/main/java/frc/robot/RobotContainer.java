@@ -75,7 +75,7 @@ public class RobotContainer {
    */
   public Command[] getTeleCommand() {
     // An ExampleCommand will run in autonomous
-    Command[] ret = {shoot, intakeCommand, jdrive, tmove};
+    Command[] ret = {intakeCommand};
     return ret;
     // Removed tmove from ret
     /*

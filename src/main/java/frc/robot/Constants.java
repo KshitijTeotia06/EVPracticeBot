@@ -26,15 +26,15 @@ public final class Constants {
     // shooter and turret
     public static final int SHOOTER1 = 14;
     public static final int SHOOTER2 = 15;
-    public static final int TURRT_MOTOR_ID = 9;
+    public static final int TURRT_MOTOR_ID = 12;
     public static final int LIMIT_LEFT = 3; //dio
     public static final int LIMIT_RIGHT = 4; //dio
 
     // control 
-    public static final int XBOX_PORT = 0;
-    public static final int DRIVE_STICK_PORT = 1; // joystick
+    public static final int XBOX_PORT = 1;
+    public static final int DRIVE_STICK_PORT = 0; // joystick
     public static final int TURN_STICK_PORT = 2; // steering wheel
-    public static final int DRIVE_AXIS = 3; // 1 for joystick, 3 for right trigger xbox controller
+    public static final int DRIVE_AXIS = 1; // 1 for joystick, 3 for right trigger xbox controller
     public static final int TURN_AXIS = 0; // 0 for wheel, 0 for left stick x-axis xbox controller
 
     // climb 

@@ -49,7 +49,9 @@ public class Turret extends SubsystemBase {
   }
 
   public void turnTurret(double autoTrigger) {
-    double manual = 0;
+    double manual = 1;
+    autoTrigger = 0;
+
     SmartDashboard.putNumber("REACHED", 1);
     posErr = vision.getX();
     SmartDashboard.putNumber("JOYSTICK", autoTrigger);
@@ -77,7 +79,7 @@ public class Turret extends SubsystemBase {
     if(Math.abs(posErr) > .1 && posErr * intErr < 0){
       intErr = 0;
     }
-    motorOutput = autoTrigger * (intErr * ki + posErr * kp + fric) + manual*.5;
+    motorOutput = autoTrigger * (intErr * ki + posErr * kp + fric) + manual*1;
     if (getLeftLimitSwitchStatus() == false && motorOutput < 0) {
       motorOutput = .25;
     }
