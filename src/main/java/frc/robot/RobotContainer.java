@@ -12,12 +12,15 @@ import frc.robot.commands.JoyDrive;
 import frc.robot.commands.MoveClimb;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.TurretMove;
+import frc.robot.commands.testcommand;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Vision;
+import frc.robot.commands.testcommand;
+import frc.robot.subsystems.testSystem;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /**
@@ -32,6 +35,7 @@ public class RobotContainer {
   private final Climb climb = new Climb();
   private final Vision vision = new Vision();
   private final Turret turret = new Turret(vision);
+  private final testSystem tSys = new testSystem();
   private Joystick driveStick, turnStick;
   private XboxController controller;
   private final JoyDrive jdrive;
@@ -41,6 +45,7 @@ public class RobotContainer {
   private final MoveClimb climbmove;
   private final Intake intake = new Intake();
   private final IntakeBall intakeCommand;
+  private final testcommand tester;
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -55,7 +60,7 @@ public class RobotContainer {
     shoot = new Shoot(shooter, driveStick, intake);
     climbmove = new MoveClimb(climb, driveStick);
     intakeCommand = new IntakeBall(intake, driveStick);
-
+    tester = new testcommand(driveStick, tSys);
   }
 
   /**
@@ -75,7 +80,7 @@ public class RobotContainer {
    */
   public Command[] getTeleCommand() {
     // An ExampleCommand will run in autonomous
-    Command[] ret = {shoot, intakeCommand, jdrive, tmove};
+    Command[] ret = {tester};
     return ret;
     // Removed tmove from ret
     /*
