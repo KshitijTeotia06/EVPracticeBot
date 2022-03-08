@@ -24,8 +24,8 @@ public final class Constants {
     public static final int MOTOR_R2_ID = 4;
 
     // shooter and turret
-    public static final int SHOOTER1 = 14;
-    public static final int SHOOTER2 = 15;
+    public static final int SHOOTER1 = 10;
+    public static final int SHOOTER2 = 9;
     public static final int TURRT_MOTOR_ID = 12;
     public static final int LIMIT_LEFT = 3; //dio
     public static final int LIMIT_RIGHT = 4; //dio
