@@ -21,8 +21,8 @@ public class Intake extends SubsystemBase {
   /**
    * Creates a new Intake.
    */
-  private VictorSPX intakeMotor;
-  private VictorSPX brushMotor;
+  private TalonFX intakeMotor;
+  private TalonFX brushMotor;
   private TalonFX transitionMotor;
   private Compressor compressor;
 
@@ -35,13 +35,14 @@ public class Intake extends SubsystemBase {
   private String intakeStatus;
   
   public Intake() {
-    intakeMotor = new VictorSPX(Constants.INTAKE_MOTOR);
-    brushMotor = new VictorSPX(Constants.BRUSH_MOTOR);
-    transitionMotor = new TalonFX(Constants.TRANSIT_MOTOR);
-
+    intakeMotor = new TalonFX(Constants.INTAKE_MOTOR);
+    // brushMotor = new TalonFX(Constants.BRUSH_MOTOR);
+    // transitionMotor = new TalonFX(Constants.TRANSIT_MOTOR);
+    intakeMotor.setInverted(true);
+    // transitionMotor.setInverted(true);
     banner1 = new DigitalInput(Constants.BANNER_1);
-    banner2 = new DigitalInput(Constants.BANNER_2);
-    banner3 = new DigitalInput(Constants.BANNER_3);
+    // banner2 = new DigitalInput(Constants.BANNER_2);
+    // banner3 = new DigitalInput(Constants.BANNER_3);
   }
 
   @Override
@@ -51,7 +52,7 @@ public class Intake extends SubsystemBase {
   }
  
   public void intake(boolean isEjecting){
-    if (!isEjecting) {
+    /* if (!isEjecting) {
 
       if (!banner3Output()) {
         storageFull = true; // all slots full
@@ -78,7 +79,7 @@ public class Intake extends SubsystemBase {
       intakeBall(-1);
       transitionMotor(-1); // ejects everything 
       intakeStatus = "intake motor ejecting balls";
-    }
+    } */
 
     SmartDashboard.putBoolean("Storage Full?", storageFull);
     SmartDashboard.putNumber("Balls Stored:", ballStored);

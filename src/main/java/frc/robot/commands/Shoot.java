@@ -10,6 +10,7 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
@@ -20,40 +21,52 @@ public class Shoot extends CommandBase {
   private Shooter shoot;
   private Intake intake;
   private Joystick stick;
+  private XboxController controller;
   private double throttle;
+  double speed = 0;
   private boolean shooterWarmedUp = false;
 
   /** Creates a new Shoot. */
-  public Shoot(Shooter shoot, Joystick stick, Intake intake) {
+  public Shoot(Shooter shoot, Joystick stick, Intake intake, XboxController controller) {
     addRequirements(shoot);
     this.shoot = shoot;
     this.stick = stick;
     this.intake = intake;
+    this.controller = controller;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    speed = 0;
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(stick.getRawButton(4)) { // starts warming up shooter (press again to stop shooter)
-      if(shooterWarmedUp == false) {
-        shooterWarmedUp = true;
-      } else {
-        shooterWarmedUp = false;
-      }
+    // if(stick.getRawButton(4)) { // starts warming up shooter (press again to stop shooter)
+    //   if(shooterWarmedUp == false) {
+    //     shooterWarmedUp = true;
+    //   } else {
+    //     shooterWarmedUp = false;
+    //   }
+    // }
+
+    // if(shooterWarmedUp){
+    //   shoot.outtakeBall(0.5); // keeps shooter spinning
+    // }
+    
+    if(stick.getRawButtonPressed(12)){
+      if(speed == 0) speed = 0.5;
+      else speed = 0;
     }
 
-    if(shooterWarmedUp = true){
-      shoot.outtakeBall(0.5); // keeps shooter spinning
-    }
-
-    if(stick.getTrigger()){ // pulls ball into shooter and speeds up shooter
-      shoot.outtakeBall(0.8); // SPEED SHOULD BE DECIDED BY LIMELIGHT AUTO TRAJECTORY IN FINAL BOT
-      intake.transitionMotor(0.8);
-    }
+    SmartDashboard.putNumber("TRIGGER: ", stick.getY());
+    SmartDashboard.updateValues();
+    
+    intake.transitionMotor(controller.getRightTriggerAxis());
+    shoot.outtakeBall(speed);
+    
     SmartDashboard.putNumber("SHOOTER SPEED", shoot.getRPM());
   }
 

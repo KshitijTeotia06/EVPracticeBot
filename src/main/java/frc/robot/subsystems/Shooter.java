@@ -8,8 +8,10 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -23,8 +25,8 @@ public class Shooter extends SubsystemBase {
   // private static TalonFX intakeMotor1 = new TalonFX(Constants.INTAKE_1);
   // private static TalonFX intakeMotor2 = new TalonFX(Constants.INTAKE_2);
   // private static TalonFX turretMotor = new TalonFX(Constants.TURRET);
-  private static TalonSRX shooterMotor1;
-  private static TalonSRX shooterMotor2;
+  private static WPI_TalonFX shooterMotor1;
+  private static WPI_TalonFX shooterMotor2;
   //private static VictorSPX intakeMotor = new VictorSPX(Constants.INTAKE);
   private DigitalInput banner;
   boolean ballLoaded;
@@ -38,14 +40,16 @@ public class Shooter extends SubsystemBase {
    * Creates a new Shooter.
    */
   public Shooter() {
-    shooterMotor1 = new TalonSRX(Constants.SHOOTER1);
-    shooterMotor2 = new TalonSRX(Constants.SHOOTER2);
-    shooterMotor2.setInverted(true);
+    shooterMotor1 = new WPI_TalonFX(Constants.SHOOTER1);
+    shooterMotor2 = new WPI_TalonFX(Constants.SHOOTER2);
+    shooterMotor1.setInverted(true);
     shooterMotor2.follow(shooterMotor1);
     banner = new DigitalInput(6);
     banner2 = new DigitalInput(8);
     ballLoaded = false;
     timer = new Timer();
+    // shooterMotor1.setNeutralMode(NeutralMode.Coast);
+    // shooterMotor2.setNeutralMode(NeutralMode.Coast);
   }
 
   @Override
@@ -59,14 +63,16 @@ public class Shooter extends SubsystemBase {
   }
 
   public void outtakeBall(double speed) {
-    SmartDashboard.putNumber("SHOOTER SPEED: ", speed);
-    if(speed > 0.5) shooterMotor1.set(ControlMode.PercentOutput, speed);
-    else shooterMotor1.set(ControlMode.Velocity, 0);
-    // shooterMotor1.set(ControlMode.Velocity, );
-    // if(speed > 0.5) shooterMotor1.set(ControlMode.Velocity, 15000);
+    shooterMotor1.set(ControlMode.PercentOutput, speed);
+    getShooterVel();
+    // SmartDashboard.putNumber("SHOOTER SPEED: ", speed);
+    // if(speed > 0.1) shooterMotor1.set(ControlMode.PercentOutput, speed);
     // else shooterMotor1.set(ControlMode.Velocity, 0);
-    SmartDashboard.putNumber("Shooter speed 1 : ", shooterMotor1.getSelectedSensorVelocity());
-    SmartDashboard.putNumber("Shooter speed 2 : ", shooterMotor2.getSelectedSensorVelocity());
+    // // shooterMotor1.set(ControlMode.Velocity, );
+    // // if(speed > 0.5) shooterMotor1.set(ControlMode.Velocity, 15000);
+    // // else shooterMotor1.set(ControlMode.Velocity, 0);
+    // SmartDashboard.putNumber("Shooter speed 1 : ", shooterMotor1.getSelectedSensorVelocity());
+    // SmartDashboard.putNumber("Shooter speed 2 : ", shooterMotor2.getSelectedSensorVelocity());
   }
 
   public void inttakeBall(double speed) {

@@ -64,10 +64,7 @@ public class Vision extends SubsystemBase {
   }
 
   // returns true or false depending on if a target is found
-  public boolean getTarget() {
-
-    targets = tv.getBoolean(false);
-    return targets;
-
+  public double getTarget() {
+    return tv.getDouble(3);
   }
 }

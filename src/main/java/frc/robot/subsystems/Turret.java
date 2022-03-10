@@ -33,6 +33,7 @@ public class Turret extends SubsystemBase {
   /** Creates a new Turret. */
   public Turret(Vision vision) {
     turretMotor = new TalonSRX(Constants.TURRT_MOTOR_ID);
+    turretMotor.setInverted(true);
     this.vision = vision;
     limitSwitch_left = new DigitalInput(Constants.LIMIT_LEFT);
     limitSwitch_right = new DigitalInput(Constants.LIMIT_RIGHT);
@@ -48,17 +49,27 @@ public class Turret extends SubsystemBase {
     zerr = 0;
   }
 
+  public void setSpeed(double speed){
+    turretMotor.set(ControlMode.PercentOutput, speed);
+  }
+
   public void turnTurret(double autoTrigger) {
-    double manual = 1;
-    autoTrigger = 0;
+    SmartDashboard.putNumber("TARGET FOUND", vision.getTarget());
+    SmartDashboard.putNumber("VISION X", vision.getX());
+    SmartDashboard.updateValues();
+    if(vision.getTarget() != 1.0){
+      turretMotor.set(ControlMode.PercentOutput, 0);
+      return;
+    }
 
     SmartDashboard.putNumber("REACHED", 1);
     posErr = vision.getX();
     SmartDashboard.putNumber("JOYSTICK", autoTrigger);
     SmartDashboard.putNumber("Vision X: ", posErr);
     zerr = vision.getZ();
+
     SmartDashboard.putNumber("Vision Z: ", zerr);
-    SmartDashboard.putBoolean("Target Found", vision.getTarget());
+    SmartDashboard.putNumber("Target Found", vision.getTarget());
     SmartDashboard.updateValues();
     intErr += posErr;
 
@@ -79,14 +90,14 @@ public class Turret extends SubsystemBase {
     if(Math.abs(posErr) > .1 && posErr * intErr < 0){
       intErr = 0;
     }
-    motorOutput = autoTrigger * (intErr * ki + posErr * kp + fric) + manual*1;
-    if (getLeftLimitSwitchStatus() == false && motorOutput < 0) {
-      motorOutput = .25;
-    }
-    if (getRightLimitSwitchStatus() == false && motorOutput > 0) {
-      motorOutput = -.25;
-    }
-    turretMotor.set(ControlMode.PercentOutput, motorOutput);
+    motorOutput = autoTrigger * (intErr * ki + posErr * kp + fric);
+    // if (getLeftLimitSwitchStatus() == false && motorOutput < 0) {
+      // motorOutput = .25;
+    // }
+    // if (getRightLimitSwitchStatus() == false && motorOutput > 0) {
+      // motorOutput = -.25;
+    // }
+    turretMotor.set(ControlMode.PercentOutput, -motorOutput);
     SmartDashboard.putBoolean("LEFT LIMIT", getLeftLimitSwitchStatus());
     SmartDashboard.putBoolean("RIGHT LIMIT", getRightLimitSwitchStatus());
     SmartDashboard.putNumber("Motor Ouptut: ", motorOutput);

@@ -6,6 +6,8 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 
+//
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -43,12 +45,12 @@ public final class Constants {
 
     // intake
     public static final int INTAKE_MOTOR = 11;
-    public static final int TRANSIT_MOTOR = 8;
+    public static final int TRANSIT_MOTOR = 5;
     public static final int BRUSH_MOTOR = 10;
     public static final int BANNER_1 = 0; // dio
     public static final int BANNER_2 = 1; // dio
     public static final int BANNER_3 = 2; // needs to be installed
     public static final double TRACK_WIDTH = 0;
-    public static final int SHIFTER_L = 5; //0
-    public static final int SHIFTER_R = 6; //1
+    public static final int SHIFTER_L = 0; //0
+    public static final int SHIFTER_R = 1; //1
 }

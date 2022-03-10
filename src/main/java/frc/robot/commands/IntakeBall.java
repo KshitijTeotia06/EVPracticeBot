@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
@@ -14,14 +15,17 @@ public class IntakeBall extends CommandBase {
   /** Creates a new IntakeBall. */
   Intake intake;
   // Shooter shoot;
+  XboxController controller;
   Joystick j1;
   boolean on = false;
+  double speed = 0;
 
-  public IntakeBall(Intake intake, Joystick j1) {
-    addRequirements(intake);
+  public IntakeBall(Intake intake, Joystick j1, XboxController controller) {
     this.intake = intake;
+    addRequirements(intake);
     //this.shoot = shoot;
     this.j1 = j1;
+    this.controller = controller;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -49,7 +53,18 @@ public class IntakeBall extends CommandBase {
       intake.intakeBrush(0);
     } 
     */
-    intake.intakeBall(0.9);
+    SmartDashboard.putBoolean("BANNNER OUTPUT", intake.banner1Output());
+    if(!intake.banner1Output()){
+      SmartDashboard.putNumber("ITNAKE SPED ", controller.getRightY());
+      intake.intakeBall(controller.getRightY());
+    }else{
+      intake.intakeBall(0);
+    }
+    // if(j1.getRawButton(12)){
+    //   if(speed == 0) speed = 0.9;
+    //   else speed = 0;
+    // }
+    // intake.intakeBall(speed);
     SmartDashboard.updateValues();
   }
 

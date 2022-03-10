@@ -14,14 +14,13 @@ import frc.robot.subsystems.Vision;
 public class TurretMove extends CommandBase {
   /** Creates a new TurretMove. */
   Turret turret;
-  Joystick j1;
-  Joystick wheel;
+  XboxController controller;
+  boolean manual = false;
 
-  public TurretMove(Turret turret, Joystick j1, Joystick wheel) {
+  public TurretMove(Turret turret, XboxController controller) {
     this.turret = turret;
     addRequirements(turret);
-    this.j1 = j1;
-    this.wheel = wheel;
+    this.controller = controller;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -42,8 +41,18 @@ public class TurretMove extends CommandBase {
       turret.turnTurret(0.5); // turns turret right
     }
     */
-
-    //turret.turnTurret(-0.9);
+    SmartDashboard.putNumber("AXIS VALUE", controller.getRightTriggerAxis());
+    SmartDashboard.updateValues();
+    if(controller.getBButtonPressed()){
+      manual = !manual;
+    }
+    if(manual){
+      turret.setSpeed(-controller.getRightX());
+    }else{
+      turret.turnTurret(controller.getRightTriggerAxis());
+    }
+    
+    // turret.setSpeed(controller.getRightX());
   }
 
   // Called once the command ends or is interrupted.

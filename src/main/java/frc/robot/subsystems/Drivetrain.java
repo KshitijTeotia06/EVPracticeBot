@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -47,17 +48,19 @@ public class Drivetrain extends SubsystemBase {
     r = new MotorControllerGroup(r1, r2);
     r.setInverted(true);
     // shifter.set(Value.kReverse);
+    pcmCompressor.enabled();
+    pcmCompressor.enableDigital();
+
     shifterL.set(false);
     shifterR.set(false);
     
-    pcmCompressor.enabled();
-    pcmCompressor.enableDigital();
+    SmartDashboard.putBoolean("compressor enabled: ", pcmCompressor.enabled());
     ddrive = new DifferentialDrive(l, r);
   }
 
 
   public void move(double power, double offset){ // power is the throttle (drive stick), offset is turning
-    ddrive.arcadeDrive(power, offset, power < 0.1);
+    ddrive.arcadeDrive(power, offset);
   }
 
   public void toggleGear(){
