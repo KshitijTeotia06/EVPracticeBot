@@ -56,18 +56,19 @@ public class Shoot extends CommandBase {
     //   shoot.outtakeBall(0.5); // keeps shooter spinning
     // }
     
-    if(stick.getRawButtonPressed(12)){
-      if(speed == 0) speed = 0.5;
-      else speed = 0;
-    }
-
-    SmartDashboard.putNumber("TRIGGER: ", stick.getY());
-    SmartDashboard.updateValues();
+    // if(controller.getLeftTriggerAxis() > 0){
+    //   if(speed == 0) speed = 0.5 ;
+    //   else speed = 0;
+    // }
     
     intake.transitionMotor(controller.getRightTriggerAxis());
-    shoot.outtakeBall(speed);
     
+    shoot.outtakeBall(controller.getLeftTriggerAxis());
+    
+    SmartDashboard.putNumber("TRIGGER: ", stick.getY());
     SmartDashboard.putNumber("SHOOTER SPEED", shoot.getRPM());
+    SmartDashboard.updateValues();
+
   }
 
   // Called once the command ends or is interrupted.

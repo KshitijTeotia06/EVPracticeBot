@@ -19,6 +19,7 @@ public class JoyDrive extends CommandBase {
   private final Drivetrain drivetrain;
   private Joystick driveStick, turnStick;
   private AHRS ahrsNavX;
+  private boolean highGear = false;
 
   public JoyDrive(Drivetrain dt, Joystick dst, Joystick tst) { //replace parameters w (Drivetrain dt, Joystick dst, Joystick tst) for wheel and stick 
     this.drivetrain = dt;      
@@ -47,10 +48,20 @@ public class JoyDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    // SmartDashboard.putData("shift gear", drivetrain.toggleGear());
+
     if(driveStick.getTriggerPressed()){
-      drivetrain.toggleGear();
+      SmartDashboard.putBoolean("CLICKED", true);
+      SmartDashboard.updateValues();
+      if(highGear){
+        drivetrain.setForward();
+      }else{
+        drivetrain.setReverse();
+      }
+      highGear = !highGear;
     }
-    drivetrain.move(-driveStick.getY(), -turnStick.getX());
+
+    drivetrain.move(-driveStick.getY(), turnStick.getX());
   }
 
   // Called once the command ends or is interrupted.

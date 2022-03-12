@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -15,7 +16,7 @@ import frc.robot.Constants;
 
 public class Turret extends SubsystemBase {
 
-  private TalonSRX turretMotor;
+  private TalonFX turretMotor;
   // private TalonSRX elevator = new TalonSRX(Constants.ELEVATOR);
   Vision vision;
   double kp;
@@ -32,7 +33,7 @@ public class Turret extends SubsystemBase {
 
   /** Creates a new Turret. */
   public Turret(Vision vision) {
-    turretMotor = new TalonSRX(Constants.TURRT_MOTOR_ID);
+    turretMotor = new TalonFX(Constants.TURRT_MOTOR_ID);
     turretMotor.setInverted(true);
     this.vision = vision;
     limitSwitch_left = new DigitalInput(Constants.LIMIT_LEFT);

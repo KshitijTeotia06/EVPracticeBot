@@ -39,10 +39,6 @@ public final class Constants {
     public static final int DRIVE_AXIS = 1; // 1 for joystick, 3 for right trigger xbox controller
     public static final int TURN_AXIS = 0; // 0 for wheel, 0 for left stick x-axis xbox controller
 
-    // climb 
-    public static final int CLIMB_MOTOR_1_ID = 13;
-    public static final int CLIMB_MOTOR_2_ID = 12;
-
     // intake
     public static final int INTAKE_MOTOR = 11;
     public static final int TRANSIT_MOTOR = 5;
@@ -51,6 +47,6 @@ public final class Constants {
     public static final int BANNER_2 = 1; // dio
     public static final int BANNER_3 = 2; // needs to be installed
     public static final double TRACK_WIDTH = 0;
-    public static final int SHIFTER_L = 0; //0
-    public static final int SHIFTER_R = 1; //1
+    public static final int LOWGEAR = 0;//0
+    public static final int HIGHGEAR = 1; //1
 }

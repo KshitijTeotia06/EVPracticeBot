@@ -12,21 +12,16 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 
 public class IntakeBall extends CommandBase {
-  /** Creates a new IntakeBall. */
   Intake intake;
-  // Shooter shoot;
   XboxController controller;
-  Joystick j1;
   boolean on = false;
   double speed = 0;
+  
 
-  public IntakeBall(Intake intake, Joystick j1, XboxController controller) {
+  public IntakeBall(Intake intake, XboxController controller) {
     this.intake = intake;
     addRequirements(intake);
-    //this.shoot = shoot;
-    this.j1 = j1;
     this.controller = controller;
-    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
@@ -37,34 +32,12 @@ public class IntakeBall extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    SmartDashboard.putBoolean("7 button", j1.getRawButton(7));
     SmartDashboard.putBoolean("banner1: ", intake.banner1Output());
-    SmartDashboard.putBoolean("banner2: ", intake.banner2Output());
-    /*
-    if(j1.getRawButton(5)){ 
-      intake.intake(true); // ejects balls (joystick button 6(id 5))
-    } else {
-      intake.intake(false); // keeps running intake by default
-    }
-    
-    if(j1.getRawButton(2)){ //runs brush (add color sensor stuff here)
-      intake.intakeBrush(0.8);
-    }else{
-      intake.intakeBrush(0);
-    } 
-    */
     SmartDashboard.putBoolean("BANNNER OUTPUT", intake.banner1Output());
-    if(!intake.banner1Output()){
-      SmartDashboard.putNumber("ITNAKE SPED ", controller.getRightY());
-      intake.intakeBall(controller.getRightY());
-    }else{
-      intake.intakeBall(0);
+    intake.intakeBall(controller.getRightY());
+    if(controller.getRawButton(3)) { // x-button, ejects balls
+      intake.intakeBall(-0.5); 
     }
-    // if(j1.getRawButton(12)){
-    //   if(speed == 0) speed = 0.9;
-    //   else speed = 0;
-    // }
-    // intake.intakeBall(speed);
     SmartDashboard.updateValues();
   }
 

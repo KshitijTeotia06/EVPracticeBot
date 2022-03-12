@@ -9,11 +9,9 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.IntakeBall;
 import frc.robot.commands.JoyDrive;
-import frc.robot.commands.MoveClimb;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.TurretMove;
 import frc.robot.commands.testcommand;
-import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
@@ -32,7 +30,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final Drivetrain drivetrain = new Drivetrain();
-  private final Climb climb = new Climb();
   private final Vision vision = new Vision();
   private final Turret turret = new Turret(vision);
   private final testSystem tSys = new testSystem();
@@ -58,8 +55,7 @@ public class RobotContainer {
     tmove = new TurretMove(turret, controller);
     jdrive = new JoyDrive(drivetrain, driveStick, turnStick);
     shoot = new Shoot(shooter, driveStick, intake, controller);
-    // climbmove = new MoveClimb(climb, driveStick);
-    intakeCommand = new IntakeBall(intake, driveStick, controller);
+    intakeCommand = new IntakeBall(intake, controller);
     tester = new testcommand(driveStick, tSys);
   }
 
@@ -80,7 +76,7 @@ public class RobotContainer {
    */
   public Command[] getTeleCommand() {
     // An ExampleCommand will run in autonomous
-    Command[] ret = {intakeCommand};
+    Command[] ret = {intakeCommand, jdrive, tmove, shoot};
     return ret;
     // Removed tmove from ret
     /*

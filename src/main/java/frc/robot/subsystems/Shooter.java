@@ -28,9 +28,9 @@ public class Shooter extends SubsystemBase {
   private static WPI_TalonFX shooterMotor1;
   private static WPI_TalonFX shooterMotor2;
   //private static VictorSPX intakeMotor = new VictorSPX(Constants.INTAKE);
-  private DigitalInput banner;
+  // private DigitalInput banner;
   boolean ballLoaded;
-  private DigitalInput banner2;
+  // private DigitalInput banner2;
 
   private double currentSpeed;
   private double maxSpeed;
@@ -44,8 +44,8 @@ public class Shooter extends SubsystemBase {
     shooterMotor2 = new WPI_TalonFX(Constants.SHOOTER2);
     shooterMotor1.setInverted(true);
     shooterMotor2.follow(shooterMotor1);
-    banner = new DigitalInput(6);
-    banner2 = new DigitalInput(8);
+    // banner = new DigitalInput(Constants.BANNER_1);
+    // banner2 = new DigitalInput(8);
     ballLoaded = false;
     timer = new Timer();
     // shooterMotor1.setNeutralMode(NeutralMode.Coast);
@@ -63,7 +63,14 @@ public class Shooter extends SubsystemBase {
   }
 
   public void outtakeBall(double speed) {
-    shooterMotor1.set(ControlMode.PercentOutput, speed);
+    if (speed > 0.8) {
+      shooterMotor1.set(ControlMode.PercentOutput, 0.8);
+
+    }
+    else {
+      shooterMotor1.set(ControlMode.PercentOutput, speed);
+
+    }
     getShooterVel();
     // SmartDashboard.putNumber("SHOOTER SPEED: ", speed);
     // if(speed > 0.1) shooterMotor1.set(ControlMode.PercentOutput, speed);
@@ -79,14 +86,14 @@ public class Shooter extends SubsystemBase {
     //intakeMotor.set(ControlMode.PercentOutput, speed);
   }
 
-  public boolean bannerOutput() {
-    return banner.get();
+  // public boolean bannerOutput() {
+  //   return banner.get();
 
-  }
+  // }
 
-  public boolean banner2Output() {
-    return banner2.get();
-  }
+  // public boolean banner2Output() {
+  //   return banner2.get();
+  // }
 
   public void ejectBalls(double speed) {
     //intakeMotor.set(ControlMode.PercentOutput, speed);
@@ -95,24 +102,24 @@ public class Shooter extends SubsystemBase {
 
   public void intake(boolean isEjecting) {
    // System.out.println("Is ejecting: " + isEjecting);
-    if (!isEjecting) {
-      if (bannerOutput()) {
-        ballLoaded = true;
-        timer.start();
-      } else if (banner2Output()) {
-        ballLoaded = false;
-      }
-      if(timer.get() > .5){
-        ballLoaded = false;
-      }
-      if (ballLoaded) {
-        inttakeBall(0.5);
-      } else {
-        inttakeBall(0);
-      }
-    }else{
-      inttakeBall(-1);
-    }
+    // if (!isEjecting) {
+    //   if (bannerOutput()) {
+    //     ballLoaded = true;
+    //     timer.start();
+    //   } else if (banner2Output()) {
+    //     ballLoaded = false;
+    //   }
+    //   if(timer.get() > .5){
+    //     ballLoaded = false;
+    //   }
+    //   if (ballLoaded) {
+    //     inttakeBall(0.5);
+    //   } else {
+    //     inttakeBall(0);
+    //   }
+    // }else{
+    //   inttakeBall(-1);
+    // }
   }
 
   public double getRPM(){

@@ -47,11 +47,19 @@ public class TurretMove extends CommandBase {
       manual = !manual;
     }
     if(manual){
-      turret.setSpeed(-controller.getRightX());
+      if ((controller.getLeftX() < 0.2) && (controller.getLeftX() > -0.2)){
+        turret.setSpeed(0);
+      } else {
+        turret.setSpeed(controller.getLeftX());
+      }
     }else{
-      turret.turnTurret(controller.getRightTriggerAxis());
+      if ((-controller.getLeftX() < 0.2) && (-controller.getLeftX() > -0.2)){
+        turret.turnTurret(0);
+      } else {
+        turret.turnTurret(-controller.getLeftX());
+      }
+
     }
-    
     // turret.setSpeed(controller.getRightX());
   }
 

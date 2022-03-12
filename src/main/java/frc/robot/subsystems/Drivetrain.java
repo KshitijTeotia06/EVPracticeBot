@@ -29,32 +29,38 @@ public class Drivetrain extends SubsystemBase {
   public MotorControllerGroup l, r;
   public DifferentialDrive ddrive;
   public DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(Constants.TRACK_WIDTH);
-  // public DoubleSolenoid shifter;
-  public Solenoid shifterL, shifterR;
-  public Compressor pcmCompressor;
+  public DoubleSolenoid shifter;
+  public Compressor c;
+
+  // public Solenoid shifterL, shifterR;
  // public AHRS gyro = new AHRS(SPI.Port.kMXP)
  // public DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(gyroAngle)
 
   public Drivetrain() {
-    shifterL = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.SHIFTER_L);
-    shifterR = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.SHIFTER_R);
-    // shifter = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.SHIFTER_L,Constants.SHIFTER_R);
+    // shifterL = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.SHIFTER_L);
+    // shifterR = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.SHIFTER_R);
     l1 = new WPI_TalonFX(Constants.MOTOR_L1_ID);
     l2 = new WPI_TalonFX(Constants.MOTOR_L2_ID);
     r1 = new WPI_TalonFX(Constants.MOTOR_R1_ID);
     r2 = new WPI_TalonFX(Constants.MOTOR_R2_ID);
-    pcmCompressor = new Compressor(0, PneumaticsModuleType.CTREPCM);
+    c = new Compressor(0, PneumaticsModuleType.CTREPCM);
+    c.enabled();
+    c.enableDigital();
+    shifter = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 1);
+
     l = new MotorControllerGroup(l1, l2);
     r = new MotorControllerGroup(r1, r2);
-    r.setInverted(true);
+    l.setInverted(true);
     // shifter.set(Value.kReverse);
-    pcmCompressor.enabled();
-    pcmCompressor.enableDigital();
+ 
 
-    shifterL.set(false);
-    shifterR.set(false);
-    
-    SmartDashboard.putBoolean("compressor enabled: ", pcmCompressor.enabled());
+    // shifterL.set(false);
+    // shifterR.set(false);
+    shifter.set(DoubleSolenoid.Value.kForward);
+    SmartDashboard.putBoolean("FWD", shifter.isFwdSolenoidDisabled());
+    SmartDashboard.putBoolean("RWD", shifter.isRevSolenoidDisabled());
+    SmartDashboard.updateValues();
+    // SmartDashboard.putBoolean("compressor enabled: ", pcmCompressor.enabled());
     ddrive = new DifferentialDrive(l, r);
   }
 
@@ -63,10 +69,16 @@ public class Drivetrain extends SubsystemBase {
     ddrive.arcadeDrive(power, offset);
   }
 
-  public void toggleGear(){
-    shifterL.toggle();
-    shifterR.toggle();
-    // shifter.toggle();
+  public void setForward(){
+    // shifterL.toggle();
+    // shifterR.toggle();
+    shifter.set(DoubleSolenoid.Value.kForward);
+  }
+
+  public void setReverse(){
+    // shifterL.toggle();
+    // shifterR.toggle();
+    shifter.set(DoubleSolenoid.Value.kReverse);
   }
 
   @Override
