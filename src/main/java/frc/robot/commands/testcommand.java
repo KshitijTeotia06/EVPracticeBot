@@ -32,7 +32,7 @@ public class testcommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    tester.testMethod(stick.getX());
+    tester.testMethod(8000);
   }
 
   // Called once the command ends or is interrupted.

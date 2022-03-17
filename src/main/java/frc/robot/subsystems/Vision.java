@@ -25,12 +25,17 @@ public class Vision extends SubsystemBase {
   NetworkTableEntry tz;
   NetworkTableEntry ta; 
   NetworkTableEntry tv; 
+  NetworkTableEntry thor;
+  NetworkTableEntry tvert;
   // read values periodically
   double x;
   double y;
   double z;
   double area;
   Boolean targets;
+
+  double vert;
+  
   public Vision() {
     table = NetworkTableInstance.getDefault().getTable("limelight");
   }
@@ -42,16 +47,32 @@ public class Vision extends SubsystemBase {
     tz = table.getEntry("tz");
     ta = table.getEntry("ta");
     tv = table.getEntry("tv");
+
+    // Sidelengths
+    thor = table.getEntry("thor");
+    tvert = table.getEntry("tvert");
+
   }
 
   public double getX() {
 
-    x = tx.getDouble(0) + 2.4;
+    x = tx.getDouble(0);
     
     if(tv.getBoolean(false)){
       x = 0;
     }
     return x ;
+    
+  }
+
+  public double getY() {
+
+    y = ty.getDouble(0);
+    
+    if(tv.getBoolean(false)){
+      y = 0;
+    }
+    return y;
     
   }
   
@@ -62,6 +83,7 @@ public class Vision extends SubsystemBase {
     }
     return z;
   }
+
 
   // returns true or false depending on if a target is found
   public double getTarget() {

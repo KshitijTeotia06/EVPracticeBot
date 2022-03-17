@@ -21,10 +21,15 @@ public class JoyDrive extends CommandBase {
   private AHRS ahrsNavX;
   private boolean highGear = false;
 
-  public JoyDrive(Drivetrain dt, Joystick dst, Joystick tst) { //replace parameters w (Drivetrain dt, Joystick dst, Joystick tst) for wheel and stick 
+  // Auto
+  private final IntakeBall intake;
+
+
+  public JoyDrive(Drivetrain dt, Joystick dst, Joystick tst, IntakeBall intake) { //replace parameters w (Drivetrain dt, Joystick dst, Joystick tst) for wheel and stick 
     this.drivetrain = dt;      
     this.turnStick = tst; 
     this.driveStick = dst;
+    this.intake = intake;
     
     // Change based on the connection to nav x
     /*
@@ -61,7 +66,7 @@ public class JoyDrive extends CommandBase {
       highGear = !highGear;
     }
 
-    drivetrain.move(-driveStick.getY(), turnStick.getX());
+    drivetrain.move(driveStick.getY(), turnStick.getX());
   }
 
   // Called once the command ends or is interrupted.
@@ -73,4 +78,5 @@ public class JoyDrive extends CommandBase {
   public boolean isFinished() { 
     return false;
   }
+
 }

@@ -5,12 +5,14 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveKinematicsConstraint;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.SPI;
@@ -32,8 +34,12 @@ public class Drivetrain extends SubsystemBase {
   public DoubleSolenoid shifter;
   public Compressor c;
 
+  // Auto
+  
+  public Encoder encoderL, encoderR;
+
   // public Solenoid shifterL, shifterR;
- // public AHRS gyro = new AHRS(SPI.Port.kMXP)
+ public AHRS gyro = new AHRS(SPI.Port.kMXP);
  // public DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(gyroAngle)
 
   public Drivetrain() {
@@ -53,6 +59,10 @@ public class Drivetrain extends SubsystemBase {
     l.setInverted(true);
     // shifter.set(Value.kReverse);
  
+    // Auto start
+    // encoderL = new Encoder(Constants.MOTOR_L1_ID, Constants.MOTOR_L2_ID);   
+    // encoderR = new Encoder(Constants.MOTOR_R1_ID, Constants.MOTOR_R2_ID);   
+    // Auto end
 
     // shifterL.set(false);
     // shifterR.set(false);
@@ -62,6 +72,7 @@ public class Drivetrain extends SubsystemBase {
     SmartDashboard.updateValues();
     // SmartDashboard.putBoolean("compressor enabled: ", pcmCompressor.enabled());
     ddrive = new DifferentialDrive(l, r);
+    
   }
 
 
@@ -75,14 +86,28 @@ public class Drivetrain extends SubsystemBase {
     shifter.set(DoubleSolenoid.Value.kForward);
   }
 
+  public void resetEncoders(){
+    encoderL.reset();
+    encoderR.reset();
+  }
+
+  public void setEncoderDis(double v){
+    encoderL.setDistancePerPulse(v);
+    encoderR.setDistancePerPulse(v);
+  }
+
   public void setReverse(){
     // shifterL.toggle();
     // shifterR.toggle();
     shifter.set(DoubleSolenoid.Value.kReverse);
   }
 
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
   }
+
+
+
 }

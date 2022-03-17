@@ -4,6 +4,10 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.CvSink;
+import edu.wpi.first.cscore.CvSource;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -13,6 +17,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Intake;
+
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -23,6 +29,9 @@ import frc.robot.subsystems.Drivetrain;
 public class Robot extends TimedRobot {
   private Command[] teleCommands;
 
+  private UsbCamera camera;
+  private CvSink cvSink;
+  private CvSource outputStream;
   private RobotContainer m_robotContainer;
 
   /**
@@ -34,6 +43,11 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+    camera = CameraServer.startAutomaticCapture();
+    camera.setResolution(640, 480);
+    cvSink = CameraServer.getVideo();
+    outputStream = CameraServer.putVideo("IntakeStream", 640, 480);
+  
   }
 
   /**
@@ -54,7 +68,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    // m_robotContainer.intakeUp(); // pulls up intake once disabled mode is entered
+  }
 
   @Override
   public void disabledPeriodic() {}
@@ -62,11 +78,14 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    m_robotContainer.startAutoInit();
   }
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    m_robotContainer.startAutoPeriod();
+  }
 
   @Override
   public void teleopInit() {

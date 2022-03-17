@@ -15,12 +15,15 @@ public class TurretMove extends CommandBase {
   /** Creates a new TurretMove. */
   Turret turret;
   XboxController controller;
-  boolean manual = false;
+  boolean manual;
+  Vision vision;
 
-  public TurretMove(Turret turret, XboxController controller) {
+  public TurretMove(Turret turret, XboxController controller, Vision vision) {
     this.turret = turret;
     addRequirements(turret);
+    this.vision = vision;
     this.controller = controller;
+    manual = false;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -47,16 +50,20 @@ public class TurretMove extends CommandBase {
       manual = !manual;
     }
     if(manual){
-      if ((controller.getLeftX() < 0.2) && (controller.getLeftX() > -0.2)){
+      if ((controller.getLeftX() < 0.) && (controller.getLeftX() > -0.2)){
         turret.setSpeed(0);
       } else {
-        turret.setSpeed(controller.getLeftX());
+        turret.setSpeed(-controller.getLeftX());
       }
     }else{
-      if ((-controller.getLeftX() < 0.2) && (-controller.getLeftX() > -0.2)){
+      if ((controller.getLeftX() < 0.2) && (controller.getLeftX() > -0.2)){
         turret.turnTurret(0);
       } else {
-        turret.turnTurret(-controller.getLeftX());
+        // if (vision.getX() < 1.2) {
+        //   turret.turnTurret(-controller.getLeftX());
+        // } else {
+          turret.turnTurret(controller.getLeftX());
+        // }
       }
 
     }

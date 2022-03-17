@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.kauailabs.navx.frc.AHRS;
 
@@ -12,8 +14,10 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.Intake;
 
 
@@ -25,10 +29,12 @@ public class Shoot extends CommandBase {
   private double throttle;
   double speed = 0;
   private boolean shooterWarmedUp = false;
+  private Vision vision;
 
   /** Creates a new Shoot. */
-  public Shoot(Shooter shoot, Joystick stick, Intake intake, XboxController controller) {
+  public Shoot(Shooter shoot, Vision vision, Joystick stick, Intake intake, XboxController controller) {
     addRequirements(shoot);
+    this.vision = vision;
     this.shoot = shoot;
     this.stick = stick;
     this.intake = intake;
@@ -61,14 +67,50 @@ public class Shoot extends CommandBase {
     //   else speed = 0;
     // }
     
-    intake.transitionMotor(controller.getRightTriggerAxis());
-    
-    shoot.outtakeBall(controller.getLeftTriggerAxis());
-    
-    SmartDashboard.putNumber("TRIGGER: ", stick.getY());
-    SmartDashboard.putNumber("SHOOTER SPEED", shoot.getRPM());
-    SmartDashboard.updateValues();
+    // if(controller.getAButtonPressed()){
+    //   speed = shoot.computeV(vision.getY());
+    //   SmartDashboard.putNumber("Y VALUE", vision.getY());
+    // }
 
+    // // if ((shoot.getColorSensorV3().equals(Color.kBlue)) || (shoot.getColorSensorV3().equals(Color.kRed))) {
+    //   shoot.outakeV(speed * controller.getLeftTriggerAxis());
+    // // }
+    // // else {
+    //   // shoot.outakeV(0.1);
+    // // }
+
+    // SmartDashboard.putNumber("Current SHOOTER SPEED", shoot.getRPM());
+    // SmartDashboard.putNumber("TARGET SPEED", speed);
+
+
+    // double outtakespeed= 0;
+    // if(controller.getRightTriggerAxis() > 0.1) outtakespeed = 1;
+    // else outtakespeed = 0;
+    // intake.transitionMotor(outtakespeed);
+    // // shoot.outtakeBall(controller.getLeftTriggerAxis());
+  
+    
+    // SmartDashboard.putNumber("TRIGGER: ", stick.getY());
+    // SmartDashboard.putNumber("SHOOTER SPEED", shoot.getRPM());
+
+    // // if (shoot.getColorSensorV3() == Color.kBlue) {
+    // //   SmartDashboard.putString("Color Sensor Value", "Blue");
+
+
+    // // }
+    // // else if (shoot.getColorSensorV3() == Color.kRed) {
+    // //   SmartDashboard.putString("Color Sensor Value", "Red");
+
+
+    // // }
+    // SmartDashboard.updateValues();
+
+    shoot.outtakeBall(controller.getLeftTriggerAxis());
+    intake.transitionMotor(controller.getRightTriggerAxis());
+
+    SmartDashboard.putNumber("LEFT X", controller.getLeftTriggerAxis());
+    SmartDashboard.updateValues();
+    
   }
 
   // Called once the command ends or is interrupted.

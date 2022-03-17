@@ -16,6 +16,7 @@ public class IntakeBall extends CommandBase {
   XboxController controller;
   boolean on = false;
   double speed = 0;
+  boolean isEjecting = false;
   
 
   public IntakeBall(Intake intake, XboxController controller) {
@@ -34,10 +35,26 @@ public class IntakeBall extends CommandBase {
   public void execute() {
     SmartDashboard.putBoolean("banner1: ", intake.banner1Output());
     SmartDashboard.putBoolean("BANNNER OUTPUT", intake.banner1Output());
+    intake.intakeBrush(controller.getRightY());
     intake.intakeBall(controller.getRightY());
-    if(controller.getRawButton(3)) { // x-button, ejects balls
-      intake.intakeBall(-0.5); 
+
+    // if(controller.getRawButton(3)) { // x-button, ejects balls
+    //   intake.intakeBall(-0.5); 
+    //   isEjecting = true;
+    // } else {
+    //   isEjecting = false;
+    // }
+
+    // if ((intake.getIntakeDown())) {
+    //   intake.intake(isEjecting);
+    // } else {
+    //   intake.intakeBall(0);
+    // }
+    // Y
+    if (controller.getRawButtonPressed(4)){
+      intake.intakeToggle();
     }
+    // intake.intake(isEjecting);
     SmartDashboard.updateValues();
   }
 
@@ -50,4 +67,5 @@ public class IntakeBall extends CommandBase {
   public boolean isFinished() {
     return false;
   }
+
 }

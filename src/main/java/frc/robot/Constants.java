@@ -29,8 +29,8 @@ public final class Constants {
     public static final int SHOOTER1 = 10;
     public static final int SHOOTER2 = 9;
     public static final int TURRT_MOTOR_ID = 12;
-    public static final int LIMIT_LEFT = 3; //dio
-    public static final int LIMIT_RIGHT = 4; //dio
+    public static final int LIMIT_LEFT = 2; //dio
+    public static final int LIMIT_RIGHT = 3; //dio
 
     // control 
     public static final int XBOX_PORT = 1;
@@ -42,11 +42,16 @@ public final class Constants {
     // intake
     public static final int INTAKE_MOTOR = 11;
     public static final int TRANSIT_MOTOR = 5;
-    public static final int BRUSH_MOTOR = 10;
+    public static final int BRUSH_MOTOR = 6;
     public static final int BANNER_1 = 0; // dio
     public static final int BANNER_2 = 1; // dio
     public static final int BANNER_3 = 2; // needs to be installed
     public static final double TRACK_WIDTH = 0;
     public static final int LOWGEAR = 0;//0
     public static final int HIGHGEAR = 1; //1
+    // 2, 4 fire together / 3, 5 fire together (intake pistons)
+    public static final int INTAKEPISTON1_CHANNEL1 = 3; // forward
+    public static final int INTAKEPISTON1_CHANNEL2 = 2;
+    public static final int INTAKEPISTON2_CHANNEL1 = 5;
+    public static final int INTAKEPISTON2_CHANNEL2 = 4;
 }

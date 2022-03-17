@@ -35,6 +35,8 @@ public class testSystem extends SubsystemBase {
     testTalon3 = new VictorSPX(testTalon3ID);
     testTalon4 = new VictorSPX(testTalon4ID);
     testTalon5 = new WPI_TalonFX(testTalon5ID);
+
+    testTalon2.follow(testTalon1);
     //upper intake motor
     testTalon5.setInverted(true);
     testTalon2.setInverted(true);
@@ -42,11 +44,11 @@ public class testSystem extends SubsystemBase {
   }
 
   public void testMethod(double value) {
-    // testTalon1.set(ControlMode.PercentOutput, value);
+    // testTalon1.set(ControlMode.Velocity, value);
     // testTalon2.set(ControlMode.PercentOutput, value);
     // testTalon3.set(ControlMode.PercentOutput, 0.8);
     // testTalon4.set(ControlMode.PercentOutput, 0.5);
-    testTalon5.set(ControlMode.PercentOutput, value);
+    // testTalon5.set(ControlMode.PercentOutput, value);
     SmartDashboard.putBoolean("Motor Tested", true);
     SmartDashboard.putNumber("Motor Test Value", value);
   }

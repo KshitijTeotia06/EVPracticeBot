@@ -52,10 +52,12 @@ public class RobotContainer {
     driveStick = new Joystick(Constants.DRIVE_STICK_PORT);
     turnStick = new Joystick(Constants.TURN_STICK_PORT);
     controller = new XboxController(Constants.XBOX_PORT);
-    tmove = new TurretMove(turret, controller);
-    jdrive = new JoyDrive(drivetrain, driveStick, turnStick);
-    shoot = new Shoot(shooter, driveStick, intake, controller);
+    tmove = new TurretMove(turret, controller, vision);
     intakeCommand = new IntakeBall(intake, controller);
+
+    // adds intake for the auto to know when 
+    jdrive = new JoyDrive(drivetrain, driveStick, turnStick, intakeCommand);
+    shoot = new Shoot(shooter, vision, driveStick, intake, controller);
     tester = new testcommand(driveStick, tSys);
   }
 
@@ -76,11 +78,70 @@ public class RobotContainer {
    */
   public Command[] getTeleCommand() {
     // An ExampleCommand will run in autonomous
-    Command[] ret = {intakeCommand, jdrive, tmove, shoot};
+    Command[] ret = {jdrive, intakeCommand, shoot};
     return ret;
     // Removed tmove from ret
     /*
     REMINDER: schedule the other commands here !!!!
     */
   }
+
+  // Auto Commands only once
+  public void startAutoInit() {
+
+    // Init Commands
+    drivetrain.encoderL.reset();
+    drivetrain.encoderR.reset();
+
+    // In 4 feet
+    drivetrain.encoderL.setDistancePerPulse(1.0/256.0);
+    drivetrain.encoderR.setDistancePerPulse(1.0/256.0);
+
+    
+    
+  }
+
+  public void startAutoPeriod() {
+// moves robot 4 feet backwards
+
+    if (drivetrain.encoderL.getDistance() <= 4) {
+
+      drivetrain.ddrive.arcadeDrive(0.5, 0);
+      
+
+    }
+    else {
+      // Turns turret to left if at right and right if at left and if it is between
+      // -1 and 1 it just disables the turret and starts shooting
+        if (vision.getX() > 1.0) {
+          turret.turnTurret(-1);
+        }
+        else if (vision.getX() < -1.0) {
+          turret.turnTurret(1);
+
+        }
+        else {
+          turret.turnTurret(0);
+        
+          
+          // At this point in the auto the robot should have the ball in its intake but facing in the wrong direction
+          // double intakeSpeedRev = shoot.computeV(vision.getY());
+          
+
+          // Until the intake is empty keep shooting
+          if (intake.banner1Output()) {
+            // shooter.outakeV(intakeSpeedRev);
+            intake.intakeBall(0.5);
+            // Waits until the shooters velocity is within 50 rpm of the vision based speed
+            // if (shooter.getShooterVel() > (intakeSpeedRev - 50)) {
+              // intake.transitionMotor(1);
+            // }
+          }
+        }
+    }
+  }
+
+  // public void intakeUp() {
+  //   intake.intakeUp();
+  // }
 }
