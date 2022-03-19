@@ -17,7 +17,7 @@ import frc.robot.subsystems.Drivetrain;
 public class JoyDrive extends CommandBase {
   /** Creates a new JoyDrive. */
   private final Drivetrain drivetrain;
-  private Joystick driveStick, turnStick;
+  private XboxController controller;
   private AHRS ahrsNavX;
   private boolean highGear = false;
 
@@ -25,10 +25,9 @@ public class JoyDrive extends CommandBase {
   private final IntakeBall intake;
 
 
-  public JoyDrive(Drivetrain dt, Joystick dst, Joystick tst, IntakeBall intake) { //replace parameters w (Drivetrain dt, Joystick dst, Joystick tst) for wheel and stick 
+  public JoyDrive(Drivetrain dt, XboxController controller, IntakeBall intake) { //replace parameters w (Drivetrain dt, Joystick dst, Joystick tst) for wheel and stick 
     this.drivetrain = dt;      
-    this.turnStick = tst; 
-    this.driveStick = dst;
+    this.controller = controller;
     this.intake = intake;
     
     // Change based on the connection to nav x
@@ -46,8 +45,8 @@ public class JoyDrive extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    driveStick = new Joystick(Constants.DRIVE_STICK_PORT);
-    turnStick = new Joystick(Constants.TURN_STICK_PORT);
+    controller = new XboxController(Constants.XBOX_DRIVE_CONTROLLER_PORT);
+    drivetrain.resetEncoders();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -55,9 +54,11 @@ public class JoyDrive extends CommandBase {
   public void execute() {
     // SmartDashboard.putData("shift gear", drivetrain.toggleGear());
 
-    if(driveStick.getTriggerPressed()){
-      SmartDashboard.putBoolean("CLICKED", true);
-      SmartDashboard.updateValues();
+    // SmartDashboard.putNumber("ENCODER", drivetrain.getIntegratedSensor());
+    // SmartDashboard.updateValues();
+    if(controller.getAButtonPressed()){
+      // SmartDashboard.putBoolean("CLICKED", true);
+      // SmartDashboard.updateValues();
       if(highGear){
         drivetrain.setForward();
       }else{
@@ -66,12 +67,16 @@ public class JoyDrive extends CommandBase {
       highGear = !highGear;
     }
 
-    drivetrain.move(driveStick.getY(), turnStick.getX());
+    drivetrain.move(controller.getLeftY(), controller.getRightX());
+    SmartDashboard.putNumber("L ENCODER: ", drivetrain.getLIntegratedSensor());
+    SmartDashboard.putNumber("R ENCODER: ", drivetrain.getRIntegratedSensor());
+    SmartDashboard.updateValues();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {}
+
 
   // Returns true when the command should end.
   @Override   

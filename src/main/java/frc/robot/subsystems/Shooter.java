@@ -16,6 +16,7 @@ import com.revrobotics.ColorSensorV3;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -39,6 +40,10 @@ public class Shooter extends SubsystemBase {
 
   private double currentSpeed;
   private double maxSpeed;
+  
+  // This is the color of the balls that our team can shoot out properly
+  // Either RED or BLUE
+  public DriverStation.Alliance teamColor = DriverStation.getAlliance();
 
   Timer timer;
   /**
@@ -102,7 +107,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public double computeV(double ty){
-    return 16054 - 398 * ty + 10.2 * ty * ty + 00;
+    return 16054 - 398 * ty + 10.2 * ty * ty - 200;
   }
 
   public void outakeV(double v){

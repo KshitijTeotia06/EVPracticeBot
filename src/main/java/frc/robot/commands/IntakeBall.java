@@ -33,24 +33,14 @@ public class IntakeBall extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    SmartDashboard.putBoolean("banner1: ", intake.banner1Output());
-    SmartDashboard.putBoolean("BANNNER OUTPUT", intake.banner1Output());
-    intake.intakeBrush(controller.getRightY());
-    intake.intakeBall(controller.getRightY());
+    SmartDashboard.putBoolean("Test_Banner1 ", intake.banner1Output());
+    SmartDashboard.putBoolean("TEST_Banner2", intake.banner2Output());
+    SmartDashboard.updateValues();
+    
+    intake.mainIntakeFunction(controller.getRightY());
+    // intake.conveyor(controller.getRightY());
 
-    // if(controller.getRawButton(3)) { // x-button, ejects balls
-    //   intake.intakeBall(-0.5); 
-    //   isEjecting = true;
-    // } else {
-    //   isEjecting = false;
-    // }
 
-    // if ((intake.getIntakeDown())) {
-    //   intake.intake(isEjecting);
-    // } else {
-    //   intake.intakeBall(0);
-    // }
-    // Y
     if (controller.getRawButtonPressed(4)){
       intake.intakeToggle();
     }

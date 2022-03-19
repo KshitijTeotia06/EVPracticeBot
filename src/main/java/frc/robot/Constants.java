@@ -24,6 +24,10 @@ public final class Constants {
     public static final int MOTOR_L2_ID = 2;
     public static final int MOTOR_R1_ID = 3;
     public static final int MOTOR_R2_ID = 4;
+    public static final int ENCODER_L_CHANNELA = 0;
+    public static final int ENCODER_L_CHANNELB = 1;
+    public static final int ENCODER_R_CHANNELA = 2;
+    public static final int ENCODER_R_CHANNELB = 3;
 
     // shooter and turret
     public static final int SHOOTER1 = 10;
@@ -43,9 +47,9 @@ public final class Constants {
     public static final int INTAKE_MOTOR = 11;
     public static final int TRANSIT_MOTOR = 5;
     public static final int BRUSH_MOTOR = 6;
-    public static final int BANNER_1 = 0; // dio
-    public static final int BANNER_2 = 1; // dio
-    public static final int BANNER_3 = 2; // needs to be installed
+    public static final int BANNER_1 = 6; // dio
+    public static final int BANNER_2 = 7; // dio
+    // public static final int BANNER_3 = 2; // needs to be installed
     public static final double TRACK_WIDTH = 0;
     public static final int LOWGEAR = 0;//0
     public static final int HIGHGEAR = 1; //1
@@ -54,4 +58,5 @@ public final class Constants {
     public static final int INTAKEPISTON1_CHANNEL2 = 2;
     public static final int INTAKEPISTON2_CHANNEL1 = 5;
     public static final int INTAKEPISTON2_CHANNEL2 = 4;
+    public static final int XBOX_DRIVE_CONTROLLER_PORT = 0;
 }

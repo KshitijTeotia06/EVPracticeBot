@@ -15,6 +15,7 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -26,7 +27,7 @@ public class Intake extends SubsystemBase {
   /**
    * Creates a new Intake.
    */
-  private TalonFX intakeMotor;
+  private TalonFX conveyorMotor;
   private VictorSPX brushMotor;
   private TalonSRX transitionMotor;
   // private Compressor compressor;
@@ -44,18 +45,19 @@ public class Intake extends SubsystemBase {
   
   public Intake() {
     // compressor = new Compressor(PneumaticsModuleType.CTREPCM);
-    intakeMotor = new TalonFX(Constants.INTAKE_MOTOR);
+    conveyorMotor = new TalonFX(Constants.INTAKE_MOTOR);
     brushMotor = new VictorSPX(Constants.BRUSH_MOTOR);
     transitionMotor = new TalonSRX(Constants.TRANSIT_MOTOR);
-    intakeMotor.setInverted(true);
+    conveyorMotor.setInverted(true);
     transitionMotor.setInverted(true);
     // compressor.enableDigital();
     banner1 = new DigitalInput(Constants.BANNER_1);
     banner2 = new DigitalInput(Constants.BANNER_2);
+
     // banner3 = new DigitalInput(Constants.BANNER_3);
     leftSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.INTAKEPISTON1_CHANNEL1, Constants.INTAKEPISTON1_CHANNEL2);
     rightSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.INTAKEPISTON2_CHANNEL1, Constants.INTAKEPISTON2_CHANNEL2);
-
+    
     leftSolenoid.set(Value.kReverse);
     rightSolenoid.set(Value.kReverse);
   }
@@ -66,42 +68,63 @@ public class Intake extends SubsystemBase {
 
   }
  
-  public void intake(boolean isEjecting){
-    if (!isEjecting) {
+  // public void intake(boolean isEjecting){
+  //   if (!isEjecting) {
 
-      if (!banner1Output()) {
-        storageFull = true; // one slot open
-        ballStored = 2;
-      } else if (!banner2Output()) {
-        storageFull = false; // two slots open 
-        ballStored = 1;
-      } else {
-        storageFull = false;
-        ballStored = 0;
-      }
+  //     if (!banner1Output()) {
+  //       storageFull = true; // one slot open
+  //       ballStored = 2;
+  //     } else if (!banner2Output()) {
+  //       storageFull = false; // two slots open 
+  //       ballStored = 1;
+  //     } else {
+  //       storageFull = false;
+  //       ballStored = 0;
+  //     }
 
-      if (storageFull) {
-        intakeBall(0);
-        intakeStatus = "intake motor not running";
-      } else {
-        intakeBall(.5);
-        intakeStatus = "intake motor running";
-       }
-    }else{
-      intakeBall(-1);
-      transitionMotor(-1); // ejects everything 
-      intakeStatus = "intake motor ejecting balls";
-    } 
+  //     if (storageFull) {
+  //       conveyor(0);
+  //       intakeStatus = "intake motor not running";
+  //     } else {
+  //       conveyor(.5);
+  //       intakeStatus = "intake motor running";
+  //      }
+  //   }else{
+  //     conveyor(-1);
+  //     transitionMotor(-1); // ejects everything 
+  //     intakeStatus = "intake motor ejecting balls";
+  //   } 
 
-    SmartDashboard.putBoolean("Storage Full?", storageFull);
-    SmartDashboard.putNumber("Balls Stored:", ballStored);
-    SmartDashboard.putString("Intake Status:", intakeStatus);
+  //   SmartDashboard.putBoolean("Storage Full?", storageFull);
+  //   SmartDashboard.putNumber("Balls Stored:", ballStored);
+  //   SmartDashboard.putString("Intake Status:", intakeStatus);
 
+  // }
+
+  public void mainIntakeFunction(double speed){
+    // SmartDashboard.putBoolean("BANNER 1", banner1Output());
+    // SmartDashboard.putBoolean("BANNER 2", banner2Output());
+    // SmartDashboard.updateValues();
+    // if(banner1Output() && banner2Output()){
+    //   //stop the conveyer
+    //   conveyor(0);
+    //   intakeBrush(0);
+    // }
+    // else{
+      intakeBrush(speed);
+      conveyor(speed);
+    // }
+    
   }
 
-  public void intakeBall(double speed){
-    intakeMotor.set(ControlMode.PercentOutput, speed); 
-    SmartDashboard.putNumber("Intake: ", speed);
+  public void conveyor(double speed){
+    // if ((!banner1Output()) && (!banner2Output())) {
+      
+      
+    // } else {
+      conveyorMotor.set(ControlMode.PercentOutput, speed); 
+      // intakeBrush(speed);
+    // }
   }
 
   public void intakeBrush(double speed) {
@@ -127,10 +150,10 @@ public class Intake extends SubsystemBase {
   //   return banner3.get();
   // }
 
-  public void ejectBalls(double speed) {
-    intakeMotor.set(ControlMode.PercentOutput, speed);
+  // public void ejectBalls(double speed) {
+  //   intakeMotor.set(ControlMode.PercentOutput, speed);
 
-  }
+  // }
 
   public void intakeToggle(){
     leftSolenoid.toggle();
@@ -139,7 +162,11 @@ public class Intake extends SubsystemBase {
       intakeDown = true;
     } else {
       intakeDown = false;
+      intakeBrush(0);
+      conveyor(0);
     }
+
+
   }
 
   public void intakeUp() {

@@ -49,8 +49,8 @@ public class testSystem extends SubsystemBase {
     // testTalon3.set(ControlMode.PercentOutput, 0.8);
     // testTalon4.set(ControlMode.PercentOutput, 0.5);
     // testTalon5.set(ControlMode.PercentOutput, value);
-    SmartDashboard.putBoolean("Motor Tested", true);
-    SmartDashboard.putNumber("Motor Test Value", value);
+    // SmartDashboard.putBoolean("Motor Tested", true);
+    // SmartDashboard.putNumber("Motor Test Value", value);
   }
 
   @Override

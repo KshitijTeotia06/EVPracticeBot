@@ -33,6 +33,7 @@ public class Robot extends TimedRobot {
   private CvSink cvSink;
   private CvSource outputStream;
   private RobotContainer m_robotContainer;
+  private Command auto;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -78,13 +79,14 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    m_robotContainer.startAutoInit();
+    auto = m_robotContainer.getAutoCommand();
+    auto.schedule();
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    m_robotContainer.startAutoPeriod();
+    
   }
 
   @Override
@@ -93,6 +95,7 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.if (m_autonomousCommand != null) {
+    
     teleCommands = m_robotContainer.getTeleCommand();
 
     // schedule the autonomous command (example)

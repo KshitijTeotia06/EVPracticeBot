@@ -93,13 +93,13 @@ public class Turret extends SubsystemBase {
     // }
     turretMotor.set(ControlMode.PercentOutput, -motorOutput);
 
-    SmartDashboard.putNumber("Vision X: ", posErr);
-    SmartDashboard.putNumber("Vision Z: ", zerr);
-    SmartDashboard.putNumber("TARGET FOUND", vision.getTarget());
-    SmartDashboard.putNumber("VISION X", vision.getX());
+    // SmartDashboard.putNumber("Vision X: ", posErr);
+    // SmartDashboard.putNumber("Vision Z: ", zerr);
+    // SmartDashboard.putNumber("TARGET FOUND", vision.getTarget());
+    // SmartDashboard.putNumber("VISION X", vision.getX());
     // SmartDashboard.putBoolean("LEFT LIMIT", getLeftLimitSwitchStatus());
     // SmartDashboard.putBoolean("RIGHT LIMIT", getRightLimitSwitchStatus());
-    SmartDashboard.putNumber("Turret Motor Ouptut: ", motorOutput);
+    // SmartDashboard.putNumber("Turret Motor Ouptut: ", motorOutput);
   }
 
   // public boolean getLeftLimitSwitchStatus() {// right

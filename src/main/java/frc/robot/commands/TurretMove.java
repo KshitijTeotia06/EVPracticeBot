@@ -44,7 +44,9 @@ public class TurretMove extends CommandBase {
       turret.turnTurret(0.5); // turns turret right
     }
     */
-    SmartDashboard.putNumber("AXIS VALUE", controller.getRightTriggerAxis());
+    // SmartDashboard.putNumber("AXIS VALUE", controller.getRightTriggerAxis());
+    // SmartDashboard.updateValues();
+    SmartDashboard.putBoolean("MANUAL ", manual);
     SmartDashboard.updateValues();
     if(controller.getBButtonPressed()){
       manual = !manual;

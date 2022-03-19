@@ -9,6 +9,7 @@ package frc.robot.commands;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SerialPort;
@@ -30,6 +31,7 @@ public class Shoot extends CommandBase {
   double speed = 0;
   private boolean shooterWarmedUp = false;
   private Vision vision;
+  private boolean shooting = false;
 
   /** Creates a new Shoot. */
   public Shoot(Shooter shoot, Vision vision, Joystick stick, Intake intake, XboxController controller) {
@@ -50,6 +52,7 @@ public class Shoot extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    
     // if(stick.getRawButton(4)) { // starts warming up shooter (press again to stop shooter)
     //   if(shooterWarmedUp == false) {
     //     shooterWarmedUp = true;
@@ -67,13 +70,13 @@ public class Shoot extends CommandBase {
     //   else speed = 0;
     // }
     
-    // if(controller.getAButtonPressed()){
-    //   speed = shoot.computeV(vision.getY());
-    //   SmartDashboard.putNumber("Y VALUE", vision.getY());
-    // }
+    if(controller.getAButtonPressed()){
+      speed = shoot.computeV(vision.getY());
+      SmartDashboard.putNumber("Y VALUE", vision.getY());
+    }
 
     // // if ((shoot.getColorSensorV3().equals(Color.kBlue)) || (shoot.getColorSensorV3().equals(Color.kRed))) {
-    //   shoot.outakeV(speed * controller.getLeftTriggerAxis());
+    shoot.outakeV(speed * controller.getLeftTriggerAxis());
     // // }
     // // else {
     //   // shoot.outakeV(0.1);
@@ -83,33 +86,63 @@ public class Shoot extends CommandBase {
     // SmartDashboard.putNumber("TARGET SPEED", speed);
 
 
-    // double outtakespeed= 0;
-    // if(controller.getRightTriggerAxis() > 0.1) outtakespeed = 1;
-    // else outtakespeed = 0;
-    // intake.transitionMotor(outtakespeed);
-    // // shoot.outtakeBall(controller.getLeftTriggerAxis());
+    double outtakespeed= 0;
+    if(controller.getRightTriggerAxis() > 0.1) outtakespeed = 1;
+    else outtakespeed = 0;
+    intake.transitionMotor(outtakespeed);
+    // shoot.outtakeBall(controller.getLeftTriggerAxis());
   
     
     // SmartDashboard.putNumber("TRIGGER: ", stick.getY());
     // SmartDashboard.putNumber("SHOOTER SPEED", shoot.getRPM());
 
-    // // if (shoot.getColorSensorV3() == Color.kBlue) {
-    // //   SmartDashboard.putString("Color Sensor Value", "Blue");
+     SmartDashboard.putNumber("BlueColor Sensor Value", shoot.getColorSensorV3().blue);
 
 
-    // // }
-    // // else if (shoot.getColorSensorV3() == Color.kRed) {
-    // //   SmartDashboard.putString("Color Sensor Value", "Red");
+    
+     SmartDashboard.putNumber("RedColor Sensor Value", shoot.getColorSensorV3().red);
 
-
-    // // }
-    // SmartDashboard.updateValues();
-
-    shoot.outtakeBall(controller.getLeftTriggerAxis());
-    intake.transitionMotor(controller.getRightTriggerAxis());
-
-    SmartDashboard.putNumber("LEFT X", controller.getLeftTriggerAxis());
+    // SmartDashboard.putNumber("COL SENSOR", shoot.getColorSensorV3());
     SmartDashboard.updateValues();
+
+    // This makes the ball spit out the other teams ball
+
+    
+
+      Color colorReading = shoot.getColorSensorV3();
+      // if (shoot.teamColor.equals(DriverStation.Alliance.Red) && colorReading.red > colorReading.blue) {
+      //   shoot.outtakeBall(controller.getLeftTriggerAxis());
+      // }
+      // else if (shoot.teamColor.equals(DriverStation.Alliance.Blue) && colorReading.red < colorReading.blue) {
+      //   shoot.outtakeBall(controller.getLeftTriggerAxis());
+      // }
+      // else {
+      //   if (controller.getLeftTriggerAxis() > 0.1) {
+      //     shoot.outtakeBall(0.5);
+      //   }
+      //   else {
+      //     // This will happen if nothing gets pressed 
+      //     shoot.outtakeBall(0);
+      //   }
+      // }
+    
+    
+
+    if (controller.getRightTriggerAxis() < 0.1) {
+      if (intake.banner2Output()) {
+        // Keeps the ball intake down
+        intake.transitionMotor(-0.3);
+      }
+    }
+    else {
+      intake.transitionMotor(controller.getRightTriggerAxis());
+
+    }
+   
+    
+
+    // SmartDashboard.putNumber("LEFT X", controller.getLeftTriggerAxis());
+    // SmartDashboard.updateValues();
     
   }
 

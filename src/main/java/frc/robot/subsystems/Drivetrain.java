@@ -4,6 +4,16 @@
 
 package frc.robot.subsystems;
 
+import javax.naming.ldap.Control;
+
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.DemandType;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.InvertType;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
+import com.ctre.phoenix.motorcontrol.can.TalonFXPIDSetConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.kauailabs.navx.frc.AHRS;
 
@@ -17,6 +27,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
@@ -36,7 +47,7 @@ public class Drivetrain extends SubsystemBase {
 
   // Auto
   
-  public Encoder encoderL, encoderR;
+  public Encoder QuadEncoderL, QuadEncoderR;
 
   // public Solenoid shifterL, shifterR;
  public AHRS gyro = new AHRS(SPI.Port.kMXP);
@@ -50,51 +61,110 @@ public class Drivetrain extends SubsystemBase {
     r1 = new WPI_TalonFX(Constants.MOTOR_R1_ID);
     r2 = new WPI_TalonFX(Constants.MOTOR_R2_ID);
     c = new Compressor(0, PneumaticsModuleType.CTREPCM);
+    r1.setInverted(true);
+    r2.setInverted(true);
+    l2.follow(l1);
+    r2.follow(r1);
+
     c.enabled();
     c.enableDigital();
+
+    l1.setNeutralMode(NeutralMode.Brake);
+    l2.setNeutralMode(NeutralMode.Brake);
+    r1.setNeutralMode(NeutralMode.Brake);
+    r2.setNeutralMode(NeutralMode.Brake);
+
+    // REMOVE
+    // c.disable();
+
+
     shifter = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 1);
 
     l = new MotorControllerGroup(l1, l2);
     r = new MotorControllerGroup(r1, r2);
-    l.setInverted(true);
+    // l.setInverted(true);
     // shifter.set(Value.kReverse);
  
     // Auto start
-    // encoderL = new Encoder(Constants.MOTOR_L1_ID, Constants.MOTOR_L2_ID);   
-    // encoderR = new Encoder(Constants.MOTOR_R1_ID, Constants.MOTOR_R2_ID);   
+    QuadEncoderL = new Encoder(Constants.ENCODER_L_CHANNELA, Constants.ENCODER_L_CHANNELB);   
+    QuadEncoderR = new Encoder(Constants.ENCODER_R_CHANNELA, Constants.ENCODER_R_CHANNELB); 
+    
+    QuadEncoderL.setReverseDirection(true);
+
+    l1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+    l1.setSelectedSensorPosition(0);
+    r1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+    r1.setSelectedSensorPosition(0);
+    l2.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+    l2.setSelectedSensorPosition(0);
+    r2.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+    r2.setSelectedSensorPosition(0);
     // Auto end
+
+    
 
     // shifterL.set(false);
     // shifterR.set(false);
-    shifter.set(DoubleSolenoid.Value.kForward);
-    SmartDashboard.putBoolean("FWD", shifter.isFwdSolenoidDisabled());
-    SmartDashboard.putBoolean("RWD", shifter.isRevSolenoidDisabled());
+    // shifter.set(DoubleSolenoid.Value.kForward);
+    SmartDashboard.putBoolean("High Shift Status:", shifter.isFwdSolenoidDisabled());
+    SmartDashboard.putBoolean("Low Shift Status:", shifter.isRevSolenoidDisabled());
     SmartDashboard.updateValues();
     // SmartDashboard.putBoolean("compressor enabled: ", pcmCompressor.enabled());
     ddrive = new DifferentialDrive(l, r);
     
   }
 
+  public double getQuadSensor(){
+    SmartDashboard.putNumber("ENCODERL_QUAD", QuadEncoderL.getDistance());
+    SmartDashboard.updateValues();
+
+    
+    return QuadEncoderL.getDistance();
+  }
+
+  public double getLIntegratedSensor(){
+    return l1.getSelectedSensorPosition();
+  }
+
+  public double getRIntegratedSensor(){
+    return r1.getSelectedSensorPosition();
+  }
 
   public void move(double power, double offset){ // power is the throttle (drive stick), offset is turning
     ddrive.arcadeDrive(power, offset);
+    
   }
 
   public void setForward(){
     // shifterL.toggle();
     // shifterR.toggle();
+    
     shifter.set(DoubleSolenoid.Value.kForward);
   }
 
   public void resetEncoders(){
-    encoderL.reset();
-    encoderR.reset();
+    l1.setSelectedSensorPosition(0);
+    r1.setSelectedSensorPosition(0);
+    l2.setSelectedSensorPosition(0);
+    r2.setSelectedSensorPosition(0);
+
+    // l1.setNeutralMode(NeutralMode.Brake);
+    // r1.setNeutralMode(NeutralMode.Brake);
+    
+    
+    // QuadEncoderR.reset();
+    // QuadEncoderL.reset();
+    // QuadEncoderL.setDistancePerPulse(1.0/256.0);
+    // QuadEncoderR.setDistancePerPulse(1.0/256.0);
+
+    // l1.setInverted(InvertType.FollowMaster);
+    // r1.setInverted(InvertType.FollowMaster);
   }
 
-  public void setEncoderDis(double v){
-    encoderL.setDistancePerPulse(v);
-    encoderR.setDistancePerPulse(v);
-  }
+  // public void setEncoderDis(double v){
+  //   QuadEncoderL.setDistancePerPulse(v);
+  //   QuadEncoderR.setDistancePerPulse(v);
+  // }
 
   public void setReverse(){
     // shifterL.toggle();
@@ -102,6 +172,11 @@ public class Drivetrain extends SubsystemBase {
     shifter.set(DoubleSolenoid.Value.kReverse);
   }
 
+  public void moveTime(double time){
+    move(0.3, 0);
+    Timer.delay(1);
+    move(0, 0);
+  }
 
   @Override
   public void periodic() {

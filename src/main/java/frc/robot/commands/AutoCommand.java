@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
@@ -32,20 +33,27 @@ public class AutoCommand extends CommandBase {
   @Override
   public void initialize() {
     drivetrain.resetEncoders();
-    drivetrain.setEncoderDis(1.0/256.0);
+    // drivetrain.setEncoderDis(1.0/256.0);
+    // drivetrain.l.setInverted(true);
   } 
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
-    while (Math.abs(vision.getX()) < 0.02){
-      turret.turnTurret(1);
-    }
-    double rpm = shooter.computeV(vision.getY());
-    shooter.outakeV(rpm);
-    while(Math.abs(shooter.getRPM() - rpm) <= 100){}
+    drivetrain.moveTime(0.3);
     
+    
+    // SmartDashboard.putNumber("L Encoder:", drivetrain.getIntegratedSensor());
+    // SmartDashboard.updateValues();
+    // intake.conveyor(0.5);
+    // while (vision.getTarget() != 1.0){}
+    // while (Math.abs(vision.getX()) < 0.02){
+    //   turret.turnTurret(1);
+    // }
+    // double rpm = shooter.computeV(vision.getY());
+    // shooter.outakeV(rpm);
+    // while(Math.abs(shooter.getRPM() - rpm) <= 100){}
+    // intake.transitionMotor(1);
   }
 
   // Called once the command ends or is interrupted.
