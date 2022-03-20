@@ -95,9 +95,12 @@ public class AutoCommand extends CommandBase {
 
 
     // Locks turret on target
-    turret.setSpeed(0);
-    turret.turnTurret(0.5);
-
+    // turret.setSpeed(0);
+    // turret.turnTurret(0.5);
+  // Locks turret on target
+  while ((vision.getX() > 0.1) || (vision.getX() < -0.1)) {
+    turret.turnTurret(1);
+  }
     // // This stops the turning
     // turret.turnTurret(0);   
     
