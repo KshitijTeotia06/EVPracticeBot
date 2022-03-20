@@ -52,22 +52,22 @@ public class TurretMove extends CommandBase {
       manual = !manual;
     }
     if(manual){
-      if ((controller.getLeftX() < 0.) && (controller.getLeftX() > -0.2)){
+      if ((controller.getLeftX() < 0.2) && (controller.getLeftX() > -0.2)){
         turret.setSpeed(0);
       } else {
         turret.setSpeed(-controller.getLeftX());
       }
     }else{
-      if ((controller.getLeftX() < 0.2) && (controller.getLeftX() > -0.2)){
-        turret.turnTurret(0);
-      } else {
-        // if (vision.getX() < 1.2) {
-        //   turret.turnTurret(-controller.getLeftX());
-        // } else {
-          turret.turnTurret(controller.getLeftX());
-        // }
-      }
-
+      // if ((controller.getLeftX() < 0.2) && (controller.getLeftX() > -0.2)){
+      //   turret.turnTurret(0);
+      // } else {
+      //   // if (vision.getX() < 1.2) {
+      //   //   turret.turnTurret(-controller.getLeftX());
+      //   // } else {
+      //     turret.turnTurret(controller.getLeftX());
+      //   // }
+      // }
+      turret.turnTurret(1);
     }
     // turret.setSpeed(controller.getRightX());
   }

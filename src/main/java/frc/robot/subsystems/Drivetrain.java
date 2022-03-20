@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -50,7 +51,7 @@ public class Drivetrain extends SubsystemBase {
   public Encoder QuadEncoderL, QuadEncoderR;
 
   // public Solenoid shifterL, shifterR;
- public AHRS gyro = new AHRS(SPI.Port.kMXP);
+ public AHRS gyro = new AHRS(SerialPort.Port.kUSB1);
  // public DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(gyroAngle)
 
   public Drivetrain() {
@@ -106,9 +107,7 @@ public class Drivetrain extends SubsystemBase {
     // shifterL.set(false);
     // shifterR.set(false);
     // shifter.set(DoubleSolenoid.Value.kForward);
-    SmartDashboard.putBoolean("High Shift Status:", shifter.isFwdSolenoidDisabled());
-    SmartDashboard.putBoolean("Low Shift Status:", shifter.isRevSolenoidDisabled());
-    SmartDashboard.updateValues();
+   
     // SmartDashboard.putBoolean("compressor enabled: ", pcmCompressor.enabled());
     ddrive = new DifferentialDrive(l, r);
     
@@ -172,10 +171,37 @@ public class Drivetrain extends SubsystemBase {
     shifter.set(DoubleSolenoid.Value.kReverse);
   }
 
-  public void moveTime(double time){
-    move(0.3, 0);
-    Timer.delay(1);
+  public void moveAuto(double power, double distance){
+    // 29273.5 encoder rotations per feet
+    // double curangle = gyro.getDisplacementZ();
+    // double kp = 0.01;
+    // double offset = kp * curangle;
+    while (l1.getSelectedSensorPosition() <= (distance*29273.5)) {
+      move(power, 0);
+    }
+    // Timer.delay(time);
     move(0, 0);
+    // gyro.getDisplacementZ()
+    SmartDashboard.putNumber("Displaement x(ft)", l1.getSelectedSensorPosition()/29273.5);
+
+    SmartDashboard.updateValues();
+  }
+  public void turnDegrees(double degrees) {
+    SmartDashboard.putNumber("GYROYAW", gyro.getYaw());
+    SmartDashboard.updateValues();
+
+    if (degrees < 0) {// degrees = -90
+      if (gyro.getYaw() >= degrees) {
+ 
+        move(0, 0.3);
+      }
+    }
+    else { // Degrees = 90
+      if (gyro.getYaw() <= degrees) {
+       
+        move(0, -0.30);
+      }
+    }
   }
 
   @Override

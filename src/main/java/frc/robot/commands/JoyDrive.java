@@ -56,6 +56,11 @@ public class JoyDrive extends CommandBase {
 
     // SmartDashboard.putNumber("ENCODER", drivetrain.getIntegratedSensor());
     // SmartDashboard.updateValues();
+
+    SmartDashboard.putBoolean("Low Shift Status:", drivetrain.shifter.isFwdSolenoidDisabled());
+    SmartDashboard.putBoolean("High Shift Status:", drivetrain.shifter.isRevSolenoidDisabled());
+    SmartDashboard.updateValues();
+
     if(controller.getAButtonPressed()){
       // SmartDashboard.putBoolean("CLICKED", true);
       // SmartDashboard.updateValues();
