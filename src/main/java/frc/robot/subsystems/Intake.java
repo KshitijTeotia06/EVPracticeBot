@@ -27,9 +27,9 @@ public class Intake extends SubsystemBase {
   /**
    * Creates a new Intake.
    */
-  private TalonFX conveyorMotor;
-  private VictorSPX brushMotor;
-  private TalonSRX transitionMotor;
+  public TalonFX conveyorMotor;
+  public VictorSPX brushMotor;
+  public TalonSRX transitionMotor;
   // private Compressor compressor;
 
   private DigitalInput banner1; // dio 0
@@ -42,6 +42,7 @@ public class Intake extends SubsystemBase {
   private DoubleSolenoid leftSolenoid, rightSolenoid; 
 
   private boolean intakeDown;
+  private double joyIntakeSpeed = 0, conIntakeSpeed = 0;
   
   public Intake() {
     // compressor = new Compressor(PneumaticsModuleType.CTREPCM);
@@ -50,6 +51,7 @@ public class Intake extends SubsystemBase {
     transitionMotor = new TalonSRX(Constants.TRANSIT_MOTOR);
     conveyorMotor.setInverted(true);
     transitionMotor.setInverted(true);
+
     // compressor.enableDigital();
     banner1 = new DigitalInput(Constants.BANNER_1);
     banner2 = new DigitalInput(Constants.BANNER_2);
@@ -117,6 +119,16 @@ public class Intake extends SubsystemBase {
     
   }
 
+  public void IntakeBalls(double speed){
+    intakeBrush(speed);
+    conveyor(speed);
+  }
+
+  public void ShootBalls(double speed){
+    conveyor(speed);
+    transitionMotor(speed);
+  }
+
   public void conveyor(double speed){
     // if ((!banner1Output()) && (!banner2Output())) {
       
@@ -160,10 +172,11 @@ public class Intake extends SubsystemBase {
     rightSolenoid.toggle();
     if ((leftSolenoid.get() == Value.kForward) && (rightSolenoid.get() == Value.kForward)){
       intakeDown = true;
+      // conveyor(0);
     } else {
       intakeDown = false;
       intakeBrush(0);
-      conveyor(0);
+      // conveyor(0);
     }
 
 

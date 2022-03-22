@@ -39,8 +39,8 @@ public class AutoCommand extends CommandBase {
   @Override
   public void initialize() {
     drivetrain.resetEncoders();
-    drivetrain.gyro.resetDisplacement();
-    drivetrain.gyro.reset();
+    // drivetrain.gyro.resetDisplacement();
+    // drivetrain.gyro.reset();
     // drivetrain.setEncoderDis(1.0/256.0);
     // drivetrain.l.setInverted(true);
 
@@ -75,32 +75,33 @@ public class AutoCommand extends CommandBase {
   public void phase1() { // shoot with auto aim
     Color colorReading = shooter.getColorSensorV3();
     // Checks the alliance color
-    if (shooter.teamColor.equals(DriverStation.Alliance.Red) && colorReading.red > colorReading.blue) {
-      // Calculates RPM
+    // if (shooter.teamColor.equals(DriverStation.Alliance.Red) && colorReading.red > colorReading.blue) {
+    //   // Calculates RPM
+    //   double rpm = shooter.computeV(vision.getY());
+
+    //   // Starts Revving up motor
+    //   shooter.outakeV(rpm);   
+    // }
+    // else if (shooter.teamColor.equals(DriverStation.Alliance.Blue) && colorReading.red < colorReading.blue) {
+    //   // Calculates RPM
       double rpm = shooter.computeV(vision.getY());
 
       // Starts Revving up motor
       shooter.outakeV(rpm);   
-    }
-    else if (shooter.teamColor.equals(DriverStation.Alliance.Blue) && colorReading.red < colorReading.blue) {
-      // Calculates RPM
-      double rpm = shooter.computeV(vision.getY());
-
-      // Starts Revving up motor
-      shooter.outakeV(rpm);   
-    }
-    else {
-        shooter.outtakeBall(0.5);
-    }
+    // }
+    // else {
+    //     shooter.outtakeBall(0.5);
+    // }
 
 
     // Locks turret on target
     // turret.setSpeed(0);
     // turret.turnTurret(0.5);
-  // Locks turret on target
-  while ((vision.getX() > 0.1) || (vision.getX() < -0.1)) {
-    turret.turnTurret(1);
-  }
+    // Locks turret on target
+    // while ((vision.getX() > 0.1) || (vision.getX() < -0.1)) {
+    //   turret.turnTurret(1);
+    // }
+  
     // // This stops the turning
     // turret.turnTurret(0);   
     

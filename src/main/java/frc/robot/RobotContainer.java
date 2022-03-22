@@ -4,9 +4,12 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.AutoCommand;
 import frc.robot.commands.IntakeBall;
 import frc.robot.commands.JoyDrive;
@@ -45,6 +48,7 @@ public class RobotContainer {
   private final IntakeBall intakeCommand;
   private final testcommand tester;
   private final AutoCommand autoCommand;
+  private boolean config = false;
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -56,13 +60,15 @@ public class RobotContainer {
     controller = new XboxController(Constants.XBOX_PORT);
     driveController = new XboxController(Constants.XBOX_DRIVE_CONTROLLER_PORT);
     tmove = new TurretMove(turret, controller, vision);
-    intakeCommand = new IntakeBall(intake, controller);
+    intakeCommand = new IntakeBall(intake, controller, driveStick);
     autoCommand = new AutoCommand(drivetrain, turret, vision, shooter, intake);
 
     // adds intake for the auto to know when 
-    jdrive = new JoyDrive(drivetrain, driveController , intakeCommand);
+    jdrive = new JoyDrive(drivetrain, driveStick, turnStick, intakeCommand);
     shoot = new Shoot(shooter, vision, driveStick, intake, controller);
     tester = new testcommand(driveStick, tSys);
+
+    configureTalons();
   }
 
   /**
@@ -109,8 +115,6 @@ public class RobotContainer {
     // // In 4 feet
     // drivetrain.encoderL.setDistancePerPulse(1.0/256.0);
     // drivetrain.encoderR.setDistancePerPulse(1.0/256.0);
-
-    
     
   }
 
@@ -152,6 +156,28 @@ public class RobotContainer {
     //       }
     //     }
     // }
+  }
+
+  public void configureTalons() {
+    drivetrain.l1.setNeutralMode(NeutralMode.Brake);
+    drivetrain.l2.setNeutralMode(NeutralMode.Brake);
+    drivetrain.r1.setNeutralMode(NeutralMode.Brake);
+    drivetrain.r2.setNeutralMode(NeutralMode.Brake);
+    
+    intake.brushMotor.setNeutralMode(NeutralMode.Coast);
+    intake.conveyorMotor.setNeutralMode(NeutralMode.Brake);
+    intake.transitionMotor.setNeutralMode(NeutralMode.Brake);
+
+    shooter.shooterMotor1.setNeutralMode(NeutralMode.Coast);
+    shooter.shooterMotor2.setNeutralMode(NeutralMode.Coast);
+
+    turret.turretMotor.setNeutralMode(NeutralMode.Brake);
+    
+    config = true;
+    
+    SmartDashboard.putBoolean("Talons Configured", config);
+    SmartDashboard.updateValues();
+
   }
 
   // public void intakeUp() {

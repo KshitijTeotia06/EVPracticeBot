@@ -7,7 +7,7 @@ package frc.robot.commands;
 
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.kauailabs.navx.frc.AHRS;
+// import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
@@ -32,6 +32,8 @@ public class Shoot extends CommandBase {
   private boolean shooterWarmedUp = false;
   private Vision vision;
   private boolean shooting = false;
+  private double bumpertrim = 0;
+
 
   /** Creates a new Shoot. */
   public Shoot(Shooter shoot, Vision vision, Joystick stick, Intake intake, XboxController controller) {
@@ -69,27 +71,43 @@ public class Shoot extends CommandBase {
     //   if(speed == 0) speed = 0.5 ;
     //   else speed = 0;
     // }
-    
-    if(controller.getAButtonPressed()){
-      speed = shoot.computeV(vision.getY());
-      SmartDashboard.putNumber("Y VALUE", vision.getY());
-    }
 
-    // // if ((shoot.getColorSensorV3().equals(Color.kBlue)) || (shoot.getColorSensorV3().equals(Color.kRed))) {
-    shoot.outakeV(speed * controller.getLeftTriggerAxis());
-    // // }
-    // // else {
-    //   // shoot.outakeV(0.1);
-    // // }
+    if (controller.getLeftBumperPressed()) {
+      bumpertrim -= 100;
+    } else if (controller.getRightBumperPressed()){
+      bumpertrim += 100;
+    }
+    SmartDashboard.putNumber("trim value: ", bumpertrim);
+    
+    speed = shoot.computeV(vision.getY());
+    SmartDashboard.putNumber("Y VALUE", vision.getY());
+
+    // if ((shoot.getColorSensorV3().equals(Color.kBlue)) || (shoot.getColorSensorV3().equals(Color.kRed))) {
+    //   shoot.outakeV((speed + bumpertrim) * controller.getLeftTriggerAxis());
+    // }
+    // else {
+    //   shoot.outakeV(0.5);
+    // }
 
     // SmartDashboard.putNumber("Current SHOOTER SPEED", shoot.getRPM());
     // SmartDashboard.putNumber("TARGET SPEED", speed);
 
 
     double outtakespeed= 0;
-    if(controller.getRightTriggerAxis() > 0.1) outtakespeed = 1;
-    else outtakespeed = 0;
-    intake.transitionMotor(outtakespeed);
+    if(controller.getRightTriggerAxis() > 0.1){
+      // intake.conveyor(outtakespeed);
+      outtakespeed = controller.getRightTriggerAxis();
+      intake.ShootBalls(outtakespeed);
+    }else if ((controller.getRightY() > 0.1) && (!intake.banner1Output() || !intake.banner2Output())){
+      outtakespeed = controller.getRightY();
+      intake.IntakeBalls(outtakespeed);
+    }else if (controller.getRightY() < -0.1) {
+      intake.transitionMotor(-0.5);
+    }else{
+      intake.conveyor(0);
+      intake.intakeBrush(0);
+      intake.transitionMotor(0);
+    }
     // shoot.outtakeBall(controller.getLeftTriggerAxis());
   
     
@@ -110,34 +128,34 @@ public class Shoot extends CommandBase {
     
 
       Color colorReading = shoot.getColorSensorV3();
-      // if (shoot.teamColor.equals(DriverStation.Alliance.Red) && colorReading.red > colorReading.blue) {
-      //   shoot.outtakeBall(controller.getLeftTriggerAxis());
-      // }
-      // else if (shoot.teamColor.equals(DriverStation.Alliance.Blue) && colorReading.red < colorReading.blue) {
-      //   shoot.outtakeBall(controller.getLeftTriggerAxis());
-      // }
-      // else {
-      //   if (controller.getLeftTriggerAxis() > 0.1) {
-      //     shoot.outtakeBall(0.5);
-      //   }
-      //   else {
-      //     // This will happen if nothing gets pressed 
-      //     shoot.outtakeBall(0);
-      //   }
-      // }
-    
-    
-
-    if (controller.getRightTriggerAxis() < 0.1) {
-      if (intake.banner2Output()) {
-        // Keeps the ball intake down
-        intake.transitionMotor(-0.3);
+      if (shoot.teamColor.equals(DriverStation.Alliance.Red) && colorReading.red > colorReading.blue) {
+        shoot.outtakeBall(controller.getLeftTriggerAxis());
       }
-    }
-    else {
-      intake.transitionMotor(controller.getRightTriggerAxis());
+      else if (shoot.teamColor.equals(DriverStation.Alliance.Blue) && colorReading.red < colorReading.blue) {
+        shoot.outtakeBall(controller.getLeftTriggerAxis());
+      }
+      else {
+        if (controller.getLeftTriggerAxis() > 0.1) {
+          shoot.outtakeBall(0.5);
+        }
+        else {
+          // This will happen if nothing gets pressed 
+          shoot.outtakeBall(0);
+        }
+      }
+    
+    
 
-    }
+    // if (controller.getRightTriggerAxis() < 0.1) {
+    //   if (intake.banner2Output()) {
+    //     // Keeps the ball intake down
+    //     intake.transitionMotor(-0.3);
+    //   }
+    // }
+    // else {
+    //   intake.transitionMotor(controller.getRightTriggerAxis());
+
+    // }
    
     
 

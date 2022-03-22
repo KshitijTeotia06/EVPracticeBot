@@ -99,6 +99,8 @@ public class Robot extends TimedRobot {
     teleCommands = m_robotContainer.getTeleCommand();
 
     // schedule the autonomous command (example)
+
+
     if (teleCommands != null) {
       for(Command get : teleCommands){
         get.schedule();
@@ -121,11 +123,6 @@ public class Robot extends TimedRobot {
     //post to smart dashboard periodically
     double k = 3.44;
     double dis = k / Math.sqrt(area);
-
-    SmartDashboard.putNumber("LimelightX", x);
-    SmartDashboard.putNumber("LimelightY", y);
-    SmartDashboard.putNumber("LimelightArea", area);
-    SmartDashboard.putNumber("LimelightDis", dis);
   }
 
   @Override

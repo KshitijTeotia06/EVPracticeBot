@@ -4,7 +4,7 @@
 
 package frc.robot.commands;
 
-import com.kauailabs.navx.frc.AHRS;
+// import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SerialPort;
@@ -17,17 +17,19 @@ import frc.robot.subsystems.Drivetrain;
 public class JoyDrive extends CommandBase {
   /** Creates a new JoyDrive. */
   private final Drivetrain drivetrain;
-  private XboxController controller;
-  private AHRS ahrsNavX;
+  private Joystick stick, tstick;
+  // private AHRS ahrsNavX;
   private boolean highGear = false;
+  private double sensScale = 1;
 
   // Auto
   private final IntakeBall intake;
 
 
-  public JoyDrive(Drivetrain dt, XboxController controller, IntakeBall intake) { //replace parameters w (Drivetrain dt, Joystick dst, Joystick tst) for wheel and stick 
+  public JoyDrive(Drivetrain dt, Joystick stick, Joystick tstick, IntakeBall intake) { //replace parameters w (Drivetrain dt, Joystick dst, Joystick tst) for wheel and stick 
     this.drivetrain = dt;      
-    this.controller = controller;
+    this.stick = stick;
+    this.tstick = tstick;
     this.intake = intake;
     
     // Change based on the connection to nav x
@@ -45,7 +47,8 @@ public class JoyDrive extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    controller = new XboxController(Constants.XBOX_DRIVE_CONTROLLER_PORT);
+    stick = new Joystick(Constants.DRIVE_STICK_PORT);
+    tstick = new Joystick(Constants.TURN_STICK_PORT);
     drivetrain.resetEncoders();
   }
 
@@ -57,11 +60,7 @@ public class JoyDrive extends CommandBase {
     // SmartDashboard.putNumber("ENCODER", drivetrain.getIntegratedSensor());
     // SmartDashboard.updateValues();
 
-    SmartDashboard.putBoolean("Low Shift Status:", drivetrain.shifter.isFwdSolenoidDisabled());
-    SmartDashboard.putBoolean("High Shift Status:", drivetrain.shifter.isRevSolenoidDisabled());
-    SmartDashboard.updateValues();
-
-    if(controller.getAButtonPressed()){
+    if(stick.getTriggerPressed()){
       // SmartDashboard.putBoolean("CLICKED", true);
       // SmartDashboard.updateValues();
       if(highGear){
@@ -72,9 +71,8 @@ public class JoyDrive extends CommandBase {
       highGear = !highGear;
     }
 
-    drivetrain.move(controller.getLeftY(), controller.getRightX());
-    SmartDashboard.putNumber("L ENCODER: ", drivetrain.getLIntegratedSensor());
-    SmartDashboard.putNumber("R ENCODER: ", drivetrain.getRIntegratedSensor());
+    drivetrain.move(-stick.getY()*sensScale, -tstick.getX()*sensScale);
+    
     SmartDashboard.updateValues();
   }
 

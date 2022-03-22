@@ -29,8 +29,8 @@ public class Shooter extends SubsystemBase {
   // private static TalonFX intakeMotor1 = new TalonFX(Constants.INTAKE_1);
   // private static TalonFX intakeMotor2 = new TalonFX(Constants.INTAKE_2);
   // private static TalonFX turretMotor = new TalonFX(Constants.TURRET);
-  private static WPI_TalonFX shooterMotor1;
-  private static WPI_TalonFX shooterMotor2;
+  public WPI_TalonFX shooterMotor1;
+  public WPI_TalonFX shooterMotor2;
   //private static VictorSPX intakeMotor = new VictorSPX(Constants.INTAKE);
   // private DigitalInput banner;
   boolean ballLoaded;

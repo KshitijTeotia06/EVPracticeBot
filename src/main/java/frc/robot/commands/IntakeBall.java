@@ -14,13 +14,15 @@ import frc.robot.subsystems.Shooter;
 public class IntakeBall extends CommandBase {
   Intake intake;
   XboxController controller;
+  Joystick stick;
   boolean on = false;
   double speed = 0;
   boolean isEjecting = false;
   
 
-  public IntakeBall(Intake intake, XboxController controller) {
+  public IntakeBall(Intake intake, XboxController controller, Joystick stick) {
     this.intake = intake;
+    this.stick = stick;
     addRequirements(intake);
     this.controller = controller;
   }
@@ -37,13 +39,24 @@ public class IntakeBall extends CommandBase {
     SmartDashboard.putBoolean("TEST_Banner2", intake.banner2Output());
     SmartDashboard.updateValues();
     
-    intake.mainIntakeFunction(controller.getRightY());
+    SmartDashboard.putNumber("RIGHT Y", controller.getRightY());
+    SmartDashboard.updateValues();
     // intake.conveyor(controller.getRightY());
 
-
-    if (controller.getRawButtonPressed(4)){
+    if (controller.getYButtonPressed()) {
       intake.intakeToggle();
     }
+
+    // if (stick.getRawButton(4)) {
+    //   if (intake.banner1Output() && intake.banner2Output()) {
+    //     intake.mainIntakeFunction(0);
+    //   } else {
+    //     intake.mainIntakeFunction(0.8);
+    //   }
+    // }
+    // else {
+    //   intake.mainIntakeFunction(0);
+    // }
     // intake.intake(isEjecting);
     SmartDashboard.updateValues();
   }

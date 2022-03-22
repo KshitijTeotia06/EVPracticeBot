@@ -16,7 +16,7 @@ import frc.robot.Constants;
 
 public class Turret extends SubsystemBase {
 
-  private TalonFX turretMotor;
+  public TalonFX turretMotor;
   // private TalonSRX elevator = new TalonSRX(Constants.ELEVATOR);
   Vision vision;
   double kp;

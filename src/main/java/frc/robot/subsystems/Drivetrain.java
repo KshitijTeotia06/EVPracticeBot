@@ -15,7 +15,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFXPIDSetConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import com.kauailabs.navx.frc.AHRS;
+//import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
@@ -51,7 +51,7 @@ public class Drivetrain extends SubsystemBase {
   public Encoder QuadEncoderL, QuadEncoderR;
 
   // public Solenoid shifterL, shifterR;
- public AHRS gyro = new AHRS(SerialPort.Port.kUSB1);
+ // public AHRS gyro = new AHRS(SerialPort.Port.kUSB1);
  // public DifferentialDriveOdometry odometry = new DifferentialDriveOdometry(gyroAngle)
 
   public Drivetrain() {
@@ -69,11 +69,6 @@ public class Drivetrain extends SubsystemBase {
 
     c.enabled();
     c.enableDigital();
-
-    l1.setNeutralMode(NeutralMode.Brake);
-    l2.setNeutralMode(NeutralMode.Brake);
-    r1.setNeutralMode(NeutralMode.Brake);
-    r2.setNeutralMode(NeutralMode.Brake);
 
     // REMOVE
     // c.disable();
@@ -186,23 +181,23 @@ public class Drivetrain extends SubsystemBase {
 
     SmartDashboard.updateValues();
   }
-  public void turnDegrees(double degrees) {
-    SmartDashboard.putNumber("GYROYAW", gyro.getYaw());
-    SmartDashboard.updateValues();
+  // public void turnDegrees(double degrees) {
+  //   SmartDashboard.putNumber("GYROYAW", gyro.getYaw());
+  //   SmartDashboard.updateValues();
 
-    if (degrees < 0) {// degrees = -90
-      if (gyro.getYaw() >= degrees) {
+  //   if (degrees < 0) {// degrees = -90
+  //     if (gyro.getYaw() >= degrees) {
  
-        move(0, 0.3);
-      }
-    }
-    else { // Degrees = 90
-      if (gyro.getYaw() <= degrees) {
+  //       move(0, 0.3);
+  //     }
+  //   }
+  //   else { // Degrees = 90
+  //     if (gyro.getYaw() <= degrees) {
        
-        move(0, -0.30);
-      }
-    }
-  }
+  //       move(0, -0.30);
+  //     }
+  //   }
+  // }
 
   @Override
   public void periodic() {
