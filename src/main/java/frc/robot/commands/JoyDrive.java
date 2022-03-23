@@ -4,11 +4,14 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
+
 // import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
@@ -25,6 +28,8 @@ public class JoyDrive extends CommandBase {
   // Auto
   private final IntakeBall intake;
 
+  private NetworkTableEntry compressorEntry;
+
 
   public JoyDrive(Drivetrain dt, Joystick stick, Joystick tstick, IntakeBall intake) { //replace parameters w (Drivetrain dt, Joystick dst, Joystick tst) for wheel and stick 
     this.drivetrain = dt;      
@@ -32,6 +37,7 @@ public class JoyDrive extends CommandBase {
     this.tstick = tstick;
     this.intake = intake;
     
+    this.compressorEntry = Shuffleboard.getTab("Tokyo Drifter - Driver View").add("Compressor(PSI)", drivetrain.c.getPressure()).getEntry();
     // Change based on the connection to nav x
     /*
     ahrsNavX = new AHRS(SerialPort.Port.kUSB);
@@ -71,7 +77,10 @@ public class JoyDrive extends CommandBase {
       highGear = !highGear;
     }
 
-    drivetrain.move(-stick.getY()*sensScale, -tstick.getX()*sensScale);
+    drivetrain.move(-stick.getY()*sensScale, -1 * Math.signum(tstick.getX()) * Math.pow(Math.abs(tstick.getX()), 1.4));
+    
+    // Shuffleboard
+    compressorEntry.setNumber(drivetrain.c.getPressure());
     
     SmartDashboard.updateValues();
   }

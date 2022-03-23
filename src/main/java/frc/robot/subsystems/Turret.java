@@ -28,16 +28,16 @@ public class Turret extends SubsystemBase {
   double intErr;
   double zerr;
   double motorOutput;
-  // private DigitalInput limitSwitch_left;
-  // private DigitalInput limitSwitch_right;
+  private DigitalInput limitSwitch_left;
+  private DigitalInput limitSwitch_right;
 
   /** Creates a new Turret. */
   public Turret(Vision vision) {
     turretMotor = new TalonFX(Constants.TURRT_MOTOR_ID);
     turretMotor.setInverted(true);
     this.vision = vision;
-    // limitSwitch_left = new DigitalInput(Constants.LIMIT_LEFT);
-    // limitSwitch_right = new DigitalInput(Constants.LIMIT_RIGHT);
+    limitSwitch_left = new DigitalInput(Constants.LIMIT_LEFT);
+    limitSwitch_right = new DigitalInput(Constants.LIMIT_RIGHT);
 
     kp = .2;
     kf = 0*0.1;
@@ -86,10 +86,10 @@ public class Turret extends SubsystemBase {
 
     motorOutput = autoTrigger * (intErr * ki + posErr * kp + fric);
     // if (getLeftLimitSwitchStatus() == false && motorOutput < 0) {
-      // motorOutput = .25;
+    //   motorOutput = .25;
     // }
     // if (getRightLimitSwitchStatus() == false && motorOutput > 0) {
-      // motorOutput = -.25;
+    //   motorOutput = -.25;
     // }
     turretMotor.set(ControlMode.PercentOutput, -motorOutput);
 
@@ -102,13 +102,13 @@ public class Turret extends SubsystemBase {
     // SmartDashboard.putNumber("Turret Motor Ouptut: ", motorOutput);
   }
 
-  // public boolean getLeftLimitSwitchStatus() {// right
-  //   return limitSwitch_left.get();
-  // }
+  public boolean getLeftLimitSwitchStatus() {// right
+    return limitSwitch_left.get();
+  }
 
-  // public boolean getRightLimitSwitchStatus() { // left
-  //   return limitSwitch_right.get();
-  // }
+  public boolean getRightLimitSwitchStatus() { // left
+    return limitSwitch_right.get();
+  }
 
   @Override
   public void periodic() {

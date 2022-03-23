@@ -4,8 +4,10 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
@@ -18,13 +20,20 @@ public class IntakeBall extends CommandBase {
   boolean on = false;
   double speed = 0;
   boolean isEjecting = false;
-  
+
+  private NetworkTableEntry bannerUpperEntry;
+  private NetworkTableEntry bannerLowerEntry;
+
 
   public IntakeBall(Intake intake, XboxController controller, Joystick stick) {
     this.intake = intake;
     this.stick = stick;
     addRequirements(intake);
     this.controller = controller;
+
+    this.bannerUpperEntry = Shuffleboard.getTab("Tokyo Drifter - Driver View").add("Banner Upper", intake.banner2Output()).getEntry();
+    this.bannerLowerEntry = Shuffleboard.getTab("Tokyo Drifter - Driver View").add("Banner Lower", intake.banner2Output()).getEntry();
+
   }
 
   // Called when the command is initially scheduled.
@@ -58,6 +67,12 @@ public class IntakeBall extends CommandBase {
     //   intake.mainIntakeFunction(0);
     // }
     // intake.intake(isEjecting);
+
+    bannerUpperEntry.setBoolean(intake.banner2Output());
+    bannerLowerEntry.setBoolean(intake.banner1Output());
+    
+    Shuffleboard.update();
+
     SmartDashboard.updateValues();
   }
 

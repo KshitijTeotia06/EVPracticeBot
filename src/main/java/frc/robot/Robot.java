@@ -13,6 +13,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -49,6 +50,8 @@ public class Robot extends TimedRobot {
     cvSink = CameraServer.getVideo();
     outputStream = CameraServer.putVideo("IntakeStream", 640, 480);
   
+    Shuffleboard.getTab("Tokyo Drifter - Driver View").add(outputStream);
+    Shuffleboard.update();
   }
 
   /**

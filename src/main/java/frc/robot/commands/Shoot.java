@@ -9,11 +9,13 @@ package frc.robot.commands;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 // import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -34,6 +36,10 @@ public class Shoot extends CommandBase {
   private boolean shooting = false;
   private double bumpertrim = 0;
 
+  private NetworkTableEntry colorSensorEntry;
+  private NetworkTableEntry limelightTargetEntry;
+  private NetworkTableEntry limelightAimLocked;
+
 
   /** Creates a new Shoot. */
   public Shoot(Shooter shoot, Vision vision, Joystick stick, Intake intake, XboxController controller) {
@@ -43,6 +49,10 @@ public class Shoot extends CommandBase {
     this.stick = stick;
     this.intake = intake;
     this.controller = controller;
+
+    this.colorSensorEntry = Shuffleboard.getTab("Tokyo Drifter - Driver View").add("Ball Color", "Red").getEntry();
+    this.limelightTargetEntry = Shuffleboard.getTab("Tokyo Drifter - Driver View").add("Limelight Target Found", true).getEntry();
+    this.limelightAimLocked = Shuffleboard.getTab("Tokyo Drifter - Driver View").add("Limelight Aim Locked", true).getEntry();
   }
 
   // Called when the command is initially scheduled.
@@ -80,13 +90,17 @@ public class Shoot extends CommandBase {
     SmartDashboard.putNumber("trim value: ", bumpertrim);
     
     speed = shoot.computeV(vision.getY());
+    SmartDashboard.putNumber("Difference Shooter Speed", speed - shoot.getRPM());
     SmartDashboard.putNumber("Y VALUE", vision.getY());
 
-    // if ((shoot.getColorSensorV3().equals(Color.kBlue)) || (shoot.getColorSensorV3().equals(Color.kRed))) {
-    //   shoot.outakeV((speed + bumpertrim) * controller.getLeftTriggerAxis());
+
+          Color colorReading = shoot.getColorSensorV3();
+
+    // if  (((shoot.teamColor.equals(DriverStation.Alliance.Red) && colorReading.red > colorReading.blue)) || ((shoot.teamColor.equals(DriverStation.Alliance.Blue) && colorReading.red < colorReading.blue))) {
+      shoot.outakeV((speed + bumpertrim) * controller.getLeftTriggerAxis());
     // }
     // else {
-    //   shoot.outakeV(0.5);
+      // shoot.outakeV(0.5);
     // }
 
     // SmartDashboard.putNumber("Current SHOOTER SPEED", shoot.getRPM());
@@ -125,26 +139,49 @@ public class Shoot extends CommandBase {
 
     // This makes the ball spit out the other teams ball
 
-    
 
-      Color colorReading = shoot.getColorSensorV3();
-      if (shoot.teamColor.equals(DriverStation.Alliance.Red) && colorReading.red > colorReading.blue) {
-        shoot.outtakeBall(controller.getLeftTriggerAxis());
-      }
-      else if (shoot.teamColor.equals(DriverStation.Alliance.Blue) && colorReading.red < colorReading.blue) {
-        shoot.outtakeBall(controller.getLeftTriggerAxis());
+      // if (shoot.teamColor.equals(DriverStation.Alliance.Red) && colorReading.red > colorReading.blue) {
+      //   shoot.outtakeBall(controller.getLeftTriggerAxis());
+      // }
+      // else if (shoot.teamColor.equals(DriverStation.Alliance.Blue) && colorReading.red < colorReading.blue) {
+      //   shoot.outtakeBall(controller.getLeftTriggerAxis());
+      // }
+      // else {
+      //   if (controller.getLeftTriggerAxis() > 0.1) {
+      //     shoot.outtakeBall(0.5);
+      //   }
+      //   else {
+      //     // This will happen if nothing gets pressed 
+      //     shoot.outtakeBall(0);
+      //   }
+      // }
+    
+      if (colorReading.red > colorReading.blue) {
+        colorSensorEntry.setString("Red");
       }
       else {
-        if (controller.getLeftTriggerAxis() > 0.1) {
-          shoot.outtakeBall(0.5);
-        }
-        else {
-          // This will happen if nothing gets pressed 
-          shoot.outtakeBall(0);
-        }
+        colorSensorEntry.setString("Blue");
       }
-    
-    
+
+      if (vision.getTarget() == 1) {
+        limelightTargetEntry.setBoolean(true);
+      }
+      else {
+        limelightTargetEntry.setBoolean(false);
+      }
+
+      if ((vision.getX() > -0.1) && (vision.getX() < 0.1)) {
+        limelightAimLocked.setBoolean(true);
+
+      }
+      else {
+        limelightAimLocked.setBoolean(false);
+
+      }
+      
+      
+      
+        Shuffleboard.update();
 
     // if (controller.getRightTriggerAxis() < 0.1) {
     //   if (intake.banner2Output()) {

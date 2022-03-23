@@ -186,7 +186,10 @@ public class Intake extends SubsystemBase {
     leftSolenoid.set(Value.kReverse);
     rightSolenoid.set(Value.kReverse);
   }
-
+  public void intakeDown() {
+    leftSolenoid.set(Value.kForward);
+    rightSolenoid.set(Value.kForward);
+  }
   public boolean getIntakeDown() {
     return intakeDown;
   }

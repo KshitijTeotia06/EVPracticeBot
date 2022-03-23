@@ -4,8 +4,10 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Turret;
@@ -17,6 +19,11 @@ public class TurretMove extends CommandBase {
   XboxController controller;
   boolean manual;
   Vision vision;
+  boolean limR;
+  boolean limL;
+
+  private NetworkTableEntry turretAutoEntry;
+
 
   public TurretMove(Turret turret, XboxController controller, Vision vision) {
     this.turret = turret;
@@ -24,6 +31,8 @@ public class TurretMove extends CommandBase {
     this.vision = vision;
     this.controller = controller;
     manual = false;
+
+    turretAutoEntry = Shuffleboard.getTab("Tokyo Drifter - Driver View").add("Turret Auto", true).getEntry();
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -70,6 +79,30 @@ public class TurretMove extends CommandBase {
       turret.turnTurret(1);
     }
     // turret.setSpeed(controller.getRightX());
+
+    if (turret.getLeftLimitSwitchStatus()) {
+      limL = true;
+    } else {
+      limL = false;
+    }
+
+    if (turret.getRightLimitSwitchStatus()) {
+      limR = true;
+    } else {
+      limR = false;
+    }
+
+    SmartDashboard.putBoolean("Limit Right", limR);
+    SmartDashboard.putBoolean("Limit Left", limL);
+
+    if (!manual) {
+      turretAutoEntry.setBoolean(true);
+    }
+    else {
+      turretAutoEntry.setBoolean(false);
+    }
+
+    Shuffleboard.update();
   }
 
   // Called once the command ends or is interrupted.
@@ -82,3 +115,4 @@ public class TurretMove extends CommandBase {
     return false;
   }
 }
+

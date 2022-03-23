@@ -33,8 +33,8 @@ public final class Constants {
     public static final int SHOOTER1 = 10;
     public static final int SHOOTER2 = 9;
     public static final int TURRT_MOTOR_ID = 12;
-    public static final int LIMIT_LEFT = 2; //dio
-    public static final int LIMIT_RIGHT = 3; //dio
+    public static final int LIMIT_LEFT = 4; //dio
+    public static final int LIMIT_RIGHT = 5; //dio
 
     // control 
     public static final int XBOX_PORT = 1;
