@@ -21,6 +21,7 @@ public class TurretMove extends CommandBase {
   Vision vision;
   boolean limR;
   boolean limL;
+  
 
   private NetworkTableEntry turretAutoEntry;
 

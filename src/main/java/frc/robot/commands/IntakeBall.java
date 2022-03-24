@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 
@@ -23,6 +24,7 @@ public class IntakeBall extends CommandBase {
 
   private NetworkTableEntry bannerUpperEntry;
   private NetworkTableEntry bannerLowerEntry;
+  private NetworkTableEntry intakeStatusEntry;
 
 
   public IntakeBall(Intake intake, XboxController controller, Joystick stick) {
@@ -33,6 +35,7 @@ public class IntakeBall extends CommandBase {
 
     this.bannerUpperEntry = Shuffleboard.getTab("Tokyo Drifter - Driver View").add("Banner Upper", intake.banner2Output()).getEntry();
     this.bannerLowerEntry = Shuffleboard.getTab("Tokyo Drifter - Driver View").add("Banner Lower", intake.banner2Output()).getEntry();
+    this.intakeStatusEntry = Shuffleboard.getTab("Tokyo Drifter - Driver View").add("Intake Status", intake.getIntakeDown()).getEntry();
 
   }
 
@@ -56,6 +59,16 @@ public class IntakeBall extends CommandBase {
       intake.intakeToggle();
     }
 
+    intake.setLEDDigital(Constants.LED_CHANNEL_DEFAULT);
+
+    if (intake.banner2Output()) {
+      intake.setLEDDigital(Constants.LED_CHANNEL_RED);
+    }
+    if (intake.banner1Output() && intake.banner2Output()) {
+      intake.setLEDDigital(Constants.LED_CHANNEL_GREEN);
+    }
+    
+
     // if (stick.getRawButton(4)) {
     //   if (intake.banner1Output() && intake.banner2Output()) {
     //     intake.mainIntakeFunction(0);
@@ -70,6 +83,7 @@ public class IntakeBall extends CommandBase {
 
     bannerUpperEntry.setBoolean(intake.banner2Output());
     bannerLowerEntry.setBoolean(intake.banner1Output());
+    intakeStatusEntry.setBoolean(intake.getIntakeDown());
     
     Shuffleboard.update();
 

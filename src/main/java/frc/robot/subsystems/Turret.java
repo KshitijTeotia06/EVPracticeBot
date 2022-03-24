@@ -59,8 +59,12 @@ public class Turret extends SubsystemBase {
     turretMotor.setSelectedSensorPosition(0);
   }
 
-  public void setSpeed(double speed){
-    turretMotor.set(ControlMode.PercentOutput, speed);
+  public void setSpeed(double speed){ 
+    if((getLeftLimitSwitchStatus() && speed > 0) || (getRightLimitSwitchStatus() && speed < 0)){
+      turretMotor.set(ControlMode.PercentOutput, 0);
+    }else{
+      turretMotor.set(ControlMode.PercentOutput, speed);
+    }
   }
 
   public double getEncoder(){
@@ -70,7 +74,7 @@ public class Turret extends SubsystemBase {
   public void turnTurret(double autoTrigger) {
     SmartDashboard.updateValues();
     if(vision.getTarget() != 1.0){
-      turretMotor.set(ControlMode.PercentOutput, 0);
+      setSpeed(0);
       return;
     }
 
@@ -104,7 +108,8 @@ public class Turret extends SubsystemBase {
     // if (getRightLimitSwitchStatus() == false && motorOutput > 0) {
     //   motorOutput = -.25;
     // }
-    turretMotor.set(ControlMode.PercentOutput, -motorOutput);
+    setSpeed(-motorOutput);
+    // turretMotor.set(ControlMode.PercentOutput, -motorOutput);
 
     // SmartDashboard.putNumber("Vision X: ", posErr);
     // SmartDashboard.putNumber("Vision Z: ", zerr);

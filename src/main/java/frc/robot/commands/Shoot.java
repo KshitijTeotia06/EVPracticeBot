@@ -96,12 +96,12 @@ public class Shoot extends CommandBase {
 
           Color colorReading = shoot.getColorSensorV3();
 
-    // if  (((shoot.teamColor.equals(DriverStation.Alliance.Red) && colorReading.red > colorReading.blue)) || ((shoot.teamColor.equals(DriverStation.Alliance.Blue) && colorReading.red < colorReading.blue))) {
+    if  (((shoot.teamColor.equals(DriverStation.Alliance.Red) && colorReading.red > colorReading.blue)) || ((shoot.teamColor.equals(DriverStation.Alliance.Blue) && colorReading.red < colorReading.blue))) {
       shoot.outakeV((speed + bumpertrim) * controller.getLeftTriggerAxis());
-    // }
-    // else {
-      // shoot.outakeV(0.5);
-    // }
+    }
+    else {
+      shoot.outakeV(0.5);
+    }
 
     // SmartDashboard.putNumber("Current SHOOTER SPEED", shoot.getRPM());
     // SmartDashboard.putNumber("TARGET SPEED", speed);

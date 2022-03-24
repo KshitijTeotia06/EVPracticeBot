@@ -14,11 +14,13 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -36,6 +38,8 @@ public class Intake extends SubsystemBase {
   private DigitalInput banner2; // dio 1
   // private DigitalInput banner3; // dio 2
 
+  private Spark ledDigital;
+
   private boolean storageFull; // whether storage is full
   private int ballStored; // balls stored
   private String intakeStatus;
@@ -46,6 +50,7 @@ public class Intake extends SubsystemBase {
   
   public Intake() {
     // compressor = new Compressor(PneumaticsModuleType.CTREPCM);
+    
     conveyorMotor = new TalonFX(Constants.INTAKE_MOTOR);
     brushMotor = new VictorSPX(Constants.BRUSH_MOTOR);
     transitionMotor = new TalonSRX(Constants.TRANSIT_MOTOR);
@@ -55,6 +60,8 @@ public class Intake extends SubsystemBase {
     // compressor.enableDigital();
     banner1 = new DigitalInput(Constants.BANNER_1);
     banner2 = new DigitalInput(Constants.BANNER_2);
+
+    ledDigital = new Spark(Constants.LED_CHANNEL);
 
     // banner3 = new DigitalInput(Constants.BANNER_3);
     leftSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.INTAKEPISTON1_CHANNEL1, Constants.INTAKEPISTON1_CHANNEL2);
@@ -119,6 +126,9 @@ public class Intake extends SubsystemBase {
     
   }
 
+  public void setLEDDigital(double ledConstant) {
+    ledDigital.set(ledConstant);
+  }
   public void IntakeBalls(double speed){
     intakeBrush(speed);
     conveyor(speed);
