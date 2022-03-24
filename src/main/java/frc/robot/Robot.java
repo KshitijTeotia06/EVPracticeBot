@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.CvSink;
 import edu.wpi.first.cscore.CvSource;
+import edu.wpi.first.cscore.HttpCamera;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -35,7 +36,7 @@ public class Robot extends TimedRobot {
   private CvSource outputStream;
   private RobotContainer m_robotContainer;
   private Command auto;
-
+  private HttpCamera limelightCamera;
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -46,12 +47,15 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     camera = CameraServer.startAutomaticCapture();
+    limelightCamera = new HttpCamera("limelight", "http://10.28.54.11:5801/stream.mjpg", edu.wpi.first.cscore.HttpCamera.HttpCameraKind.kMJPGStreamer);
     camera.setResolution(640, 480);
     cvSink = CameraServer.getVideo();
     outputStream = CameraServer.putVideo("IntakeStream", 640, 480);
+    CameraServer.startAutomaticCapture(limelightCamera);
   
-    Shuffleboard.getTab("Tokyo Drifter - Driver View").add(outputStream);
-    Shuffleboard.update();
+    
+    // Shuffleboard.getTab("Tokyo Drifter - Driver View").add(outputStream);
+    // Shuffleboard.update();
   }
 
   /**
