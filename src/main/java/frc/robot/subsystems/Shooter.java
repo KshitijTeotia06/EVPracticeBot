@@ -80,8 +80,8 @@ public class Shooter extends SubsystemBase {
 
   public void outtakeBall(double speed) {
     maxSpeed = SmartDashboard.getNumber("SHOOTER SPEED: ", 0);
-    shooterMotor1.set(ControlMode.PercentOutput, speed);
-    // shooterMotor1.set(ControlMode.Velocity, speed);
+    shooterMotor1.set(ControlMode.Velocity, maxSpeed);
+    // shooterMotor1.set(ControlMode.PercentOutput, speed);
 // 
     // if (speed > 0.8) {
     //   shooterMotor1.set(ControlMode.PercentOutput, 0.8);

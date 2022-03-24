@@ -96,12 +96,13 @@ public class Shoot extends CommandBase {
 
           Color colorReading = shoot.getColorSensorV3();
 
-    if  (((shoot.teamColor.equals(DriverStation.Alliance.Red) && colorReading.red > colorReading.blue)) || ((shoot.teamColor.equals(DriverStation.Alliance.Blue) && colorReading.red < colorReading.blue))) {
-      shoot.outakeV((speed + bumpertrim) * controller.getLeftTriggerAxis());
-    }
-    else {
-      shoot.outakeV(0.5);
-    }
+          // undo
+    // if  (((shoot.teamColor.equals(DriverStation.Alliance.Red) && colorReading.red > colorReading.blue)) || ((shoot.teamColor.equals(DriverStation.Alliance.Blue) && colorReading.red < colorReading.blue))) {
+    //   shoot.outakeV((speed + bumpertrim) * controller.getLeftTriggerAxis());
+    // }
+    // else {
+    //   shoot.outakeV(0.5);
+    // }
 
     // SmartDashboard.putNumber("Current SHOOTER SPEED", shoot.getRPM());
     // SmartDashboard.putNumber("TARGET SPEED", speed);
@@ -122,11 +123,11 @@ public class Shoot extends CommandBase {
       intake.intakeBrush(0);
       intake.transitionMotor(0);
     }
-    // shoot.outtakeBall(controller.getLeftTriggerAxis());
+    shoot.outtakeBall(controller.getLeftTriggerAxis());
   
     
     // SmartDashboard.putNumber("TRIGGER: ", stick.getY());
-    // SmartDashboard.putNumber("SHOOTER SPEED", shoot.getRPM());
+    // SmartDashboard.putNumber("SHOOTER SPEED: ", shoot.getRPM());
 
      SmartDashboard.putNumber("BlueColor Sensor Value", shoot.getColorSensorV3().blue);
 
