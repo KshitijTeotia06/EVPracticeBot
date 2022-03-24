@@ -36,6 +36,9 @@ public final class Constants {
     public static final int LIMIT_LEFT = 5; //dio
     public static final int LIMIT_RIGHT = 4; //dio
 
+    // Climber
+    public static final int CLIMBER1 = 500;
+    public static final int CLIMBER2 = 501;
     // control 
     public static final int XBOX_PORT = 1;
     public static final int DRIVE_STICK_PORT = 0; // joystick

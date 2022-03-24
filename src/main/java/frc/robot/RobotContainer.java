@@ -11,11 +11,13 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.AutoCommand;
+import frc.robot.commands.ClimberCommand;
 import frc.robot.commands.IntakeBall;
 import frc.robot.commands.JoyDrive;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.TurretMove;
 import frc.robot.commands.testcommand;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
@@ -37,9 +39,11 @@ public class RobotContainer {
   private final Vision vision = new Vision();
   private final Turret turret = new Turret(vision);
   private final testSystem tSys = new testSystem();
+  private final Climber climber = new Climber();
   private Joystick driveStick, turnStick;
   private XboxController controller, driveController;
   private final JoyDrive jdrive;
+  private final ClimberCommand climb;
   private final TurretMove tmove;
   private final Shooter shooter = new Shooter();
   private final Shoot shoot;
@@ -62,7 +66,7 @@ public class RobotContainer {
     tmove = new TurretMove(turret, controller, vision);
     intakeCommand = new IntakeBall(intake, controller, driveStick);
     autoCommand = new AutoCommand(drivetrain, turret, vision, shooter, intake);
-
+    climb = new ClimberCommand(climber, controller);
     // adds intake for the auto to know when 
     jdrive = new JoyDrive(drivetrain, driveStick, turnStick, intakeCommand);
     shoot = new Shoot(shooter, vision, driveStick, intake, controller);
