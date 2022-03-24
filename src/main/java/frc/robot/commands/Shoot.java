@@ -98,7 +98,7 @@ public class Shoot extends CommandBase {
 
           // undo
     // if  (((shoot.teamColor.equals(DriverStation.Alliance.Red) && colorReading.red > colorReading.blue)) || ((shoot.teamColor.equals(DriverStation.Alliance.Blue) && colorReading.red < colorReading.blue))) {
-    //   shoot.outakeV((speed + bumpertrim) * controller.getLeftTriggerAxis());
+      shoot.outakeV((speed + bumpertrim) * ((controller.getLeftTriggerAxis() > 0.1) ? 1 : 0)  );
     // }
     // else {
     //   shoot.outakeV(0.5);
@@ -123,7 +123,7 @@ public class Shoot extends CommandBase {
       intake.intakeBrush(0);
       intake.transitionMotor(0);
     }
-    shoot.outtakeBall(controller.getLeftTriggerAxis());
+    // shoot.outtakeBall(controller.getLeftTriggerAxis());
   
     
     // SmartDashboard.putNumber("TRIGGER: ", stick.getY());
