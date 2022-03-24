@@ -97,7 +97,10 @@ public class Drivetrain extends SubsystemBase {
     r2.setSelectedSensorPosition(0);
     // Auto end
 
-    
+    // Sets it to low gear at the start if it isn't that already
+    if (shifter.get() != DoubleSolenoid.Value.kForward) {
+      shifter.set(DoubleSolenoid.Value.kForward);
+    }
 
     // shifterL.set(false);
     // shifterR.set(false);

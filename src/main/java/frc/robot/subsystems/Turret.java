@@ -6,8 +6,11 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -34,6 +37,8 @@ public class Turret extends SubsystemBase {
   /** Creates a new Turret. */
   public Turret(Vision vision) {
     turretMotor = new TalonFX(Constants.TURRT_MOTOR_ID);
+    turretMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+    turretMotor.setSelectedSensorPosition(0);
     turretMotor.setInverted(true);
     this.vision = vision;
     limitSwitch_left = new DigitalInput(Constants.LIMIT_LEFT);
@@ -50,8 +55,16 @@ public class Turret extends SubsystemBase {
     zerr = 0;
   }
 
+  public void resetEncoders(){
+    turretMotor.setSelectedSensorPosition(0);
+  }
+
   public void setSpeed(double speed){
     turretMotor.set(ControlMode.PercentOutput, speed);
+  }
+
+  public double getEncoder(){
+    return turretMotor.getSelectedSensorPosition();
   }
 
   public void turnTurret(double autoTrigger) {
@@ -103,11 +116,11 @@ public class Turret extends SubsystemBase {
   }
 
   public boolean getLeftLimitSwitchStatus() {// right
-    return limitSwitch_left.get();
+    return !limitSwitch_left.get(); // Inverted
   }
 
   public boolean getRightLimitSwitchStatus() { // left
-    return limitSwitch_right.get();
+    return !limitSwitch_right.get(); // Inverted
   }
 
   @Override

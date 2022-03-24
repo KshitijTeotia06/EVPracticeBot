@@ -159,8 +159,11 @@ public class Shoot extends CommandBase {
       if (colorReading.red > colorReading.blue) {
         colorSensorEntry.setString("Red");
       }
-      else {
+      else if (colorReading.red < colorReading.blue) {
         colorSensorEntry.setString("Blue");
+      }
+      else {
+        colorSensorEntry.setString("Unknown");
       }
 
       if (vision.getTarget() == 1) {

@@ -4,7 +4,10 @@
 
 package frc.robot.commands;
 
+import java.time.Duration;
+
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 // import com.kauailabs.navx.frc.AHRS;
 
@@ -29,7 +32,7 @@ public class JoyDrive extends CommandBase {
   private final IntakeBall intake;
 
   private NetworkTableEntry compressorEntry;
-
+  private NetworkTableEntry shifterEntry;
 
   public JoyDrive(Drivetrain dt, Joystick stick, Joystick tstick, IntakeBall intake) { //replace parameters w (Drivetrain dt, Joystick dst, Joystick tst) for wheel and stick 
     this.drivetrain = dt;      
@@ -37,8 +40,11 @@ public class JoyDrive extends CommandBase {
     this.tstick = tstick;
     this.intake = intake;
     
-    this.compressorEntry = Shuffleboard.getTab("Tokyo Drifter - Driver View").add("Compressor(PSI)", drivetrain.c.getPressure()).getEntry();
-    // Change based on the connection to nav x
+    // this.compressorEntry = Shuffleboard.getTab("Tokyo Drifter - Driver View").add("Compressor Current(AMP)", drivetrain.c.getCurrent()).getEntry();
+    this.compressorEntry = Shuffleboard.getTab("Tokyo Drifter - Driver View").add("Compressor Full", determineIfCompressorIsFull()).getEntry();
+    
+    this.shifterEntry = Shuffleboard.getTab("Tokyo Drifter - Driver View").add("Shifter", getDrivetrainShifterState()).getEntry();
+        // Change based on the connection to nav x
     /*
     ahrsNavX = new AHRS(SerialPort.Port.kUSB);
     ahrsNavX.reset();
@@ -48,6 +54,17 @@ public class JoyDrive extends CommandBase {
 
     addRequirements(dt);
     // Use addRequirements() here to declare subsystem dependencies.
+  }
+  public String getDrivetrainShifterState() {
+    if (drivetrain.shifter.get() == DoubleSolenoid.Value.kForward) {
+      return "Low";
+    }
+    else if (drivetrain.shifter.get() == DoubleSolenoid.Value.kReverse) {
+      return "High";
+    }
+    else {
+      return "Off";
+    }
   }
 
   // Called when the command is initially scheduled.
@@ -66,33 +83,46 @@ public class JoyDrive extends CommandBase {
     // SmartDashboard.putNumber("ENCODER", drivetrain.getIntegratedSensor());
     // SmartDashboard.updateValues();
 
-    if(stick.getTriggerPressed()){
+    if (stick.getTriggerPressed()) {
       // SmartDashboard.putBoolean("CLICKED", true);
       // SmartDashboard.updateValues();
-      if(highGear){
+      if (highGear) {
         drivetrain.setForward();
-      }else{
+      } else {
         drivetrain.setReverse();
       }
       highGear = !highGear;
     }
 
-    drivetrain.move(-stick.getY()*sensScale, -1 * Math.signum(tstick.getX()) * Math.pow(Math.abs(tstick.getX()), 1.4));
-    
+    drivetrain.move(-stick.getY() * sensScale,
+        -1 * Math.signum(tstick.getX()) * Math.pow(Math.abs(tstick.getX()), 1.4));
+
     // Shuffleboard
-    compressorEntry.setNumber(drivetrain.c.getPressure());
-    
+    // compressorEntry.setNumber(drivetrain.c.getCurrent());
+
+    // Updates shuffleboard to see if the compressor is full or not
+    this.compressorEntry.setBoolean(determineIfCompressorIsFull());
+    this.shifterEntry.setString(getDrivetrainShifterState());
+
     SmartDashboard.updateValues();
+  }
+
+  public Boolean determineIfCompressorIsFull() {
+    if (drivetrain.c.getCurrent() == 0) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
-
+  public void end(boolean interrupted) {
+  }
 
   // Returns true when the command should end.
-  @Override   
-  public boolean isFinished() { 
+  @Override
+  public boolean isFinished() {
     return false;
   }
 

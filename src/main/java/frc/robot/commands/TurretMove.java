@@ -30,7 +30,7 @@ public class TurretMove extends CommandBase {
     addRequirements(turret);
     this.vision = vision;
     this.controller = controller;
-    manual = false;
+    manual = true; // Starts in manual mode
 
     turretAutoEntry = Shuffleboard.getTab("Tokyo Drifter - Driver View").add("Turret Auto", true).getEntry();
     // Use addRequirements() here to declare subsystem dependencies.
@@ -39,6 +39,7 @@ public class TurretMove extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    turret.resetEncoders();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -55,6 +56,7 @@ public class TurretMove extends CommandBase {
     */
     // SmartDashboard.putNumber("AXIS VALUE", controller.getRightTriggerAxis());
     // SmartDashboard.updateValues();
+    SmartDashboard.putNumber("Turret Encoder", turret.getEncoder());
     SmartDashboard.putBoolean("MANUAL ", manual);
     SmartDashboard.updateValues();
     if(controller.getBButtonPressed()){
@@ -80,17 +82,19 @@ public class TurretMove extends CommandBase {
     }
     // turret.setSpeed(controller.getRightX());
 
-    if (turret.getLeftLimitSwitchStatus()) {
-      limL = true;
-    } else {
-      limL = false;
-    }
+    // if (turret.getLeftLimitSwitchStatus()) {
+    //   limL = true;
+    // } else {
+    //   limL = false;
+    // }
 
-    if (turret.getRightLimitSwitchStatus()) {
-      limR = true;
-    } else {
-      limR = false;
-    }
+    // if (turret.getRightLimitSwitchStatus()) {
+    //   limR = true;
+    // } else {
+    //   limR = false;
+    // }
+    limL = turret.getLeftLimitSwitchStatus();
+    limR = turret.getRightLimitSwitchStatus();
 
     SmartDashboard.putBoolean("Limit Right", limR);
     SmartDashboard.putBoolean("Limit Left", limL);
