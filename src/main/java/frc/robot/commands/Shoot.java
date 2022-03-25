@@ -35,10 +35,12 @@ public class Shoot extends CommandBase {
   private Vision vision;
   private boolean shooting = false;
   private double bumpertrim = 0;
+  // private boolean usingColorSensor = true;
 
   private NetworkTableEntry colorSensorEntry;
   private NetworkTableEntry limelightTargetEntry;
   private NetworkTableEntry limelightAimLocked;
+  private NetworkTableEntry usingColorSensorEntry;
 
 
   /** Creates a new Shoot. */
@@ -53,12 +55,14 @@ public class Shoot extends CommandBase {
     this.colorSensorEntry = Shuffleboard.getTab("Tokyo Drifter - Driver View").add("Ball Color", "Red").getEntry();
     this.limelightTargetEntry = Shuffleboard.getTab("Tokyo Drifter - Driver View").add("Limelight Target Found", true).getEntry();
     this.limelightAimLocked = Shuffleboard.getTab("Tokyo Drifter - Driver View").add("Limelight Aim Locked", true).getEntry();
+    this.usingColorSensorEntry = Shuffleboard.getTab("Tokyo Drifter - Driver View").add("Color Sensor Enabled", true).getEntry();
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     speed = 0;
+    // usingColorSensor = true;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -97,17 +101,25 @@ public class Shoot extends CommandBase {
           Color colorReading = shoot.getColorSensorV3();
 
           // undo
-    // if  (((shoot.teamColor.equals(DriverStation.Alliance.Red) && colorReading.red > colorReading.blue)) || ((shoot.teamColor.equals(DriverStation.Alliance.Blue) && colorReading.red < colorReading.blue))) {
+      
+    // if  (!usingColorSensor || ((shoot.teamColor.equals(DriverStation.Alliance.Red) && colorReading.red > colorReading.blue)) || ((shoot.teamColor.equals(DriverStation.Alliance.Blue) && colorReading.red < colorReading.blue))) {
       // SmartDashboard.putBoolean("WRONG COLOR", true);
       shoot.outakeV((speed + bumpertrim) * ((controller.getLeftTriggerAxis() > 0.1) ? 1 : 0)  );
-    // }
-    // else {
-    //   SmartDashboard.putBoolean("WRONG COLOR", true);
-    //   shoot.outakeV(0.5);
-    // }
+    // } else {
 
+
+    //   SmartDashboard.putBoolean("WRONG COLOR", true);
+    //   shoot.outtakeBall(0.5 * controller.getLeftTriggerAxis());
+    // }
+    
+    // usingColorSensorEntry.setBoolean(usingColorSensor);
+    
     // SmartDashboard.putNumber("Current SHOOTER SPEED", shoot.getRPM());
     // SmartDashboard.putNumber("TARGET SPEED", speed);
+
+    // if(controller.getXButtonPressed()){
+    //   usingColorSensor = !usingColorSensor;
+    // }
 
 
     double outtakespeed= 0;
