@@ -40,7 +40,7 @@ public class Shoot extends CommandBase {
   private NetworkTableEntry colorSensorEntry;
   private NetworkTableEntry limelightTargetEntry;
   private NetworkTableEntry limelightAimLocked;
-  private NetworkTableEntry usingColorSensorEntry;
+  // private NetworkTableEntry usingColorSensorEntry;
 
 
   /** Creates a new Shoot. */
@@ -55,7 +55,7 @@ public class Shoot extends CommandBase {
     this.colorSensorEntry = Shuffleboard.getTab("Tokyo Drifter - Driver View").add("Ball Color", "Red").getEntry();
     this.limelightTargetEntry = Shuffleboard.getTab("Tokyo Drifter - Driver View").add("Limelight Target Found", true).getEntry();
     this.limelightAimLocked = Shuffleboard.getTab("Tokyo Drifter - Driver View").add("Limelight Aim Locked", true).getEntry();
-    this.usingColorSensorEntry = Shuffleboard.getTab("Tokyo Drifter - Driver View").add("Color Sensor Enabled", true).getEntry();
+    // this.usingColorSensorEntry = Shuffleboard.getTab("Tokyo Drifter - Driver View").add("Color Sensor Enabled", true).getEntry();
   }
 
   // Called when the command is initially scheduled.
@@ -68,6 +68,7 @@ public class Shoot extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+   
     
     // if(stick.getRawButton(4)) { // starts warming up shooter (press again to stop shooter)
     //   if(shooterWarmedUp == false) {
@@ -92,8 +93,11 @@ public class Shoot extends CommandBase {
       bumpertrim += 100;
     }
     SmartDashboard.putNumber("trim value: ", bumpertrim);
-    
-    speed = shoot.computeV(vision.getY());
+    if(vision.getTarget() != 1){
+      speed = 18000;
+    }else{
+      speed = shoot.computeV(vision.getY());
+    }
     SmartDashboard.putNumber("Difference Shooter Speed", speed - shoot.getRPM());
     SmartDashboard.putNumber("Y VALUE", vision.getY());
 

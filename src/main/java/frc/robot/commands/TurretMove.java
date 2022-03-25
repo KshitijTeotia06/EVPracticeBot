@@ -31,7 +31,7 @@ public class TurretMove extends CommandBase {
     addRequirements(turret);
     this.vision = vision;
     this.controller = controller;
-    manual = true; // Starts in manual mode
+    manual = false; // Starts in manual mode
 
     turretAutoEntry = Shuffleboard.getTab("Tokyo Drifter - Driver View").add("Turret Auto", true).getEntry();
     // Use addRequirements() here to declare subsystem dependencies.
