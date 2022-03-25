@@ -97,23 +97,26 @@ public class Shoot extends CommandBase {
           Color colorReading = shoot.getColorSensorV3();
 
           // undo
-    if  (((shoot.teamColor.equals(DriverStation.Alliance.Red) && colorReading.red > colorReading.blue)) || ((shoot.teamColor.equals(DriverStation.Alliance.Blue) && colorReading.red < colorReading.blue))) {
+    // if  (((shoot.teamColor.equals(DriverStation.Alliance.Red) && colorReading.red > colorReading.blue)) || ((shoot.teamColor.equals(DriverStation.Alliance.Blue) && colorReading.red < colorReading.blue))) {
+      // SmartDashboard.putBoolean("WRONG COLOR", true);
       shoot.outakeV((speed + bumpertrim) * ((controller.getLeftTriggerAxis() > 0.1) ? 1 : 0)  );
-    }
-    else {
-      shoot.outakeV(0.5);
-    }
+    // }
+    // else {
+    //   SmartDashboard.putBoolean("WRONG COLOR", true);
+    //   shoot.outakeV(0.5);
+    // }
 
     // SmartDashboard.putNumber("Current SHOOTER SPEED", shoot.getRPM());
     // SmartDashboard.putNumber("TARGET SPEED", speed);
 
 
     double outtakespeed= 0;
+    //&& (!intake.banner1Output() || !intake.banner2Output())
     if(controller.getRightTriggerAxis() > 0.1){
       // intake.conveyor(outtakespeed);
       outtakespeed = controller.getRightTriggerAxis();
       intake.ShootBalls(outtakespeed);
-    }else if ((controller.getRightY() > 0.1) && (!intake.banner1Output() || !intake.banner2Output())){
+    }else if ((controller.getRightY() > 0.1)){
       outtakespeed = controller.getRightY();
       intake.IntakeBalls(outtakespeed);
     }else if (controller.getRightY() < -0.1) {
@@ -131,7 +134,7 @@ public class Shoot extends CommandBase {
 
      SmartDashboard.putNumber("BlueColor Sensor Value", shoot.getColorSensorV3().blue);
 
-
+      SmartDashboard.putNumber("CURRENT VALUE", shoot.getRPM());
     
      SmartDashboard.putNumber("RedColor Sensor Value", shoot.getColorSensorV3().red);
 

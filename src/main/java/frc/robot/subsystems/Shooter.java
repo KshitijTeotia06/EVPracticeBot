@@ -107,6 +107,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public double computeV(double ty){
+    // Current uncommented is 8.5 ft
     // return 16054 - 398 * ty + 10.2 * ty * ty - 200;
     return 16297 - 425 * ty + 24.6 * ty * ty;
   }
@@ -116,6 +117,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public void inttakeBall(double speed) {
+    
     //intakeMotor.set(ControlMode.PercentOutput, speed);
   }
 

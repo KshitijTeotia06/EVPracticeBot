@@ -58,10 +58,9 @@ public class AutoCommand extends CommandBase {
     // drivetrain.moveAuto(0.4, 4.5); // 6 ft
     // drivetrain.turnDegrees(90);
 
-    Timer.delay(1);
+    Timer.delay(2);
     if(!run){
       phase2();
-
       run = true;
     }
     // if (((startTime - System.currentTimeMillis()) / 1000.0) <= 15) {
@@ -141,7 +140,6 @@ public class AutoCommand extends CommandBase {
   }
 
   public void phase2() {
-
     intake.intakeToggle(); //drops intake
     Timer.delay(1);
     // Gets the current start time
@@ -149,7 +147,7 @@ public class AutoCommand extends CommandBase {
     double startTime = System.currentTimeMillis();
 //
     // 6 second limit or banner 2 ouput become true will make this stop
-    while (!intake.banner1Output() && (((System.currentTimeMillis() - startTime) / 1000.0) <= 6.0)) {
+    while ((((System.currentTimeMillis() - startTime) / 1000.0) <= 3.0)) {
       SmartDashboard.putNumber("CURRENT TIME:", System.currentTimeMillis() - startTime);
       SmartDashboard.updateValues();
       // Run conveyor and move backward
