@@ -94,9 +94,8 @@ public class JoyDrive extends CommandBase {
       highGear = !highGear;
     }
 
-    drivetrain.move(-stick.getY() * sensScale,
-        -1 * Math.signum(tstick.getX()) * Math.pow(Math.abs(tstick.getX()), 1.4));
-
+    drivetrain.move(-stick.getY() * sensScale, -tstick.getX(), ((Math.abs(stick.getY()) < 0.1) ? true : false));
+//-1 * Math.signum(tstick.getX()) * Math.pow(Math.abs(tstick.getX()), 1.4)
     // Shuffleboard
     // compressorEntry.setNumber(drivetrain.c.getCurrent());
 

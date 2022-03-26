@@ -127,8 +127,9 @@ public class Drivetrain extends SubsystemBase {
     return r1.getSelectedSensorPosition();
   }
 
-  public void move(double power, double offset){ // power is the throttle (drive stick), offset is turning
-    ddrive.arcadeDrive(power, offset);
+  public void move(double power, double offset, boolean quickTurn){ // power is the throttle (drive stick), offset is turning
+    // ddrive.arcadeDrive(power, offset);
+    ddrive.curvatureDrive(power, offset, quickTurn);
     
   }
 
@@ -169,21 +170,21 @@ public class Drivetrain extends SubsystemBase {
     shifter.set(DoubleSolenoid.Value.kReverse);
   }
 
-  public void moveAuto(double power, double distance){
-    // 29273.5 encoder rotations per feet
-    // double curangle = gyro.getDisplacementZ();
-    // double kp = 0.01;
-    // double offset = kp * curangle;
-    while (l1.getSelectedSensorPosition() <= (distance*29273.5)) {
-      move(power, 0);
-    }
-    // Timer.delay(time);
-    move(0, 0);
-    // gyro.getDisplacementZ()
-    SmartDashboard.putNumber("Displaement x(ft)", l1.getSelectedSensorPosition()/29273.5);
+  // public void moveAuto(double power, double distance){
+  //   // 29273.5 encoder rotations per feet
+  //   // double curangle = gyro.getDisplacementZ();
+  //   // double kp = 0.01;
+  //   // double offset = kp * curangle;
+  //   while (l1.getSelectedSensorPosition() <= (distance*29273.5)) {
+  //     move(power, 0);
+  //   }
+  //   // Timer.delay(time);
+  //   move(0, 0);
+  //   // gyro.getDisplacementZ()
+  //   SmartDashboard.putNumber("Displaement x(ft)", l1.getSelectedSensorPosition()/29273.5);
 
-    SmartDashboard.updateValues();
-  }
+  //   SmartDashboard.updateValues();
+  // }
   // public void turnDegrees(double degrees) {
   //   SmartDashboard.putNumber("GYROYAW", gyro.getYaw());
   //   SmartDashboard.updateValues();

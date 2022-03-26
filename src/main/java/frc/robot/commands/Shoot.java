@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -35,8 +36,10 @@ public class Shoot extends CommandBase {
   private Vision vision;
   private boolean shooting = false;
   private double bumpertrim = 0;
+  private boolean useBanners = true;
   // private boolean usingColorSensor = true;
 
+  private boolean manualShooter = true;
   private NetworkTableEntry colorSensorEntry;
   private NetworkTableEntry limelightTargetEntry;
   private NetworkTableEntry limelightAimLocked;
@@ -63,6 +66,7 @@ public class Shoot extends CommandBase {
   public void initialize() {
     speed = 0;
     // usingColorSensor = true;
+    manualShooter = true;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -98,6 +102,9 @@ public class Shoot extends CommandBase {
     }else{
       speed = shoot.computeV(vision.getY());
     }
+    if(controller.getXButtonPressed()){
+      useBanners= !useBanners;
+    }
     SmartDashboard.putNumber("Difference Shooter Speed", speed - shoot.getRPM());
     SmartDashboard.putNumber("Y VALUE", vision.getY());
 
@@ -126,9 +133,23 @@ public class Shoot extends CommandBase {
     // }
 
 
-    double outtakespeed= 0;
-    //&& (!intake.banner1Output() || !intake.banner2Output())
-    if(controller.getRightTriggerAxis() > 0.1){
+    if (vision.getTarget() == 1 && !manualShooter) {
+      // compuyts v above
+      // speed = shoot.computeV(vision.getY());
+      shoot.outakeV((speed + bumpertrim) * ((controller.getLeftTriggerAxis() > 0.1) ? 1 : 0));
+      Timer.delay(1.5);
+      intake.transitionMotor(1);
+
+      Timer.delay(1);
+      intake.transitionMotor(0);
+      shoot.outakeV(0);
+    } 
+    if (controller.getAButtonPressed()) {
+      manualShooter = !manualShooter;
+    }
+    double outtakespeed = 0;
+    //
+    if(controller.getRightTriggerAxis() > 0.1 ){
       // intake.conveyor(outtakespeed);
       outtakespeed = controller.getRightTriggerAxis();
       intake.ShootBalls(outtakespeed);
@@ -137,6 +158,8 @@ public class Shoot extends CommandBase {
       intake.IntakeBalls(outtakespeed);
     }else if (controller.getRightY() < -0.1) {
       intake.transitionMotor(-0.5);
+      intake.conveyor(-0.75);
+      intake.intakeBrush(-0.75);
     }else{
       intake.conveyor(0);
       intake.intakeBrush(0);

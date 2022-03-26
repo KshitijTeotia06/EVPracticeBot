@@ -101,10 +101,7 @@ public class AutoCommand extends CommandBase {
     // else if (shooter.teamColor.equals(DriverStation.Alliance.Blue) && colorReading.red < colorReading.blue) {
     //   // Calculates RPM
 
-      double rpm = shooter.computeV(vision.getY());
-
-      // Starts Revving up motor
-      shooter.outakeV(rpm);   
+        
     // }
     // else {
     //     shooter.outtakeBall(0.5);
@@ -123,10 +120,16 @@ public class AutoCommand extends CommandBase {
 
     // // This stops the turning
     turret.setSpeed(0);   
+
+    Timer.delay(2);
+    double rpm = shooter.computeV(vision.getY()) + 100;
+
+    // Starts Revving up motor
+    shooter.outakeV(rpm);
     
     // Makes sure RPM meets minimum requirement
     // while (shooter.getRPM() < rpm) {}
-    Timer.delay(2);
+    Timer.delay(2.5);
     
     // While there is still a ball loaded start transition(aka shoot)
     intake.conveyor(1);
@@ -153,14 +156,14 @@ public class AutoCommand extends CommandBase {
       // Run conveyor and move backward
       intake.intakeBrush(1);
       intake.conveyor(1);
-      drivetrain.move(0.6, 0);
+      drivetrain.move(0.6, 0, false);
     }
     SmartDashboard.putBoolean("REACHED", true);
     SmartDashboard.updateValues();
     // Stops drivetrain(safety)
     intake.intakeBrush(0);
     intake.conveyor(0);
-    drivetrain.move(0, 0);
+    drivetrain.move(0, 0, false);
 
     // Pulls back up the intake
     intake.intakeToggle();
