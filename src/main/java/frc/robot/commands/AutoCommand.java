@@ -54,7 +54,6 @@ public class AutoCommand extends CommandBase {
   @Override
   public void execute() {
 
-    double startTime = System.currentTimeMillis();
     // drivetrain.moveAuto(0.4, 4.5); // 6 ft
     // drivetrain.turnDegrees(90);
 
@@ -87,13 +86,12 @@ public class AutoCommand extends CommandBase {
   }
 
   public void phase1() { // shoot with auto aim
-    Color colorReading = shooter.getColorSensorV3();
 
 
     // Checks the alliance color
     // if (shooter.teamColor.equals(DriverStation.Alliance.Red) && colorReading.red > colorReading.blue) {
     //   // Calculates RPM
-    //   double rpm = shooter.computeV(vision.getY());
+     //  double rpm = shooter.computeV(vision.getY());
 
     //   // Starts Revving up motor
     //   shooter.outakeV(rpm);   
@@ -120,16 +118,14 @@ public class AutoCommand extends CommandBase {
 
     // // This stops the turning
     turret.setSpeed(0);   
-
-    Timer.delay(2);
-    double rpm = shooter.computeV(vision.getY()) + 100;
+    double rpm = shooter.computeV(vision.getY()) + 200;
 
     // Starts Revving up motor
     shooter.outakeV(rpm);
     
     // Makes sure RPM meets minimum requirement
     // while (shooter.getRPM() < rpm) {}
-    Timer.delay(2.5);
+    Timer.delay(1);
     
     // While there is still a ball loaded start transition(aka shoot)
     intake.conveyor(1);
@@ -147,8 +143,10 @@ public class AutoCommand extends CommandBase {
     Timer.delay(1);
     // Gets the current start time
     
-    double startTime = System.currentTimeMillis();
 //
+    shooter.outakeV(10000);
+    //rev up shooter
+    double startTime = System.currentTimeMillis();
     // 6 second limit or banner 2 ouput become true will make this stop
     while ((((System.currentTimeMillis() - startTime) / 1000.0) <= 3.0)) {
       SmartDashboard.putNumber("CURRENT TIME:", System.currentTimeMillis() - startTime);

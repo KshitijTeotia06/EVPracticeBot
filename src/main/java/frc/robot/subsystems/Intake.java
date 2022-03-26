@@ -131,7 +131,8 @@ public class Intake extends SubsystemBase {
   }
   public void IntakeBalls(double speed){
     intakeBrush(speed);
-    conveyor(speed);
+    //don't use the conveyer keep the balls below
+    // conveyor(speed);
   }
 
   public void ShootBalls(double speed){

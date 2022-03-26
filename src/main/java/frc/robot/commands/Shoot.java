@@ -39,7 +39,7 @@ public class Shoot extends CommandBase {
   private boolean useBanners = true;
   // private boolean usingColorSensor = true;
 
-  private boolean manualShooter = true;
+  private boolean manualShooter;
   private NetworkTableEntry colorSensorEntry;
   private NetworkTableEntry limelightTargetEntry;
   private NetworkTableEntry limelightAimLocked;
@@ -98,7 +98,7 @@ public class Shoot extends CommandBase {
     }
     SmartDashboard.putNumber("trim value: ", bumpertrim);
     if(vision.getTarget() != 1){
-      speed = 18000;
+      speed = 10000;
     }else{
       speed = shoot.computeV(vision.getY());
     }
@@ -115,7 +115,8 @@ public class Shoot extends CommandBase {
       
     // if  (!usingColorSensor || ((shoot.teamColor.equals(DriverStation.Alliance.Red) && colorReading.red > colorReading.blue)) || ((shoot.teamColor.equals(DriverStation.Alliance.Blue) && colorReading.red < colorReading.blue))) {
       // SmartDashboard.putBoolean("WRONG COLOR", true);
-      shoot.outakeV((speed + bumpertrim) * ((controller.getLeftTriggerAxis() > 0.1) ? 1 : 0)  );
+      //took out left trigger axis
+      shoot.outakeV((speed + bumpertrim));
     // } else {
 
 
@@ -136,20 +137,25 @@ public class Shoot extends CommandBase {
     if (vision.getTarget() == 1 && !manualShooter) {
       // compuyts v above
       // speed = shoot.computeV(vision.getY());
-      shoot.outakeV((speed + bumpertrim) * ((controller.getLeftTriggerAxis() > 0.1) ? 1 : 0));
-      Timer.delay(1.5);
+      // shoot.outakeV((speed + bumpertrim));
+      Timer.delay(0.5);
       intake.transitionMotor(1);
+      intake.conveyor(1);
 
-      Timer.delay(1);
+      Timer.delay(2);
+
       intake.transitionMotor(0);
-      shoot.outakeV(0);
-    } 
+      intake.conveyor(0);
+      manualShooter = true;
+    }
+
+
     if (controller.getAButtonPressed()) {
-      manualShooter = !manualShooter;
+      manualShooter = false;
     }
     double outtakespeed = 0;
     //
-    if(controller.getRightTriggerAxis() > 0.1 ){
+    if(manualShooter && controller.getRightTriggerAxis() > 0.1 ){
       // intake.conveyor(outtakespeed);
       outtakespeed = controller.getRightTriggerAxis();
       intake.ShootBalls(outtakespeed);
@@ -157,7 +163,7 @@ public class Shoot extends CommandBase {
       outtakespeed = controller.getRightY();
       intake.IntakeBalls(outtakespeed);
     }else if (controller.getRightY() < -0.1) {
-      intake.transitionMotor(-0.5);
+      intake.transitionMotor(-0.75);
       intake.conveyor(-0.75);
       intake.intakeBrush(-0.75);
     }else{
