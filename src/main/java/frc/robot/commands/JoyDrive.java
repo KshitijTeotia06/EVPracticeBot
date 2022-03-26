@@ -26,6 +26,7 @@ public class JoyDrive extends CommandBase {
   private Joystick stick, tstick;
   // private AHRS ahrsNavX;
   private boolean highGear = false;
+  private boolean useTurnInPlace;
   private double sensScale = 1;
 
   // Auto
@@ -73,6 +74,7 @@ public class JoyDrive extends CommandBase {
     stick = new Joystick(Constants.DRIVE_STICK_PORT);
     tstick = new Joystick(Constants.TURN_STICK_PORT);
     drivetrain.resetEncoders();
+    useTurnInPlace = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -93,7 +95,15 @@ public class JoyDrive extends CommandBase {
       }
       highGear = !highGear;
     }
-
+// Where da problem at? 
+    // if (Math.abs(stick.getY()) < 0.1 && Math.abs(tstick.getX()) > 0.1) {
+    //   //use the turn in place
+    //   useTurnInPlace = true;
+    // } else if (Math.abs(sti)) {
+    //   useTurnInPlace = false;
+    // }
+    //((Math.abs(stick.getY()) < 0.1) ? true : false)
+    
     drivetrain.move(-stick.getY() * sensScale, -tstick.getX(), ((Math.abs(stick.getY()) < 0.1) ? true : false));
 //-1 * Math.signum(tstick.getX()) * Math.pow(Math.abs(tstick.getX()), 1.4)
     // Shuffleboard
