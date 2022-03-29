@@ -31,15 +31,16 @@ public class Shoot extends CommandBase {
   private Joystick stick;
   private XboxController controller;
   private double throttle;
-  double speed = 0;
+  double speed;
   private boolean shooterWarmedUp = false;
   private Vision vision;
   private boolean shooting = false;
   private double bumpertrim = 0;
   private boolean useBanners = true;
+  private boolean usingAutoRev = false;
   // private boolean usingColorSensor = true;
 
-  private boolean manualShooter;
+  // private boolean manualShooter;
   private NetworkTableEntry colorSensorEntry;
   private NetworkTableEntry limelightTargetEntry;
   private NetworkTableEntry limelightAimLocked;
@@ -64,9 +65,9 @@ public class Shoot extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    speed = 0;
+    speed = 10000;
     // usingColorSensor = true;
-    manualShooter = true;
+    // manualShooter = true;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -97,15 +98,16 @@ public class Shoot extends CommandBase {
       bumpertrim += 100;
     }
     SmartDashboard.putNumber("trim value: ", bumpertrim);
-    if(vision.getTarget() != 1){
-      speed = 10000;
-    }else{
+    if(vision.getTarget() == 1){
+    
       speed = shoot.computeV(vision.getY());
     }
+    //   speed = 10000;
+    // }else{
     if(controller.getXButtonPressed()){
       useBanners= !useBanners;
     }
-    SmartDashboard.putNumber("Difference Shooter Speed", speed - shoot.getRPM());
+    SmartDashboard.putNumber("Difference Shooter Speed", speed);
     SmartDashboard.putNumber("Y VALUE", vision.getY());
 
 
@@ -116,9 +118,18 @@ public class Shoot extends CommandBase {
     // if  (!usingColorSensor || ((shoot.teamColor.equals(DriverStation.Alliance.Red) && colorReading.red > colorReading.blue)) || ((shoot.teamColor.equals(DriverStation.Alliance.Blue) && colorReading.red < colorReading.blue))) {
       // SmartDashboard.putBoolean("WRONG COLOR", true);
       //took out left trigger axis
-      shoot.outakeV((speed + bumpertrim));
     // } else {
+//
 
+// Uncomment
+  if (usingAutoRev) {
+    shoot.outakeV((speed + bumpertrim));
+
+  }
+
+  if (controller.getXButtonPressed()) {
+    usingAutoRev = !usingAutoRev;
+  }
 
     //   SmartDashboard.putBoolean("WRONG COLOR", true);
     //   shoot.outtakeBall(0.5 * controller.getLeftTriggerAxis());
@@ -134,28 +145,34 @@ public class Shoot extends CommandBase {
     // }
 
 
-    if (vision.getTarget() == 1 && !manualShooter) {
-      // compuyts v above
-      // speed = shoot.computeV(vision.getY());
-      // shoot.outakeV((speed + bumpertrim));
+    // if (vision.getTarget() == 1 && !manualShooter) {
+    //   // compuyts v above
+    //   // speed = shoot.computeV(vision.getY());
+    //   // shoot.outakeV((speed + bumpertrim));
+     
+    //   manualShooter = true;
+    // }
+
+
+    if (controller.getAButtonPressed()) {
+      // manualShooter = false;
+
+      // if (vision.getTarget() == 1) {
+
+      
       Timer.delay(0.5);
       intake.transitionMotor(1);
       intake.conveyor(1);
 
-      Timer.delay(2);
+      Timer.delay(2.5);
 
       intake.transitionMotor(0);
       intake.conveyor(0);
-      manualShooter = true;
-    }
-
-
-    if (controller.getAButtonPressed()) {
-      manualShooter = false;
+      // }
     }
     double outtakespeed = 0;
     //
-    if(manualShooter && controller.getRightTriggerAxis() > 0.1 ){
+    if(controller.getRightTriggerAxis() > 0.1 ){
       // intake.conveyor(outtakespeed);
       outtakespeed = controller.getRightTriggerAxis();
       intake.ShootBalls(outtakespeed);

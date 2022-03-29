@@ -31,7 +31,6 @@ public class TurretMove extends CommandBase {
     addRequirements(turret);
     this.vision = vision;
     this.controller = controller;
-    manual = false; // Starts in manual mode
 
     turretAutoEntry = Shuffleboard.getTab("Tokyo Drifter - Driver View").add("Turret Auto", true).getEntry();
     // Use addRequirements() here to declare subsystem dependencies.
@@ -40,6 +39,8 @@ public class TurretMove extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    manual = true; // Starts in manual mode
+
     turret.resetEncoders();
   }
 
@@ -57,20 +58,59 @@ public class TurretMove extends CommandBase {
     */
     // SmartDashboard.putNumber("AXIS VALUE", controller.getRightTriggerAxis());
     // SmartDashboard.updateValues();
-    SmartDashboard.putNumber("Turret Encoder", turret.getEncoder());
+    SmartDashboard.putNumber("Turret Controller Left X", controller.getLeftX());
     SmartDashboard.putBoolean("MANUAL ", manual);
     SmartDashboard.updateValues();
     if(controller.getBButtonPressed()){
-      manual = !manual;
+
+      // while (vision.getTarget() == 1 && vision.getX() > 0.1 && vision.getX() < -0.1) {
+      //   turret.turnTurret(1);
+      // }
+
+     
+      manual = false;
     }
-    if(manual){
-      if ((controller.getLeftX() < 0.2) && (controller.getLeftX() > -0.2)){
-        turret.setSpeed(0);
-      } else {
-        turret.setSpeed(-controller.getLeftX());
+    else if(controller.getBButtonReleased()){
+      manual = true;
+      while (turret.turretMotor.getSelectedSensorPosition() > 1000 || (turret.turretMotor.getSelectedSensorPosition() < 1000)) {
+        if (turret.turretMotor.getSelectedSensorPosition() > 10000) {
+          turret.setSpeed(-0.3);
+        }
+        else if (turret.turretMotor.getSelectedSensorPosition() < 10000) {
+          turret.setSpeed(0.3);
+        }
       }
-    }else{
-      // if ((controller.getLeftX() < 0.2) && (controller.getLeftX() > -0.2)){
+      turret.setSpeed(0);
+    }
+
+      if ((controller.getLeftX() > 0.1) || (controller.getLeftX() < -0.1)){
+      //   turret.setSpeed(0);
+      // } else {
+        turret.setSpeed(-controller.getLeftX());
+        // manual = true;
+      }
+      else {
+        turret.setSpeed(0);
+      }
+      if (turret.limitSwitchEncoderLeft()) {
+
+        turret.setSpeed(-0.3);
+      
+      }
+      // else {
+      //   turret.setSpeed(0);
+      // }
+
+      if (turret.limitSwitchEncoderRight()) {
+
+        turret.setSpeed(0.3);
+      
+      }
+      // else {
+      //   turret.setSpeed(0);
+      // }
+      if(!manual){
+        // if ((controller.getLeftX() < 0.2) && (controller.getLeftX() > -0.2)){
       //   turret.turnTurret(0);
       // } else {
       //   // if (vision.getX() < 1.2) {
@@ -80,7 +120,15 @@ public class TurretMove extends CommandBase {
       //   // }
       // }
       turret.turnTurret(1);
+      // manual = true;
     }
+
+    
+    SmartDashboard.putNumber("Turret Sensor Pos", turret.turretMotor.getSelectedSensorPosition());
+    SmartDashboard.updateValues();
+    // This will move the turret until it finds the hub oscillating between the limit switches
+    // turret.findHub(0.4);
+
     // turret.setSpeed(controller.getRightX());
 
     // if (turret.getLeftLimitSwitchStatus()) {
@@ -107,6 +155,7 @@ public class TurretMove extends CommandBase {
       turretAutoEntry.setBoolean(false);
     }
 
+    
     Shuffleboard.update();
   }
 

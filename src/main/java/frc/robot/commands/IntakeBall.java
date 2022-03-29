@@ -56,7 +56,10 @@ public class IntakeBall extends CommandBase {
     // intake.conveyor(controller.getRightY());
 
     if (controller.getYButtonPressed()) {
-      intake.intakeToggle();
+      intake.intakeDown();
+    }
+    else if (controller.getYButtonReleased()) {
+      intake.intakeUp();
     }
 
     intake.setLEDDigital(Constants.LED_CHANNEL_DEFAULT);

@@ -13,6 +13,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -33,7 +34,7 @@ public class Turret extends SubsystemBase {
   double motorOutput;
   private DigitalInput limitSwitch_left;
   private DigitalInput limitSwitch_right;
-
+  double speed = 0.1;
   /** Creates a new Turret. */
   public Turret(Vision vision) {
     turretMotor = new TalonFX(Constants.TURRT_MOTOR_ID);
@@ -44,7 +45,7 @@ public class Turret extends SubsystemBase {
     limitSwitch_left = new DigitalInput(Constants.LIMIT_LEFT);
     limitSwitch_right = new DigitalInput(Constants.LIMIT_RIGHT);
 
-    kp = .2;
+    kp = .15;
     kf = 0*0.1;
     ki = 0*.0025;
     maxIntegral = 0*100;
@@ -53,13 +54,32 @@ public class Turret extends SubsystemBase {
     intErr = 0;
     posErr = 0;
     zerr = 0;
+
+    resetEncoders();
   }
 
   public void resetEncoders(){
     turretMotor.setSelectedSensorPosition(0);
   }
 
-  public void setSpeed(double speed){ 
+  // public void findHub(double speed) {
+  //   if (vision.getTarget() != 1) {
+      
+  //   }
+  //   else {
+  //     turretMotor.set(ControlMode.PercentOutput, 0);
+  //     turnTurret(1);
+  //   }
+  // }
+  public void setSpeed(double speed){
+  
+    // if(getLeftLimitSwitchStatus() && speed > 0){
+    //   turretMotor.set(ControlMode.PercentOutput, -speed);
+    //   Timer.delay(0.5);
+    //   while (!getLeftLimitSwitchStatus()){}
+    //   turretMotor.set(ControlMode.PercentOutput, speed);
+    // }
+  
     if((getLeftLimitSwitchStatus() && speed > 0) || (getRightLimitSwitchStatus() && speed < 0)){
       turretMotor.set(ControlMode.PercentOutput, 0);
     }else{
@@ -71,10 +91,32 @@ public class Turret extends SubsystemBase {
     return turretMotor.getSelectedSensorPosition();
   }
 
+  public boolean limitSwitchEncoderLeft() {
+     if (turretMotor.getSelectedSensorPosition() >= 185000) {
+       return true;
+     } 
+     return false;
+  }
+  public boolean limitSwitchEncoderRight() {
+    if (turretMotor.getSelectedSensorPosition() <= -202298) {
+      return true;
+    } 
+    return false;
+ }
   public void turnTurret(double autoTrigger) {
+    SmartDashboard.putNumber("VisTarget", vision.getTarget());
+
     SmartDashboard.updateValues();
     if(vision.getTarget() != 1.0){
+      // turretMotor.set(ControlMode.PercentOutput, speed);
+
+      // if (getLeftLimitSwitchStatus() || limitSwitchEncoderRight()) {
+
+      //   speed *= -1;
+      
+      // }
       setSpeed(0);
+      // turretMotor.set(ControlMode.PercentOutput, 0);
       return;
     }
 
