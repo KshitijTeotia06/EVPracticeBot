@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -70,41 +72,40 @@ public class TurretMove extends CommandBase {
      
       manual = false;
     }
-    else if(controller.getBButtonReleased()){
-      manual = true;
-      while (turret.turretMotor.getSelectedSensorPosition() > 1000 || (turret.turretMotor.getSelectedSensorPosition() < 1000)) {
-        if (turret.turretMotor.getSelectedSensorPosition() > 10000) {
-          turret.setSpeed(-0.3);
-        }
-        else if (turret.turretMotor.getSelectedSensorPosition() < 10000) {
-          turret.setSpeed(0.3);
-        }
-      }
-      turret.setSpeed(0);
-    }
+    // else if(controller.getBButtonReleased()){
+    //   manual = true;
+    //   while (turret.turretMotor.getSelectedSensorPosition() > 1000 || (turret.turretMotor.getSelectedSensorPosition() < 1000)) {
+    //     if (turret.turretMotor.getSelectedSensorPosition() > 10000) {
+    //       turret.setSpeed(-0.3);
+    //     }
+    //     else if (turret.turretMotor.getSelectedSensorPosition() < 10000) {
+    //       turret.setSpeed(0.3);
+    //     }
+    //   }
+    //   turret.setSpeed(0);
+    // }
 
       if ((controller.getLeftX() > 0.1) || (controller.getLeftX() < -0.1)){
       //   turret.setSpeed(0);
       // } else {
+        manual = true;
+
         turret.setSpeed(-controller.getLeftX());
         // manual = true;
       }
       else {
         turret.setSpeed(0);
       }
-      if (turret.limitSwitchEncoderLeft()) {
-
-        turret.setSpeed(-0.3);
-      
-      }
+     
       // else {
       //   turret.setSpeed(0);
       // }
 
-      if (turret.limitSwitchEncoderRight()) {
-
-        turret.setSpeed(0.3);
       
+      SmartDashboard.putNumber("POV", controller.getPOV(0));
+      SmartDashboard.updateValues();
+      if (controller.getPOV(0) != -1) {
+        turret.findTurretHome();
       }
       // else {
       //   turret.setSpeed(0);
@@ -142,8 +143,8 @@ public class TurretMove extends CommandBase {
     // } else {
     //   limR = false;
     // }
-    limL = turret.getLeftLimitSwitchStatus();
-    limR = turret.getRightLimitSwitchStatus();
+    // limL = turret.getLeftLimitSwitchStatus();
+    // limR = turret.getRightLimitSwitchStatus();
 
     SmartDashboard.putBoolean("Limit Right", limR);
     SmartDashboard.putBoolean("Limit Left", limL);

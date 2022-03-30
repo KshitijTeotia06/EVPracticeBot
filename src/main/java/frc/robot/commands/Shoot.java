@@ -36,7 +36,7 @@ public class Shoot extends CommandBase {
   private Vision vision;
   private boolean shooting = false;
   private double bumpertrim = 0;
-  private boolean useBanners = true;
+  // private boolean useBanners = true;
   private boolean usingAutoRev = false;
   // private boolean usingColorSensor = true;
 
@@ -104,9 +104,9 @@ public class Shoot extends CommandBase {
     }
     //   speed = 10000;
     // }else{
-    if(controller.getXButtonPressed()){
-      useBanners= !useBanners;
-    }
+    // if(controller.getXButtonPressed()){
+    //   useBanners= !useBanners;
+    // }
     SmartDashboard.putNumber("Difference Shooter Speed", speed);
     SmartDashboard.putNumber("Y VALUE", vision.getY());
 
@@ -120,16 +120,26 @@ public class Shoot extends CommandBase {
       //took out left trigger axis
     // } else {
 //
+// This is the first time controller siwtches from auto rev true to turn it off because it will be changed after this
+// if (controller.getXButtonPressed() && usingAutoRev) {
+//   shoot.outakeV(0);
+// }
+if (controller.getXButtonPressed()) {
+  if (usingAutoRev) {
+    shoot.shooterMotor1.set(0);
+  }
+  usingAutoRev = !usingAutoRev;
+}
 
+SmartDashboard.putBoolean("autoRev", usingAutoRev);
+SmartDashboard.updateValues();
 // Uncomment
   if (usingAutoRev) {
     shoot.outakeV((speed + bumpertrim));
 
   }
 
-  if (controller.getXButtonPressed()) {
-    usingAutoRev = !usingAutoRev;
-  }
+  
 
     //   SmartDashboard.putBoolean("WRONG COLOR", true);
     //   shoot.outtakeBall(0.5 * controller.getLeftTriggerAxis());
@@ -160,7 +170,7 @@ public class Shoot extends CommandBase {
       // if (vision.getTarget() == 1) {
 
       
-      Timer.delay(0.5);
+      // Timer.delay(0.5);
       intake.transitionMotor(1);
       intake.conveyor(1);
 
@@ -183,7 +193,11 @@ public class Shoot extends CommandBase {
       intake.transitionMotor(-0.75);
       intake.conveyor(-0.75);
       intake.intakeBrush(-0.75);
-    }else{
+    }
+    else if (controller.getYButton()) {
+      intake.intakeBrush(1);
+    }
+    else {
       intake.conveyor(0);
       intake.intakeBrush(0);
       intake.transitionMotor(0);

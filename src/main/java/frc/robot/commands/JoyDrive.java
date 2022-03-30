@@ -6,14 +6,18 @@ package frc.robot.commands;
 
 import java.time.Duration;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 // import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.RuntimeType;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -29,17 +33,19 @@ public class JoyDrive extends CommandBase {
   private boolean useTurnInPlace;
   private double sensScale = 1;
 
+  private XboxController controller;
   // Auto
   private final IntakeBall intake;
 
   private NetworkTableEntry compressorEntry;
   private NetworkTableEntry shifterEntry;
 
-  public JoyDrive(Drivetrain dt, Joystick stick, Joystick tstick, IntakeBall intake) { //replace parameters w (Drivetrain dt, Joystick dst, Joystick tst) for wheel and stick 
+  public JoyDrive(Drivetrain dt, Joystick stick, Joystick tstick, IntakeBall intake, XboxController controller) { //replace parameters w (Drivetrain dt, Joystick dst, Joystick tst) for wheel and stick 
     this.drivetrain = dt;      
     this.stick = stick;
     this.tstick = tstick;
     this.intake = intake;
+    this.controller = controller;
     
     // this.compressorEntry = Shuffleboard.getTab("Tokyo Drifter - Driver View").add("Compressor Current(AMP)", drivetrain.c.getCurrent()).getEntry();
     this.compressorEntry = Shuffleboard.getTab("Tokyo Drifter - Driver View").add("Compressor Full", determineIfCompressorIsFull()).getEntry();
@@ -85,8 +91,8 @@ public class JoyDrive extends CommandBase {
     // SmartDashboard.putNumber("ENCODER", drivetrain.getIntegratedSensor());
     // SmartDashboard.updateValues();
 
-    if (stick.getTriggerPressed()) {
-      // SmartDashboard.putBoolean("CLICKED", true);
+    if (controller.getRightBumperPressed() || controller.getLeftBumperPressed()) {
+      // SmartDashboard.putBoolean("CLICKED", true);+
       // SmartDashboard.updateValues();
       if (highGear) {
         drivetrain.setForward();
@@ -104,8 +110,14 @@ public class JoyDrive extends CommandBase {
     // }
     //((Math.abs(stick.getY()) < 0.1) ? true : false)
     
-    drivetrain.move(-stick.getY() * sensScale, -tstick.getX(), ((Math.abs(stick.getY()) < 0.1) ? true : false));
-//-1 * Math.signum(tstick.getX()) * Math.pow(Math.abs(tstick.getX()), 1.4)
+    drivetrain.move(-controller.getRightY() * sensScale, -controller.getLeftX(), ((Math.abs(controller.getRightY()) < 0.1) ? true : false));
+    controller.setRumble(RumbleType.kLeftRumble, Math.abs(controller.getRightY()));
+
+    // This will turn off the rumble when it is not being used
+    if (Math.abs(controller.getLeftY()) < 0.1) {
+      controller.setRumble(RumbleType.kLeftRumble, 0);
+    }
+    //-1 * Math.signum(tstick.getX()) * Math.pow(Math.abs(tstick.getX()), 1.4)
     // Shuffleboard
     // compressorEntry.setNumber(drivetrain.c.getCurrent());
 

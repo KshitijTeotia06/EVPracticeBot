@@ -37,7 +37,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final Drivetrain drivetrain = new Drivetrain();
   private final Vision vision = new Vision();
-  private final Turret turret = new Turret(vision);
+  public final Turret turret = new Turret(vision);
   private final testSystem tSys = new testSystem();
   private final Climber climber = new Climber();
   private Joystick driveStick, turnStick;
@@ -68,7 +68,7 @@ public class RobotContainer {
     autoCommand = new AutoCommand(drivetrain, turret, vision, shooter, intake);
     climb = new ClimberCommand(climber, controller);
     // adds intake for the auto to know when 
-    jdrive = new JoyDrive(drivetrain, driveStick, turnStick, intakeCommand);
+    jdrive = new JoyDrive(drivetrain, driveStick, turnStick, intakeCommand, driveController);
     shoot = new Shoot(shooter, vision, driveStick, intake, controller);
     tester = new testcommand(driveStick, tSys);
 

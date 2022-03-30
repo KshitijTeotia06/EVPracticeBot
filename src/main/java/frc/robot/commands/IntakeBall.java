@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -56,9 +57,12 @@ public class IntakeBall extends CommandBase {
     // intake.conveyor(controller.getRightY());
 
     if (controller.getYButtonPressed()) {
+      controller.setRumble(RumbleType.kLeftRumble, 0.8);
       intake.intakeDown();
     }
     else if (controller.getYButtonReleased()) {
+      controller.setRumble(RumbleType.kLeftRumble, 0);
+      
       intake.intakeUp();
     }
 

@@ -32,9 +32,9 @@ public class Turret extends SubsystemBase {
   double intErr;
   double zerr;
   double motorOutput;
-  private DigitalInput limitSwitch_left;
-  private DigitalInput limitSwitch_right;
+  private DigitalInput limitSwitch_center;
   double speed = 0.1;
+  double findTurretHomeSpeed = 0.3; // Thuis will be the speed to used for finding the turrets center position
   /** Creates a new Turret. */
   public Turret(Vision vision) {
     turretMotor = new TalonFX(Constants.TURRT_MOTOR_ID);
@@ -42,10 +42,9 @@ public class Turret extends SubsystemBase {
     turretMotor.setSelectedSensorPosition(0);
     turretMotor.setInverted(true);
     this.vision = vision;
-    limitSwitch_left = new DigitalInput(Constants.LIMIT_LEFT);
-    limitSwitch_right = new DigitalInput(Constants.LIMIT_RIGHT);
+    limitSwitch_center = new DigitalInput(Constants.LIMIT_LEFT);
 
-    kp = .15;
+    kp = .15; // .2
     kf = 0*0.1;
     ki = 0*.0025;
     maxIntegral = 0*100;
@@ -80,15 +79,66 @@ public class Turret extends SubsystemBase {
     //   turretMotor.set(ControlMode.PercentOutput, speed);
     // }
   
-    if((getLeftLimitSwitchStatus() && speed > 0) || (getRightLimitSwitchStatus() && speed < 0)){
-      turretMotor.set(ControlMode.PercentOutput, 0);
-    }else{
-      turretMotor.set(ControlMode.PercentOutput, speed);
-    }
+    // 03/29/22
+    // Undo if set speed is broken
+    // if((getLeftLimitSwitchStatus() && speed > 0) || (getRightLimitSwitchStatus() && speed < 0)){
+    //   turretMotor.set(ControlMode.PercentOutput, 0);
+    // }else{
+
+      
+      if (limitSwitchEncoderLeft()) {
+
+        setSpeed(-0.3);
+      
+      }
+      else if (limitSwitchEncoderRight()) {
+
+        setSpeed(0.3);
+      
+      }
+      else {
+        turretMotor.set(ControlMode.PercentOutput, speed);
+      }
+    // }
   }
 
   public double getEncoder(){
     return turretMotor.getSelectedSensorPosition();
+  }
+  // public void moveTurretPos(double position) {
+  //   // 0 
+  //   // position += 1000;
+  //   // while (turretMotor.getSelectedSensorPosition() > position || (turretMotor.getSelectedSensorPosition() < position)) {
+  //   //     if (turretMotor.getSelectedSensorPosition() > position) {
+  //   //       setSpeed(-0.3);
+  //   //     }
+  //   //     else if (turretMotor.getSelectedSensorPosition() < position) {
+  //   //       setSpeed(0.3);
+  //   //     }
+  //   //   }
+  //   //   setSpeed(0);
+
+  //     turretMotor.set(ControlMode.Position, position);
+  // }
+
+  public void findTurretHome() {
+    while (!getCenterLimitSwitchStatus()) {
+
+      if (limitSwitchEncoderLeft()) {
+
+        findTurretHomeSpeed *= -1;
+      
+      }
+      else if (limitSwitchEncoderRight()) {
+
+        findTurretHomeSpeed *= -1;
+      
+      }
+      setSpeed(findTurretHomeSpeed);
+      
+    }
+    setSpeed(0);
+    resetEncoders();
   }
 
   public boolean limitSwitchEncoderLeft() {
@@ -162,14 +212,11 @@ public class Turret extends SubsystemBase {
     // SmartDashboard.putNumber("Turret Motor Ouptut: ", motorOutput);
   }
 
-  public boolean getLeftLimitSwitchStatus() {// right
-    return !limitSwitch_left.get(); // Inverted
+  public boolean getCenterLimitSwitchStatus() {// right
+    return !limitSwitch_center.get(); // Inverted
   }
 
-  public boolean getRightLimitSwitchStatus() { // left
-    return !limitSwitch_right.get(); // Inverted
-  }
-
+  
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
