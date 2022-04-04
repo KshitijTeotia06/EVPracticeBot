@@ -37,8 +37,8 @@ public final class Constants {
     public static final int LIMIT_RIGHT = 4; //dio
 
     // Climber
-    public static final int CLIMBER1 = 500;
-    public static final int CLIMBER2 = 501;
+    public static final int CLIMBER1 = 7;
+    public static final int CLIMBER2 = 8;
     // control 
     public static final int XBOX_PORT = 1;
     public static final int DRIVE_STICK_PORT = 0; // joystick
@@ -50,8 +50,8 @@ public final class Constants {
     public static final int INTAKE_MOTOR = 11;
     public static final int TRANSIT_MOTOR = 5;
     public static final int BRUSH_MOTOR = 6;
-    public static final int BANNER_1 = 6; // dio
-    public static final int BANNER_2 = 7; // dio
+    public static final int BANNER_1 = 7; // dio
+    public static final int BANNER_2 = 6; // dio
     // public static final int BANNER_3 = 2; // needs to be installed
     public static final double TRACK_WIDTH = 0;
     public static final int LOWGEAR = 0;//0

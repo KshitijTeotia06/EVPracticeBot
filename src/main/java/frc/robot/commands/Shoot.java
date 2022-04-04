@@ -38,6 +38,7 @@ public class Shoot extends CommandBase {
   private double bumpertrim = 0;
   // private boolean useBanners = true;
   private boolean usingAutoRev = false;
+  private Thread autoRevThread = new Thread();
   // private boolean usingColorSensor = true;
 
   // private boolean manualShooter;
@@ -91,7 +92,6 @@ public class Shoot extends CommandBase {
     //   if(speed == 0) speed = 0.5 ;
     //   else speed = 0;
     // }
-
     if (controller.getLeftBumperPressed()) {
       bumpertrim -= 100;
     } else if (controller.getRightBumperPressed()){
@@ -134,10 +134,17 @@ if (controller.getXButtonPressed()) {
 SmartDashboard.putBoolean("autoRev", usingAutoRev);
 SmartDashboard.updateValues();
 // Uncomment
-  if (usingAutoRev) {
-    shoot.outakeV((speed + bumpertrim));
+  while (usingAutoRev) {
+    autoRevThread.start();
 
+    if (((shoot.teamColor.equals(DriverStation.Alliance.Red) && colorReading.red > colorReading.blue)) || ((shoot.teamColor.equals(DriverStation.Alliance.Blue) && colorReading.red < colorReading.blue))) {
+      shoot.outakeV((speed + bumpertrim));
+    }
+    else {
+      shoot.outakeV(10000);
+    }
   }
+  
 
   
 
@@ -165,7 +172,7 @@ SmartDashboard.updateValues();
 
 
     if (controller.getAButtonPressed()) {
-      // manualShooter = false;
+      // manualShooter = false; 
 
       // if (vision.getTarget() == 1) {
 
@@ -174,6 +181,10 @@ SmartDashboard.updateValues();
       intake.transitionMotor(1);
       intake.conveyor(1);
 
+      // // While banner 1 output is false && intake 
+      // while (!(!intake.banner1Output() && intake.banner2Output())) {
+
+      // }
       Timer.delay(2.5);
 
       intake.transitionMotor(0);
@@ -186,9 +197,11 @@ SmartDashboard.updateValues();
       // intake.conveyor(outtakespeed);
       outtakespeed = controller.getRightTriggerAxis();
       intake.ShootBalls(outtakespeed);
-    }else if ((controller.getRightY() > 0.1)){
+      
+    }else if ((controller.getRightY() > 0.1) && (!intake.banner1Output() || !intake.banner2Output())){
       outtakespeed = controller.getRightY();
       intake.IntakeBalls(outtakespeed);
+      intake.transitionMotor(-1);
     }else if (controller.getRightY() < -0.1) {
       intake.transitionMotor(-0.75);
       intake.conveyor(-0.75);

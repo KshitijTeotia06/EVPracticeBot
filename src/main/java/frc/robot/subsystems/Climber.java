@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -19,13 +20,29 @@ public class Climber extends SubsystemBase {
   public Climber() {
     this.climber1 = new WPI_TalonFX(Constants.CLIMBER1);
     this.climber2 = new WPI_TalonFX(Constants.CLIMBER2);
-
+    climber1.setNeutralMode(NeutralMode.Brake);
+    climber2.setNeutralMode(NeutralMode.Brake);
     this.climber1.setInverted(true);
+    resetEncoders();
+    climber2.follow(climber1);
   }
 
   public void move(double power){
     climber1.set(ControlMode.PercentOutput, power);
-    climber2.set(ControlMode.PercentOutput, power);
+    // climber2.set(ControlMode.PercentOutput, power);
+  }
+
+  public void resetEncoders(){
+    climber1.setSelectedSensorPosition(0);
+    climber2.setSelectedSensorPosition(0);
+  }
+
+  public double get7(){
+    return climber1.getSelectedSensorPosition();
+  }
+
+  public double get8(){
+    return climber2.getSelectedSensorPosition();
   }
 
   @Override

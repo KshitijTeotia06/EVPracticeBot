@@ -66,7 +66,7 @@ public class RobotContainer {
     tmove = new TurretMove(turret, controller, vision);
     intakeCommand = new IntakeBall(intake, controller, driveStick);
     autoCommand = new AutoCommand(drivetrain, turret, vision, shooter, intake);
-    climb = new ClimberCommand(climber, controller);
+    climb = new ClimberCommand(climber, driveController);
     // adds intake for the auto to know when 
     jdrive = new JoyDrive(drivetrain, driveStick, turnStick, intakeCommand, driveController);
     shoot = new Shoot(shooter, vision, driveStick, intake, controller);
@@ -91,7 +91,7 @@ public class RobotContainer {
    */
   public Command[] getTeleCommand() {
     // An ExampleCommand will run in autonomous
-    Command[] ret = {jdrive, intakeCommand, shoot, tmove};
+    Command[] ret = {jdrive, intakeCommand, tmove, shoot, climb};
     return ret;
     // Removed tmove from ret
     /*

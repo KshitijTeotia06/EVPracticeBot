@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Climber;
@@ -29,23 +30,39 @@ public class ClimberCommand extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    climberSys.resetEncoders();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
+    if(controller.getBButtonPressed()){
+      climberSys.resetEncoders();
+    }
     
-    if (controller.getPOV(0) != -1) {
-      climberSys.move(0.5);
-    }
-    else if (controller.getPOV(4) != -1) {
-      climberSys.move(-0.5);
-    }
-    else {
+    SmartDashboard.putNumber("MOTOR 7 ENCODER: ", climberSys.get7());
+    SmartDashboard.putNumber("MOTOR 8 ENCODER: ", climberSys.get8());
+    SmartDashboard.updateValues();
+
+    // if (controller) {
+    //   climberSys.move(0.3);
+    // }
+    // else if (controller.getPOV(4) != -1) {
+    //   climberSys.move(-0.3);
+    // }
+    // else {
+    //   climberSys.move(0);
+    // }
+
+    if(controller.getRightTriggerAxis() > 0.1 && climberSys.get8() < 300000){
+      climberSys.move(controller.getRightTriggerAxis());
+      // climberSys.get8() > 0
+    }else if(Math.abs(controller.getLeftTriggerAxis()) > 0.1 && climberSys.get8() > 0){
+      climberSys.move(-controller.getLeftTriggerAxis());
+    }else{
       climberSys.move(0);
     }
-
   }
 
   // Called once the command ends or is interrupted.

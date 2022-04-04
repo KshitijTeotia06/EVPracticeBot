@@ -114,6 +114,9 @@ public class AutoCommand extends CommandBase {
     while ((((System.currentTimeMillis() - startTime) / 1000.0) <= 2.0)) {
       turret.turnTurret(1);
     }
+
+  
+
   
 
     // // This stops the turning
@@ -148,7 +151,7 @@ public class AutoCommand extends CommandBase {
     //rev up shooter
     double startTime = System.currentTimeMillis();
     // 6 second limit or banner 2 ouput become true will make this stop
-    while ((((System.currentTimeMillis() - startTime) / 1000.0) <= 3.0)) {
+    while ((((System.currentTimeMillis() - startTime) / 1000.0) <= 6.0) && (!intake.banner1Output() || !intake.banner2Output())) {
       SmartDashboard.putNumber("CURRENT TIME:", System.currentTimeMillis() - startTime);
       SmartDashboard.updateValues();
       // Run conveyor and move backward

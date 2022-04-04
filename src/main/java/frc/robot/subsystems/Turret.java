@@ -33,7 +33,6 @@ public class Turret extends SubsystemBase {
   double zerr;
   double motorOutput;
   private DigitalInput limitSwitch_center;
-  double speed = 0.1;
   double findTurretHomeSpeed = 0.3; // Thuis will be the speed to used for finding the turrets center position
   /** Creates a new Turret. */
   public Turret(Vision vision) {
@@ -79,24 +78,12 @@ public class Turret extends SubsystemBase {
     //   turretMotor.set(ControlMode.PercentOutput, speed);
     // }
   
-    // 03/29/22
     // Undo if set speed is broken
-    // if((getLeftLimitSwitchStatus() && speed > 0) || (getRightLimitSwitchStatus() && speed < 0)){
-    //   turretMotor.set(ControlMode.PercentOutput, 0);
-    // }else{
+    if((limitSwitchEncoderLeft() && speed > 0) || (limitSwitchEncoderRight() && speed < 0)){
+      turretMotor.set(ControlMode.PercentOutput, 0);
+    }else{
 
       
-      if (limitSwitchEncoderLeft()) {
-
-        setSpeed(-0.3);
-      
-      }
-      else if (limitSwitchEncoderRight()) {
-
-        setSpeed(0.3);
-      
-      }
-      else {
         turretMotor.set(ControlMode.PercentOutput, speed);
       }
     // }
@@ -158,14 +145,17 @@ public class Turret extends SubsystemBase {
 
     SmartDashboard.updateValues();
     if(vision.getTarget() != 1.0){
-      // turretMotor.set(ControlMode.PercentOutput, speed);
 
-      // if (getLeftLimitSwitchStatus() || limitSwitchEncoderRight()) {
+      // This will find the turret if in autonomous
+      if (limitSwitchEncoderLeft() || limitSwitchEncoderRight()) {
 
-      //   speed *= -1;
+        findTurretHomeSpeed *= -1;
       
-      // }
-      setSpeed(0);
+      }
+      turretMotor.set(ControlMode.PercentOutput, findTurretHomeSpeed);
+
+      // Undo if broken
+      // setSpeed(0);
       // turretMotor.set(ControlMode.PercentOutput, 0);
       return;
     }
