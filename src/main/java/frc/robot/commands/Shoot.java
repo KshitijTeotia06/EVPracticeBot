@@ -134,15 +134,14 @@ if (controller.getXButtonPressed()) {
 SmartDashboard.putBoolean("autoRev", usingAutoRev);
 SmartDashboard.updateValues();
 // Uncomment
-  while (usingAutoRev) {
-    autoRevThread.start();
+  if (usingAutoRev) {
 
-    if (((shoot.teamColor.equals(DriverStation.Alliance.Red) && colorReading.red > colorReading.blue)) || ((shoot.teamColor.equals(DriverStation.Alliance.Blue) && colorReading.red < colorReading.blue))) {
+    // if (((shoot.teamColor.equals(DriverStation.Alliance.Red) && colorReading.red > colorReading.blue)) || ((shoot.teamColor.equals(DriverStation.Alliance.Blue) && colorReading.red < colorReading.blue))) {
       shoot.outakeV((speed + bumpertrim));
-    }
-    else {
-      shoot.outakeV(10000);
-    }
+    // }
+    // else {
+    //   shoot.outakeV(10000);
+    // }
   }
   
 

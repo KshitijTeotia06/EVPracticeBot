@@ -111,16 +111,16 @@ public class AutoCommand extends CommandBase {
     // turret.setSpeed(0);
     // turret.turnTurret(0.5);
     // Locks turret on target
-    while ((((System.currentTimeMillis() - startTime) / 1000.0) <= 2.0)) {
-      turret.turnTurret(1);
-    }
+    // while ((((System.currentTimeMillis() - startTime) / 1000.0) <= 2.0)) {
+    //   turret.turnTurret(1);
+    // }
 
   
 
   
 
     // // This stops the turning
-    turret.setSpeed(0);   
+    // turret.setSpeed(0);   
     double rpm = shooter.computeV(vision.getY()) + 200;
 
     // Starts Revving up motor
@@ -128,7 +128,7 @@ public class AutoCommand extends CommandBase {
     
     // Makes sure RPM meets minimum requirement
     // while (shooter.getRPM() < rpm) {}
-    Timer.delay(1);
+    Timer.delay(3);
     
     // While there is still a ball loaded start transition(aka shoot)
     intake.conveyor(1);
@@ -142,30 +142,33 @@ public class AutoCommand extends CommandBase {
   }
 
   public void phase2() {
-    intake.intakeToggle(); //drops intake
+    intake.intakeDown(); //drops intake
     Timer.delay(1);
     // Gets the current start time
-    
+    intake.transitionMotor(-1);
 //
     shooter.outakeV(10000);
     //rev up shooter
     double startTime = System.currentTimeMillis();
     // 6 second limit or banner 2 ouput become true will make this stop
-    while ((((System.currentTimeMillis() - startTime) / 1000.0) <= 6.0) && (!intake.banner1Output() || !intake.banner2Output())) {
+    // && (!intake.banner1Output() || !intake.banner2Output())
+    while ((((System.currentTimeMillis() - startTime) / 1000.0) <= 2.75)) {
       SmartDashboard.putNumber("CURRENT TIME:", System.currentTimeMillis() - startTime);
       SmartDashboard.updateValues();
       // Run conveyor and move backward
       intake.intakeBrush(1);
       intake.conveyor(1);
-      drivetrain.move(0.6, 0, false);
+      drivetrain.move(0.4, 0, false);
     }
     SmartDashboard.putBoolean("REACHED", true);
     SmartDashboard.updateValues();
     // Stops drivetrain(safety)
+    // intake.intakeBrush(0);
+    // intake.conveyor(0);
+    drivetrain.move(0, 0, false);
+    Timer.delay(0.3);
     intake.intakeBrush(0);
     intake.conveyor(0);
-    drivetrain.move(0, 0, false);
-
     // Pulls back up the intake
     intake.intakeToggle();
 
