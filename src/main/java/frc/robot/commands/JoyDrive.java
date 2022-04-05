@@ -104,6 +104,14 @@ public class JoyDrive extends CommandBase {
       }
       highGear = !highGear;
     }
+
+    // if (highGear) {
+    //   controller.setRumble(RumbleType.kRightRumble, 0.5);
+    // }
+    // else {
+    //   controller.setRumble(RumbleType.kRightRumble, 0);
+
+    // }
 // Where da problem at? 
     // if (Math.abs(stick.getY()) < 0.1 && Math.abs(tstick.getX()) > 0.1) {
     //   //use the turn in place

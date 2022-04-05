@@ -39,6 +39,8 @@ public class Shoot extends CommandBase {
   // private boolean useBanners = true;
   private boolean usingAutoRev = false;
   private Thread autoRevThread = new Thread();
+  boolean apressed = false;
+  double timeAPressed = 0;
   // private boolean usingColorSensor = true;
 
   // private boolean manualShooter;
@@ -132,16 +134,18 @@ if (controller.getXButtonPressed()) {
 }
 
 SmartDashboard.putBoolean("autoRev", usingAutoRev);
+SmartDashboard.putNumber("RED VALUE COL SENSOR", colorReading.red);
+SmartDashboard.putNumber("BLUE VALUE COL SENSOR", colorReading.blue);
 SmartDashboard.updateValues();
 // Uncomment
   if (usingAutoRev) {
 
-    // if (((shoot.teamColor.equals(DriverStation.Alliance.Red) && colorReading.red > colorReading.blue)) || ((shoot.teamColor.equals(DriverStation.Alliance.Blue) && colorReading.red < colorReading.blue))) {
+    if (((shoot.teamColor.equals(DriverStation.Alliance.Red) && colorReading.red > colorReading.blue)) || ((shoot.teamColor.equals(DriverStation.Alliance.Blue) && colorReading.red < colorReading.blue))) {
       shoot.outakeV((speed + bumpertrim));
-    // }
-    // else {
-    //   shoot.outakeV(10000);
-    // }
+    }
+    else {
+      shoot.outakeV((speed + bumpertrim) - 4000);
+    }
   }
   
 
@@ -174,7 +178,8 @@ SmartDashboard.updateValues();
       // manualShooter = false; 
 
       // if (vision.getTarget() == 1) {
-
+        apressed = true;
+        timeAPressed = System.currentTimeMillis();
       
       // Timer.delay(0.5);
       intake.transitionMotor(1);
@@ -184,11 +189,16 @@ SmartDashboard.updateValues();
       // while (!(!intake.banner1Output() && intake.banner2Output())) {
 
       // }
-      Timer.delay(2.5);
+   
+      // }
+    }
 
+   
+    if(apressed && (System.currentTimeMillis() - timeAPressed) / 1000 >= 2.5){
+      apressed = false;
+      timeAPressed = 0;
       intake.transitionMotor(0);
       intake.conveyor(0);
-      // }
     }
     double outtakespeed = 0;
     //
@@ -210,7 +220,7 @@ SmartDashboard.updateValues();
       intake.intakeBrush(1);
       intake.conveyor(1);
     }
-    else {
+    else if(!apressed){
       intake.conveyor(0);
       intake.intakeBrush(0);
       intake.transitionMotor(0);
