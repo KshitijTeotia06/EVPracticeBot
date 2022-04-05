@@ -146,16 +146,16 @@ public class Turret extends SubsystemBase {
     SmartDashboard.updateValues();
     if(vision.getTarget() != 1.0){
 
-      // This will find the turret if in autonomous
-      if (limitSwitchEncoderLeft() || limitSwitchEncoderRight()) {
+      // // This will find the turret if in autonomous
+      // if (limitSwitchEncoderLeft() || limitSwitchEncoderRight()) {
 
-        findTurretHomeSpeed *= -1;
+      //   findTurretHomeSpeed *= -1;
       
-      }
-      turretMotor.set(ControlMode.PercentOutput, findTurretHomeSpeed);
+      // }
+      // turretMotor.set(ControlMode.PercentOutput, findTurretHomeSpeed);
 
       // Undo if broken
-      // setSpeed(0);
+      setSpeed(0);
       // turretMotor.set(ControlMode.PercentOutput, 0);
       return;
     }

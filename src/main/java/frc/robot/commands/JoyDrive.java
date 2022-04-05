@@ -48,8 +48,8 @@ public class JoyDrive extends CommandBase {
     this.tstick = tstick;
     this.intake = intake;
     this.controller = controller;
-    powerLimiter = new SlewRateLimiter(0.2);
-    turnLimiter = new SlewRateLimiter(0.2);
+    powerLimiter = new SlewRateLimiter(1.75);
+    turnLimiter = new SlewRateLimiter(1.75);
     // this.compressorEntry = Shuffleboard.getTab("Tokyo Drifter - Driver View").add("Compressor Current(AMP)", drivetrain.c.getCurrent()).getEntry();
     this.compressorEntry = Shuffleboard.getTab("Tokyo Drifter - Driver View").add("Compressor Full", determineIfCompressorIsFull()).getEntry();
     
@@ -113,8 +113,8 @@ public class JoyDrive extends CommandBase {
     // }
     //((Math.abs(stick.getY()) < 0.1) ? true : false)
     
-    // drivetrain.move(-1*powerLimiter.calculate(controller.getRightY()) * sensScale, -1*turnLimiter.calculate(controller.getLeftX()), ((Math.abs(controller.getRightY()) < 0.1) ? true : false));
-    drivetrain.move(-1 * controller.getRightY() * sensScale, -1*controller.getLeftX(), ((Math.abs(controller.getRightY()) < 0.1) ? true : false));
+    drivetrain.move(-1*powerLimiter.calculate(controller.getRightY()), (Math.abs(controller.getLeftX()) < 0.01) ? 0 : -1 * turnLimiter.calculate(controller.getLeftX()), ((Math.abs(controller.getRightY()) < 0.1) ? true : false));
+    // drivetrain.move(-1 * controller.getRightY() * sensScale, -1*controller.getLeftX(), ((Math.abs(controller.getRightY()) < 0.1) ? true : false));
     controller.setRumble(RumbleType.kLeftRumble, Math.abs(controller.getRightY()));
 
     // This will turn off the rumble when it is not being used

@@ -37,7 +37,7 @@ public class Shoot extends CommandBase {
   private boolean shooting = false;
   private double bumpertrim = 0;
   // private boolean useBanners = true;
-  private boolean usingAutoRev = false;
+  private boolean usingAutoRev = true;
   private Thread autoRevThread = new Thread();
   // private boolean usingColorSensor = true;
 
@@ -208,6 +208,7 @@ SmartDashboard.updateValues();
     }
     else if (controller.getYButton()) {
       intake.intakeBrush(1);
+      intake.conveyor(1);
     }
     else {
       intake.conveyor(0);

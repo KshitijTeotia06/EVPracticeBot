@@ -27,6 +27,15 @@ public class AutoCommand extends CommandBase {
   Shooter shooter;
   Intake intake;
   boolean run = false;
+  // Auto 1 = 5 ft, Auto Aim
+  // Auto 2 = 5 ft, without Auto Aim
+  // Auto 3 = 7 ft, Auto Aim
+  boolean far = false; // far = true : 7 ft && far = false = 5 ft
+  boolean autoAim = true;
+  boolean autoCompute = true;
+
+  int autoCommandParam = 2;
+
   public AutoCommand(Drivetrain drivetrain, Turret turret, Vision vision, Shooter shooter, Intake intake) {
     this.drivetrain = drivetrain;
     this.turret = turret;
@@ -34,6 +43,8 @@ public class AutoCommand extends CommandBase {
     this.shooter = shooter;
     this.intake = intake;
     addRequirements(drivetrain);
+
+   
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -47,13 +58,34 @@ public class AutoCommand extends CommandBase {
     // drivetrain.setEncoderDis(1.0/256.0);
     // drivetrain.l.setInverted(true);
 
-    
+     // THis runs the right auto command param
+     if (autoCommandParam == 1) {
+      far = false;
+      autoAim = false;
+      autoCompute = false;
+    }
+    else if (autoCommandParam == 2) {
+      far = false;
+      autoAim = true;
+      autoCompute = true;
+
+    }
+    else if (autoCommandParam == 3) {
+      far = true;
+      autoAim = false;
+      autoCompute = false;
+    }
+    else if (autoCommandParam == 4) {
+      far = true;
+      autoAim = true;
+      autoCompute = true;
+    }
   } 
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
+   
     // drivetrain.moveAuto(0.4, 4.5); // 6 ft
     // drivetrain.turnDegrees(90);
 
@@ -104,27 +136,35 @@ public class AutoCommand extends CommandBase {
     // else {
     //     shooter.outtakeBall(0.5);
     // }
-
+      Timer.delay(1);
     double startTime = System.currentTimeMillis();
 
     // Locks turret on target
     // turret.setSpeed(0);
     // turret.turnTurret(0.5);
     // Locks turret on target
-    // while ((((System.currentTimeMillis() - startTime) / 1000.0) <= 2.0)) {
-    //   turret.turnTurret(1);
-    // }
-
+   
   
 
   
 
-    // // This stops the turning
-    // turret.setSpeed(0);   
-    double rpm = shooter.computeV(vision.getY()) + 200;
+    SmartDashboard.putNumber("UPDATED AUTO VISION", vision.getY());
+    SmartDashboard.updateValues();
+    if (autoCompute) {
+      double rpm = shooter.computeV(vision.getY()) + 1900.0;
 
-    // Starts Revving up motor
-    shooter.outakeV(rpm);
+      // Starts Revving up motor
+      shooter.outakeV(rpm);
+    }
+    else {
+      if (far) {
+        shooter.outakeV(17000);
+      }
+      else {
+        shooter.outakeV(16000);
+      }
+    }
+    
     
     // Makes sure RPM meets minimum requirement
     // while (shooter.getRPM() < rpm) {}
@@ -152,19 +192,33 @@ public class AutoCommand extends CommandBase {
     double startTime = System.currentTimeMillis();
     // 6 second limit or banner 2 ouput become true will make this stop
     // && (!intake.banner1Output() || !intake.banner2Output())
-    while ((((System.currentTimeMillis() - startTime) / 1000.0) <= 2.75)) {
+    double distance = 3.25; // Set to far by default
+    if (!far) {
+      distance = 2.75;
+    }
+    
+    while ((((System.currentTimeMillis() - startTime) / 1000.0) <= distance)) {
       SmartDashboard.putNumber("CURRENT TIME:", System.currentTimeMillis() - startTime);
       SmartDashboard.updateValues();
       // Run conveyor and move backward
       intake.intakeBrush(1);
       intake.conveyor(1);
       drivetrain.move(0.4, 0, false);
+
+      if (autoAim) {
+        // while ((((System.currentTimeMillis() - startTime) / 1000.0) <= 2.0)) {
+          turret.turnTurret(1);
+        // }
+        // // This stops the turning
+      // turret.setSpeed(0);   
+      }
     }
     SmartDashboard.putBoolean("REACHED", true);
     SmartDashboard.updateValues();
     // Stops drivetrain(safety)
     // intake.intakeBrush(0);
     // intake.conveyor(0);
+    turret.setSpeed(0);   
     drivetrain.move(0, 0, false);
     Timer.delay(0.3);
     intake.intakeBrush(0);

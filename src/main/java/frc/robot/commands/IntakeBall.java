@@ -57,11 +57,11 @@ public class IntakeBall extends CommandBase {
     // intake.conveyor(controller.getRightY());
 
     if (controller.getYButtonPressed()) {
-      controller.setRumble(RumbleType.kLeftRumble, 0.8);
+      controller.setRumble(RumbleType.kRightRumble, 0.8);
       intake.intakeDown();
     }
     else if (controller.getYButtonReleased()) {
-      controller.setRumble(RumbleType.kLeftRumble, 0);
+      controller.setRumble(RumbleType.kRightRumble, 0);
       
       intake.intakeUp();
     }
