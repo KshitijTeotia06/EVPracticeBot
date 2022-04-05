@@ -37,7 +37,7 @@ public class Shoot extends CommandBase {
   private boolean shooting = false;
   private double bumpertrim = 0;
   // private boolean useBanners = true;
-  private boolean usingAutoRev = true;
+  private boolean usingAutoRev = false;
   private Thread autoRevThread = new Thread();
   // private boolean usingColorSensor = true;
 

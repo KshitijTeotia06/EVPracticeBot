@@ -15,6 +15,8 @@ public class ClimberCommand extends CommandBase {
 
   Climber climberSys;
 
+
+
   XboxController controller;
 
   /** Creates a new ClimberCommand. */
@@ -55,11 +57,11 @@ public class ClimberCommand extends CommandBase {
     //   climberSys.move(0);
     // }
 
-    if(controller.getRightTriggerAxis() > 0.1 && climberSys.get8() < 300000){
-      climberSys.move(controller.getRightTriggerAxis());
+    if(controller.getRightTriggerAxis() > 0.1 && climberSys.get7() < 244348){
+      climberSys.move(controller.getRightTriggerAxis() * 0.5);
       // climberSys.get8() > 0
-    }else if(Math.abs(controller.getLeftTriggerAxis()) > 0.1 && climberSys.get8() > 0){
-      climberSys.move(-controller.getLeftTriggerAxis());
+    }else if(Math.abs(controller.getLeftTriggerAxis()) > 0.1 && climberSys.get7() > 0){
+      climberSys.move(-controller.getLeftTriggerAxis() * 0.5);
     }else{
       climberSys.move(0);
     }
